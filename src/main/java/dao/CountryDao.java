@@ -1,9 +1,8 @@
 package dao;
 
-import entity.color.Color;
 import entity.country.Country;
 import exception.DaoException;
-import filter.CountryFilter;
+import dao.filter.CountryFilter;
 import util.ConnectionManager;
 
 import java.sql.ResultSet;
@@ -14,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class CountryDao implements Dao<Long, Country, CountryFilter> {
+public class CountryDao implements Dao<Long, Country> {
     private static final CountryDao INSTANCE = new CountryDao();
     private static String FIND_BY_ID_SQL = """
             select id, name
@@ -92,7 +91,6 @@ public class CountryDao implements Dao<Long, Country, CountryFilter> {
         }
     }
 
-    @Override
     public List<Country> findAll(CountryFilter filter) {
         List<Object> parameters = new ArrayList<>();
         List<String> whereSql = new ArrayList<>();

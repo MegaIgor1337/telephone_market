@@ -1,10 +1,8 @@
 package dao;
 
-import entity.model.Model;
 import entity.order.Order;
-import entity.orderproduct.OrderProduct;
 import exception.DaoException;
-import filter.OrderFilter;
+import dao.filter.OrderFilter;
 import util.ConnectionManager;
 
 import java.sql.ResultSet;
@@ -16,9 +14,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class OrderDao implements Dao<Long, Order, OrderFilter> {
+public class OrderDao implements Dao<Long, Order> {
     private static final OrderDao INSTANCE = new OrderDao();
-    private static final ClientDao clientDao = ClientDao.getInstance();
+    private static final UserDao clientDao = UserDao.getInstance();
     private static String FIND_BY_ID_SQL = """
             select id, client_id, cost, date, delivered, date_of_delivery
             from "order"
@@ -106,7 +104,6 @@ public class OrderDao implements Dao<Long, Order, OrderFilter> {
         }
     }
 
-    @Override
     public List<Order> findAll(OrderFilter filter) {
         List<Object> parameters = new ArrayList<>();
         List<String> whereSql = new ArrayList<>();

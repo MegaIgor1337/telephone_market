@@ -1,4 +1,4 @@
-package filter;
+package dao.filter;
 
 import entity.brand.Brand;
 import entity.color.Color;

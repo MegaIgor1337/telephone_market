@@ -1,10 +1,8 @@
 package dao;
 
 import entity.address.Address;
-import filter.AddressFilter;
+import dao.filter.AddressFilter;
 import junit.framework.TestCase;
-
-import java.util.List;
 
 public class AddressDaoTest extends TestCase {
     private static final AddressDao addressDao = AddressDao.getInstance();

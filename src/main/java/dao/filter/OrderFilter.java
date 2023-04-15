@@ -1,13 +1,13 @@
-package filter;
+package dao.filter;
 
-import entity.client.Client;
+import entity.user.User;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public record OrderFilter(int limit,
                           int offset,
-                          Client client,
+                          User client,
                           BigDecimal cost,
                           LocalDateTime date,
                           Boolean delivered,

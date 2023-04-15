@@ -1,9 +1,8 @@
 package dao;
 
-import entity.client.Client;
 import entity.product.Product;
 import exception.DaoException;
-import filter.ProductFilter;
+import dao.filter.ProductFilter;
 import util.ConnectionManager;
 
 import java.sql.ResultSet;
@@ -14,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class ProductDao implements Dao<Long, Product, ProductFilter> {
+public class ProductDao implements Dao<Long, Product> {
     private static final ProductDao INSTANCE = new ProductDao();
     private static final BrandDao brandDao = BrandDao.getInstance();
     private static final ModelDao modelDao = ModelDao.getInstance();
@@ -119,7 +118,6 @@ public class ProductDao implements Dao<Long, Product, ProductFilter> {
         }
     }
 
-    @Override
     public List<Product> findAll(ProductFilter filter) {
         List<Object> parameters = new ArrayList<>();
         List<String> whereSql = new ArrayList<>();

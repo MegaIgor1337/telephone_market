@@ -1,10 +1,8 @@
 package dao;
 
-import entity.brand.Brand;
 import entity.color.Color;
-import entity.model.Model;
 import exception.DaoException;
-import filter.ColorFilter;
+import dao.filter.ColorFilter;
 import util.ConnectionManager;
 
 import java.sql.ResultSet;
@@ -15,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class ColorDao implements Dao<Long, Color, ColorFilter> {
+public class ColorDao implements Dao<Long, Color> {
     private static final ColorDao INSTANCE = new ColorDao();
     private static String FIND_BY_ID_SQL = """
             select id, color
@@ -92,7 +90,6 @@ public class ColorDao implements Dao<Long, Color, ColorFilter> {
         }
     }
 
-    @Override
     public List<Color> findAll(ColorFilter filter) {
         List<Object> parameters = new ArrayList<>();
         List<String> whereSql = new ArrayList<>();

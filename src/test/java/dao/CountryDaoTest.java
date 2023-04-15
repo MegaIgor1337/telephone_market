@@ -1,7 +1,7 @@
 package dao;
 
 import entity.country.Country;
-import filter.CountryFilter;
+import dao.filter.CountryFilter;
 import junit.framework.TestCase;
 
 public class CountryDaoTest extends TestCase {

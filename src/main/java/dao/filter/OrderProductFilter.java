@@ -1,4 +1,4 @@
-package filter;
+package dao.filter;
 
 import entity.order.Order;
 import entity.product.Product;

@@ -1,6 +1,6 @@
 package dao;
 
-import filter.AddressFilter;
+import dao.filter.AddressFilter;
 import entity.address.Address;
 import exception.DaoException;
 import util.ConnectionManager;
@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class AddressDao implements Dao<Long, Address, AddressFilter> {
+public class AddressDao implements Dao<Long, Address> {
     private static final AddressDao INSTANCE = new AddressDao();
 
     private static String FIND_BY_ID_SQL = """
@@ -103,7 +103,6 @@ public class AddressDao implements Dao<Long, Address, AddressFilter> {
         }
     }
 
-    @Override
     public List<Address> findAll(AddressFilter filter) {
         List<Object> parameters = new ArrayList<>();
         List<String> whereSql = new ArrayList<>();

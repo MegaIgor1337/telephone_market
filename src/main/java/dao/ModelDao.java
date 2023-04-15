@@ -1,8 +1,7 @@
 package dao;
 
-import entity.brand.Brand;
 import exception.DaoException;
-import filter.ModelFilter;
+import dao.filter.ModelFilter;
 import entity.model.Model;
 import util.ConnectionManager;
 
@@ -14,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class ModelDao implements Dao<Long, Model, ModelFilter> {
+public class ModelDao implements Dao<Long, Model> {
 
     private static final ModelDao INSTANCE = new ModelDao();
 
@@ -93,7 +92,6 @@ public class ModelDao implements Dao<Long, Model, ModelFilter> {
         }
     }
 
-    @Override
     public List<Model> findAll(ModelFilter filter) {
         List<Object> parameters = new ArrayList<>();
         List<String> whereSql = new ArrayList<>();

@@ -1,4 +1,4 @@
-package filter;
+package dao.filter;
 
 public record CountryFilter(int limit,
                             int offset,

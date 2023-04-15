@@ -1,6 +1,6 @@
 package dao;
 
-import filter.BrandFilter;
+import dao.filter.BrandFilter;
 import entity.brand.Brand;
 import exception.DaoException;
 import util.ConnectionManager;
@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class BrandDao implements Dao<Long, Brand, BrandFilter> {
+public class BrandDao implements Dao<Long, Brand> {
     private static final BrandDao INSTANCE = new BrandDao();
 
     private static String FIND_BY_ID_SQL = """
@@ -91,7 +91,6 @@ public class BrandDao implements Dao<Long, Brand, BrandFilter> {
         }
     }
 
-    @Override
     public List<Brand> findAll(BrandFilter filter) {
         List<Object> parameters = new ArrayList<>();
         List<String> whereSql = new ArrayList<>();

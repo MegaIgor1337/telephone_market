@@ -5,7 +5,7 @@ import entity.color.Color;
 import entity.country.Country;
 import entity.model.Model;
 import entity.product.Product;
-import filter.ProductFilter;
+import dao.filter.ProductFilter;
 import junit.framework.TestCase;
 
 import java.math.BigDecimal;

@@ -1,9 +1,11 @@
 package dao;
 
 import entity.address.Address;
-import entity.client.Client;
+import entity.user.Gender;
+import entity.user.Role;
+import entity.user.User;
 import entity.order.Order;
-import filter.OrderFilter;
+import dao.filter.OrderFilter;
 import junit.framework.TestCase;
 
 import java.math.BigDecimal;
@@ -15,7 +17,7 @@ public class OrderDaoTest extends TestCase {
     public void testUpdate() {
         Order order = new Order(
                 3L,
-                new Client(
+                new User(
                         3L,
                         "Gennadiy22",
                         "boring",
@@ -28,7 +30,9 @@ public class OrderDaoTest extends TestCase {
                                 "4a",
                                 "14"
                         ),
-                        "goodjob@gmail.com"
+                        "goodjob@gmail.com",
+                        Role.USER,
+                        Gender.MALE
                 ),
                 BigDecimal.valueOf(215.00),
                 LocalDateTime.of(2021, 11, 12, 18, 37, 0),
@@ -56,7 +60,7 @@ public class OrderDaoTest extends TestCase {
     public void testSave() {
         Order order = new Order(
                 null,
-                new Client(
+                new User(
                         3L,
                         "Gennadiy22",
                         "boring",
@@ -69,7 +73,9 @@ public class OrderDaoTest extends TestCase {
                                 "4a",
                                 "14"
                         ),
-                        "goodjob@gmail.com"
+                        "goodjob@gmail.com",
+                        Role.USER,
+                        Gender.MALE
                 ),
                 BigDecimal.valueOf(285.00),
                 LocalDateTime.of(2021, 10, 12, 18, 37, 0),

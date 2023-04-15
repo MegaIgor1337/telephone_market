@@ -1,4 +1,4 @@
-package filter;
+package dao.filter;
 
 public record BrandFilter(int limit,
                           int offset,

@@ -1,9 +1,11 @@
 package dao;
 
 import entity.address.Address;
-import entity.client.Client;
+import entity.user.Gender;
+import entity.user.Role;
+import entity.user.User;
 import exception.DaoException;
-import filter.ClientFilter;
+import dao.filter.UserFilter;
 import util.ConnectionManager;
 
 import java.sql.ResultSet;
@@ -14,22 +16,22 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class ClientDao implements Dao<Long, Client, ClientFilter> {
-    private static final ClientDao INSTANCE = new ClientDao();
+public class UserDao implements Dao<Long, User> {
+    private static final UserDao INSTANCE = new UserDao();
     private static final AddressDao addressDao = AddressDao.getInstance();
     private static String FIND_BY_ID_SQL = """
-            select id, name, password, passport_no, address_id, email
-            from "client"
+            select id, name, password, passport_no, address_id, email, role, gender
+            from users
             where id = ?
             """;
 
     private static String FIND_ALL_SQL = """
-            select id, name, password, passport_no, address_id, email
-            from "client"
+            select id, name, password, passport_no, address_id, email, role, gender
+            from users
             """;
 
     private static String UPDATE_SQL = """
-            update "client"
+            update users
             set name = ?,
                 password = ?,
                 passport_no = ?,
@@ -39,28 +41,30 @@ public class ClientDao implements Dao<Long, Client, ClientFilter> {
             """;
 
     private static String DELETE_SQL = """
-            delete from "client"
+            delete from users
             where id = ?
             """;
 
     private static String SAVE_SQL = """
-            insert into "client"(name, password, passport_no, address_id, email) 
-            values (?, ?, ?, ?, ?)
+            insert into users(name, password, passport_no, address_id, email, role, gender) 
+            values (?, ?, ?, ?, ?, ?, ?)
             """;
 
-    private Client buildClient(ResultSet result) throws SQLException {
-        return new Client(
+    private User buildClient(ResultSet result) throws SQLException {
+        return new User(
                 result.getLong("id"),
                 result.getString("name"),
                 result.getString("password"),
                 result.getString("passport_no"),
                 addressDao.findById(result.getLong("address_id")).orElse(null),
-                result.getString("email")
+                result.getString("email"),
+                Role.valueOf(result.getString("role")),
+                Gender.valueOf(result.getString("gender"))
         );
     }
 
     @Override
-    public boolean update(Client client) {
+    public boolean update(User client) {
         try (var connection = ConnectionManager.get();
              var statement = connection.prepareStatement(UPDATE_SQL)) {
             statement.setString(1, client.getName());
@@ -76,10 +80,10 @@ public class ClientDao implements Dao<Long, Client, ClientFilter> {
     }
 
     @Override
-    public Optional<Client> findById(Long id) {
+    public Optional<User> findById(Long id) {
         try (var connection = ConnectionManager.get();
              var statement = connection.prepareStatement(FIND_BY_ID_SQL)) {
-            Client client = null;
+            User client = null;
             statement.setLong(1, id);
             var result = statement.executeQuery();
             if (result.next())
@@ -91,10 +95,10 @@ public class ClientDao implements Dao<Long, Client, ClientFilter> {
     }
 
     @Override
-    public List<Client> findAll() {
+    public List<User> findAll() {
         try (var connection = ConnectionManager.get();
              var statement = connection.prepareStatement(FIND_ALL_SQL)) {
-            List<Client> clients = new ArrayList<>();
+            List<User> clients = new ArrayList<>();
             var result = statement.executeQuery();
             while (result.next())
                 clients.add(buildClient(result));
@@ -104,8 +108,7 @@ public class ClientDao implements Dao<Long, Client, ClientFilter> {
         }
     }
 
-    @Override
-    public List<Client> findAll(ClientFilter filter) {
+    public List<User> findAll(UserFilter filter) {
         List<Object> parameters = new ArrayList<>();
         List<String> whereSql = new ArrayList<>();
         if (filter.name() != null) {
@@ -128,7 +131,14 @@ public class ClientDao implements Dao<Long, Client, ClientFilter> {
             whereSql.add("email = ?");
             parameters.add(filter.email());
         }
-
+        if (filter.role() != null) {
+            whereSql.add("role = ?");
+            parameters.add(filter.role());
+        }
+        if (filter.gender() != null) {
+            whereSql.add("gender = ?");
+            parameters.add(filter.gender());
+        }
         parameters.add(filter.limit());
         parameters.add(filter.offset());
 
@@ -141,7 +151,7 @@ public class ClientDao implements Dao<Long, Client, ClientFilter> {
 
         try (var connection = ConnectionManager.get();
              var statement = connection.prepareStatement(sql)) {
-            List<Client> clients = new ArrayList<>();
+            List<User> clients = new ArrayList<>();
             for (int i = 0; i < parameters.size(); i++) {
                 statement.setObject(i + 1, parameters.get(i));
             }
@@ -167,7 +177,7 @@ public class ClientDao implements Dao<Long, Client, ClientFilter> {
     }
 
     @Override
-    public Client save(Client client) {
+    public User save(User client) {
         try (var connection = ConnectionManager.get();
              var statement = connection
                      .prepareStatement(SAVE_SQL, Statement.RETURN_GENERATED_KEYS)) {
@@ -177,7 +187,8 @@ public class ClientDao implements Dao<Long, Client, ClientFilter> {
             statement.setString(3, client.getPassportNo());
             statement.setLong(4, address.getId());
             statement.setString(5, client.getEmail());
-
+            statement.setString(6, client.getRole().toString());
+            statement.setString(7, client.getGender().toString());
 
             statement.executeUpdate();
             var generatedKeys = statement.getGeneratedKeys();
@@ -189,11 +200,11 @@ public class ClientDao implements Dao<Long, Client, ClientFilter> {
         }
     }
 
-    private ClientDao() {
+    private UserDao() {
 
     }
 
-    public static ClientDao getInstance() {
+    public static UserDao getInstance() {
         return INSTANCE;
     }
 }

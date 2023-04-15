@@ -1,7 +1,7 @@
 package dao;
 
 import entity.color.Color;
-import filter.ColorFilter;
+import dao.filter.ColorFilter;
 import junit.framework.TestCase;
 
 public class ColorDaoTest extends TestCase {

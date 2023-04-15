@@ -1,22 +1,19 @@
 package dao;
 
-import entity.model.Model;
 import entity.orderproduct.OrderProduct;
 import entity.orderproduct.PrimaryKeyOrderProduct;
-import entity.product.Product;
 import exception.DaoException;
-import filter.OrderProductFilter;
+import dao.filter.OrderProductFilter;
 import util.ConnectionManager;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class OrderProductDao implements Dao<PrimaryKeyOrderProduct, OrderProduct, OrderProductFilter> {
+public class OrderProductDao implements Dao<PrimaryKeyOrderProduct, OrderProduct> {
     private static final OrderProductDao INSTANCE = new OrderProductDao();
     private static final OrderDao orderDao = OrderDao.getInstance();
     private static final ProductDao productDao = ProductDao.getInstance();
@@ -100,7 +97,6 @@ public class OrderProductDao implements Dao<PrimaryKeyOrderProduct, OrderProduct
         }
     }
 
-    @Override
     public List<OrderProduct> findAll(OrderProductFilter filter) {
         List<Object> parameters = new ArrayList<>();
         List<String> whereSql = new ArrayList<>();

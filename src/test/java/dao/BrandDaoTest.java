@@ -1,7 +1,7 @@
 package dao;
 
 import entity.brand.Brand;
-import filter.BrandFilter;
+import dao.filter.BrandFilter;
 import junit.framework.TestCase;
 
 import java.util.List;

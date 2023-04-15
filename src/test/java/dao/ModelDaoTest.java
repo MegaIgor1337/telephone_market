@@ -1,7 +1,7 @@
 package dao;
 
 import entity.model.Model;
-import filter.ModelFilter;
+import dao.filter.ModelFilter;
 import junit.framework.TestCase;
 
 public class ModelDaoTest extends TestCase {

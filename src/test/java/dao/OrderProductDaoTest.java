@@ -2,7 +2,9 @@ package dao;
 
 import entity.address.Address;
 import entity.brand.Brand;
-import entity.client.Client;
+import entity.user.Gender;
+import entity.user.Role;
+import entity.user.User;
 import entity.color.Color;
 import entity.country.Country;
 import entity.model.Model;
@@ -10,7 +12,7 @@ import entity.order.Order;
 import entity.orderproduct.OrderProduct;
 import entity.orderproduct.PrimaryKeyOrderProduct;
 import entity.product.Product;
-import filter.OrderProductFilter;
+import dao.filter.OrderProductFilter;
 import junit.framework.TestCase;
 
 import java.math.BigDecimal;
@@ -25,7 +27,7 @@ public class OrderProductDaoTest extends TestCase {
                 new PrimaryKeyOrderProduct(
                         new Order(
                                 3L,
-                                new Client(
+                                new User(
                                         3L,
                                         "Gennadiy22",
                                         "boring",
@@ -38,7 +40,9 @@ public class OrderProductDaoTest extends TestCase {
                                                 "4a",
                                                 "14"
                                         ),
-                                        "goodjob@gmail.com"
+                                        "goodjob@gmail.com",
+                                        Role.USER,
+                                        Gender.MALE
                                 ),
                                 BigDecimal.valueOf(215.00),
                                 LocalDateTime.of(2021, 11, 12, 18, 37, 0),
@@ -66,7 +70,7 @@ public class OrderProductDaoTest extends TestCase {
         assertEquals(6, orderProductDao.findById(new PrimaryKeyOrderProduct(
                 new Order(
                         3L,
-                        new Client(
+                        new User(
                                 3L,
                                 "Gennadiy22",
                                 "boring",
@@ -79,7 +83,9 @@ public class OrderProductDaoTest extends TestCase {
                                         "4a",
                                         "14"
                                 ),
-                                "goodjob@gmail.com"
+                                "goodjob@gmail.com",
+                                Role.USER,
+                                Gender.MALE
                         ),
                         BigDecimal.valueOf(215.00),
                         LocalDateTime.of(2021, 11, 12, 18, 37, 0),

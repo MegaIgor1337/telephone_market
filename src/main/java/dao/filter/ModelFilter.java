@@ -1,4 +1,4 @@
-package filter;
+package dao.filter;
 
 public record ModelFilter(int limit,
                           int offset,
