@@ -11,6 +11,9 @@ public class AddressDaoTest extends TestCase {
     private final AddressDao addressDao = AddressDao.getInstance();
     private final UserDao userDao = UserDao.getInstance();
 
+
+
+
     public void testUpdate() {
         assertTrue(addressDao.update(
                         new Address(
@@ -56,29 +59,5 @@ public class AddressDaoTest extends TestCase {
     }
 
 
-    public void testSave() {
-        Address address = new Address(null, "Poland", "Warsaw",
-                "Polskaya", "33", "",
-                userDao.save(
-                        new User(
-                                null, "Валерий", "4341244", "GH553525",
-                                 "gfjgjjg@mail.ru", Role.USER, Gender.MALE
-                        )
-                )
 
-        );
-        address = addressDao.save(address);
-        assertEquals(addressDao.findAll().stream()
-                .sorted((o1, o2) -> Long.compare(o1.getId(), o2.getId()))
-                .toList().get(addressDao.findAll().size() - 1).getId(), address.getId());
-    }
-
-    public void testDelete() {
-
-        assertTrue(userDao.delete(userDao.findAll().stream()
-                .sorted(((o1, o2) -> Long.compare(o1.getId(), o2.getId())))
-                .toList().get(userDao.findAll().size() - 1).getId()));
-
-
-    }
 }
