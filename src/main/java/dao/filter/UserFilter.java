@@ -8,7 +8,6 @@ public record UserFilter(int limit,
                          int offset,
                          String name,
                          String password,
-                         Address address,
                          String email,
                          Role role,
                          Gender gender

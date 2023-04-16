@@ -1,5 +1,6 @@
 package entity.address;
 
+import entity.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,5 +19,6 @@ public class Address {
     private String street;
     private String house;
     private String flat;
+    private User user;
 
 }

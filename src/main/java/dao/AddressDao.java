@@ -15,15 +15,16 @@ import java.util.stream.Collectors;
 
 public class AddressDao implements Dao<Long, Address> {
     private static final AddressDao INSTANCE = new AddressDao();
+    private final UserDao userDao = UserDao.getInstance();
 
     private static String FIND_BY_ID_SQL = """
-            select id, country, city, street, house, flat
+            select id, country, city, street, house, flat, user_id
             from address
             where id = ?
             """;
 
     private static String FIND_ALL_SQL = """
-            select id, country, city, street, house, flat, city 
+            select id, country, city, street, house, flat, user_id  
             from address
             """;
 
@@ -33,7 +34,8 @@ public class AddressDao implements Dao<Long, Address> {
             city = ?,
             street = ?,
             house = ?,
-            flat =?
+            flat =?,
+            user_id = ?
             where id = ?
             """;
 
@@ -43,8 +45,8 @@ public class AddressDao implements Dao<Long, Address> {
             """;
 
     private static String SAVE_SQL = """
-            insert into address(country, city, street, house, flat) 
-            values (?, ?, ?, ?, ?)
+            insert into address(country, city, street, house, flat, user_id) 
+            values (?, ?, ?, ?, ?, ?)
             """;
 
     private Address buildAddress(ResultSet result) throws SQLException {
@@ -54,7 +56,8 @@ public class AddressDao implements Dao<Long, Address> {
                 result.getString("city"),
                 result.getString("street"),
                 result.getString("house"),
-                result.getString("flat")
+                result.getString("flat"),
+                userDao.findById(result.getLong("user_id")).orElse(null)
         );
     }
 
@@ -67,7 +70,8 @@ public class AddressDao implements Dao<Long, Address> {
             statement.setString(3, address.getStreet());
             statement.setString(4, address.getHouse());
             statement.setString(5, address.getFlat());
-            statement.setLong(6, address.getId());
+            statement.setLong(6, address.getUser().getId());
+            statement.setLong(7, address.getId());
             return statement.executeUpdate() > 0;
         } catch (SQLException e) {
             throw new DaoException(e);
@@ -126,7 +130,10 @@ public class AddressDao implements Dao<Long, Address> {
             whereSql.add("flat = ?");
             parameters.add(filter.flat());
         }
-
+        if (filter.user() != null) {
+            whereSql.add("user_id = ?");
+            parameters.add(filter.user().getId());
+        }
         parameters.add(filter.limit());
         parameters.add(filter.offset());
 
@@ -174,7 +181,7 @@ public class AddressDao implements Dao<Long, Address> {
             statement.setString(3, address.getStreet());
             statement.setString(4, address.getHouse());
             statement.setString(5, address.getFlat());
-
+            statement.setLong(6, address.getUser().getId());
 
             statement.executeUpdate();
             var generatedKeys = statement.getGeneratedKeys();

@@ -20,13 +20,13 @@ public class UserDao implements Dao<Long, User> {
     private static final UserDao INSTANCE = new UserDao();
     private static final AddressDao addressDao = AddressDao.getInstance();
     private static String FIND_BY_ID_SQL = """
-            select id, name, password, passport_no, address_id, email, role, gender
+            select id, name, password, passport_no, email, role, gender
             from users
             where id = ?
             """;
 
     private static String FIND_ALL_SQL = """
-            select id, name, password, passport_no, address_id, email, role, gender
+            select id, name, password, passport_no, email, role, gender
             from users
             """;
 
@@ -35,7 +35,6 @@ public class UserDao implements Dao<Long, User> {
             set name = ?,
                 password = ?,
                 passport_no = ?,
-                address_id = ?,
                 email = ?        
             where id = ?
             """;
@@ -46,8 +45,8 @@ public class UserDao implements Dao<Long, User> {
             """;
 
     private static String SAVE_SQL = """
-            insert into users(name, password, passport_no, address_id, email, role, gender) 
-            values (?, ?, ?, ?, ?, ?, ?)
+            insert into users(name, password, passport_no, email, role, gender) 
+            values (?, ?, ?, ?, ?, ?)
             """;
 
     private User buildClient(ResultSet result) throws SQLException {
@@ -56,7 +55,6 @@ public class UserDao implements Dao<Long, User> {
                 result.getString("name"),
                 result.getString("password"),
                 result.getString("passport_no"),
-                addressDao.findById(result.getLong("address_id")).orElse(null),
                 result.getString("email"),
                 Role.valueOf(result.getString("role")),
                 Gender.valueOf(result.getString("gender"))
@@ -70,9 +68,8 @@ public class UserDao implements Dao<Long, User> {
             statement.setString(1, client.getName());
             statement.setString(2, client.getPassword());
             statement.setString(3, client.getPassportNo());
-            statement.setLong(4, client.getAddress().getId());
-            statement.setString(5, client.getEmail());
-            statement.setLong(6, client.getId());
+            statement.setString(4, client.getEmail());
+            statement.setLong(5, client.getId());
             return statement.executeUpdate() > 0;
         } catch (SQLException e) {
             throw new DaoException(e);
@@ -122,10 +119,6 @@ public class UserDao implements Dao<Long, User> {
         if (filter.password() != null) {
             whereSql.add("password = ?");
             parameters.add(filter.password());
-        }
-        if (filter.address() != null) {
-            whereSql.add("address_id = ?");
-            parameters.add(filter.address().getId());
         }
         if (filter.email() != null) {
             whereSql.add("email = ?");
@@ -181,14 +174,12 @@ public class UserDao implements Dao<Long, User> {
         try (var connection = ConnectionManager.get();
              var statement = connection
                      .prepareStatement(SAVE_SQL, Statement.RETURN_GENERATED_KEYS)) {
-            Address address = addressDao.save(client.getAddress());
             statement.setString(1, client.getName());
             statement.setString(2, client.getPassword());
             statement.setString(3, client.getPassportNo());
-            statement.setLong(4, address.getId());
-            statement.setString(5, client.getEmail());
-            statement.setString(6, client.getRole().toString());
-            statement.setString(7, client.getGender().toString());
+            statement.setString(4, client.getEmail());
+            statement.setString(5, client.getRole().toString());
+            statement.setString(6, client.getGender().toString());
 
             statement.executeUpdate();
             var generatedKeys = statement.getGeneratedKeys();

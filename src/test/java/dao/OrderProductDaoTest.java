@@ -32,14 +32,6 @@ public class OrderProductDaoTest extends TestCase {
                                         "Gennadiy22",
                                         "boring",
                                         "HH333222",
-                                        new Address(
-                                                3L,
-                                                "Belarus",
-                                                "Grodno",
-                                                "Oginskogo",
-                                                "4a",
-                                                "14"
-                                        ),
                                         "goodjob@gmail.com",
                                         Role.USER,
                                         Gender.MALE
@@ -75,14 +67,6 @@ public class OrderProductDaoTest extends TestCase {
                                 "Gennadiy22",
                                 "boring",
                                 "HH333222",
-                                new Address(
-                                        3L,
-                                        "Belarus",
-                                        "Grodno",
-                                        "Oginskogo",
-                                        "4a",
-                                        "14"
-                                ),
                                 "goodjob@gmail.com",
                                 Role.USER,
                                 Gender.MALE
