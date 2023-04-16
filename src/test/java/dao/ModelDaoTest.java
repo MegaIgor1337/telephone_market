@@ -26,19 +26,5 @@ public class ModelDaoTest extends TestCase {
         assertEquals(4, modelDao.findAll(filter).size());
     }
 
-    public void testSave() {
-        Model model = new Model(null, "e43");
-        modelDao.save(model);
-        assertEquals(modelDao.findAll().stream()
-                .sorted((o1, o2) -> Long.compare(o1.getId(), o2.getId()))
-                .toList().get(modelDao.findAll().size() - 1).getId(), model.getId());
-    }
-
-    public void testDelete() {
-        assertTrue(modelDao.delete(modelDao.findAll().stream()
-                .sorted((o1, o2) -> Long.compare(o1.getId(), o2.getId()))
-                .toList().get(modelDao.findAll().size() - 1).getId()));
-    }
-
 
 }

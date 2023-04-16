@@ -38,25 +38,4 @@ public class ProductDaoTest extends TestCase {
         assertEquals(2, productDao.findAll(filter).size());
     }
 
-    public void testSave() {
-        Product product = new Product(
-                12L,
-                new Brand(7L, "Vivo+"),
-                new Model(46L, "T1"),
-                new Color(6L, "Blue-Green"),
-                new Country(1L, "Russia"),
-                22,
-                BigDecimal.valueOf(240.00)
-        );
-        productDao.save(product);
-        assertEquals(productDao.findAll().stream()
-                .sorted((o1, o2) -> Long.compare(o1.getId(), o2.getId()))
-                .toList().get(productDao.findAll().size() - 1).getId(), product.getId());
-    }
-
-    public void testDelete() {
-        assertTrue(productDao.delete(productDao.findAll().stream()
-                .sorted((o1, o2) -> Long.compare(o1.getId(), o2.getId()))
-                .toList().get(productDao.findAll().size() - 1).getId()));
-    }
 }

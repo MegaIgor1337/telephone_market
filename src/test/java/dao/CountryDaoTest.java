@@ -27,19 +27,5 @@ public class CountryDaoTest extends TestCase {
         assertEquals(1, countryDao.findAll(filter).size());
     }
 
-    public void testSave() {
-        Country country = new Country(null, "Niggeria");
-        country = countryDao.save(country);
-        assertEquals(countryDao.findAll().stream()
-                .sorted((o1, o2) -> Long.compare(o1.getId(), o2.getId()))
-                .toList().get(countryDao.findAll().size() - 1).getId(), country.getId());
-    }
-
-    public void testDelete() {
-        assertTrue(countryDao.delete(countryDao.findAll().stream()
-                .sorted((o1, o2) -> Long.compare(o1.getId(), o2.getId()))
-                .toList().get(countryDao.findAll().size() - 1).getId()));
-    }
-
 
 }

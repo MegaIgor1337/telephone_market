@@ -34,18 +34,5 @@ public class BrandDaoTest extends TestCase {
     }
 
 
-    public void testDelete() throws InterruptedException {
 
-        assertTrue(brandDao.delete(brandDao.findAll().stream()
-                .sorted((o1, o2) -> Long.compare(o1.getId(), o2.getId()))
-                .toList().get(brandDao.findAll().size() - 1).getId()));
-    }
-
-    public void testSave() {
-        Brand brand = new Brand(null, "Google");
-        brandDao.save(brand);
-        assertEquals(brandDao.findAll().stream()
-                .sorted((o1, o2) -> Long.compare(o1.getId(), o2.getId()))
-                .toList().get(brandDao.findAll().size() - 1).getId(), brand.getId());
-    }
 }

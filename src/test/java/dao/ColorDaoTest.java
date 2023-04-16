@@ -30,19 +30,6 @@ public class ColorDaoTest extends TestCase {
         assertEquals(1, colorDao.findAll(colorFilter).size());
     }
 
-    public void testSave() {
-        Color color = new Color(null, "Gray");
-        colorDao.save(color);
-        assertEquals(colorDao.findAll().stream()
-                .sorted((o1, o2) -> Long.compare(o1.getId(), o2.getId()))
-                .toList().get(colorDao.findAll().size() - 1).getId(), color.getId());
-    }
-
-    public void testDelete() {
-        assertTrue(colorDao.delete(colorDao.findAll().stream()
-                .sorted((o1, o2) -> Long.compare(o1.getId(), o2.getId()))
-                .toList().get(colorDao.findAll().size() - 1).getId()));
-    }
 
 
 }

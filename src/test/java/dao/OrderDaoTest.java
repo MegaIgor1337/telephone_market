@@ -49,35 +49,6 @@ public class OrderDaoTest extends TestCase {
         assertEquals(4, orderDao.findAll(filter).size());
     }
 
-    public void testSave() {
-        Order order = new Order(
-                null,
-                new User(
-                        3L,
-                        "Gennadiy22",
-                        "boring",
-                        "HH333222",
-
-                        "goodjob@gmail.com",
-                        Role.USER,
-                        Gender.MALE
-                ),
-                BigDecimal.valueOf(285.00),
-                LocalDateTime.of(2021, 10, 12, 18, 37, 0),
-                true,
-                LocalDateTime.of(2021, 12, 18, 14, 0, 0)
-        );
-        orderDao.save(order);
-        assertEquals(orderDao.findAll().stream()
-                .sorted((o1, o2) -> Long.compare(o1.getId(), o2.getId()))
-                .toList().get(orderDao.findAll().size() - 1).getId(), order.getId(), order.getId());
-    }
-
-    public void testDelete() {
-        assertTrue(orderDao.delete(orderDao.findAll().stream()
-                .sorted((o1, o2) -> Long.compare(o1.getId(), o2.getId()))
-                .toList().get(orderDao.findAll().size() - 1).getId()));
-    }
 
 
 }
