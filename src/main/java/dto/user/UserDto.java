@@ -1,4 +1,4 @@
-package dto;
+package dto.user;
 
 
 import entity.address.Address;
@@ -12,12 +12,11 @@ import lombok.Value;
 @Value
 @Builder
 public class UserDto {
-    private Long id;
-    private String name;
-    private String password;
-    private String passportNo;
-    private Address address;
-    private String email;
-    private Role role;
-    private Gender gender;
+    Long id;
+    String name;
+    String password;
+    String passportNo;
+    String email;
+    Role role;
+    Gender gender;
 }

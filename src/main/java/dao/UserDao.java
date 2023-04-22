@@ -1,6 +1,5 @@
 package dao;
 
-import entity.address.Address;
 import entity.user.Gender;
 import entity.user.Role;
 import entity.user.User;
@@ -23,6 +22,12 @@ public class UserDao implements Dao<Long, User> {
             select id, name, password, passport_no, email, role, gender
             from users
             where id = ?
+            """;
+
+    private static String FIND_BY_NAME_PASSWORD = """
+            select id, name, password, passport_no, email, role, gender
+            from users
+            where name = ? and password =?
             """;
 
     private static String FIND_ALL_SQL = """
@@ -49,7 +54,7 @@ public class UserDao implements Dao<Long, User> {
             values (?, ?, ?, ?, ?, ?)
             """;
 
-    private User buildClient(ResultSet result) throws SQLException {
+    private User buildUser(ResultSet result) throws SQLException {
         return new User(
                 result.getLong("id"),
                 result.getString("name"),
@@ -84,7 +89,7 @@ public class UserDao implements Dao<Long, User> {
             statement.setLong(1, id);
             var result = statement.executeQuery();
             if (result.next())
-                client = buildClient(result);
+                client = buildUser(result);
             return Optional.ofNullable(client);
         } catch (SQLException e) {
             throw new DaoException(e);
@@ -98,7 +103,7 @@ public class UserDao implements Dao<Long, User> {
             List<User> clients = new ArrayList<>();
             var result = statement.executeQuery();
             while (result.next())
-                clients.add(buildClient(result));
+                clients.add(buildUser(result));
             return clients;
         } catch (SQLException e) {
             throw new DaoException(e);
@@ -150,7 +155,7 @@ public class UserDao implements Dao<Long, User> {
             }
             var result = statement.executeQuery();
             while (result.next())
-                clients.add(buildClient(result));
+                clients.add(buildUser(result));
 
             return clients;
         } catch (SQLException e) {
@@ -186,6 +191,22 @@ public class UserDao implements Dao<Long, User> {
             if (generatedKeys.next())
                 client.setId(generatedKeys.getLong("id"));
             return client;
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
+    }
+
+    public Optional<User> findByNameAdnPassword(String name, String password) {
+        try (var connection = ConnectionManager.get();
+        var statement = connection.prepareStatement(FIND_BY_NAME_PASSWORD)) {
+            statement.setString(1, name);
+            statement.setString(2, password);
+            var result = statement.executeQuery();
+            User user = null;
+            if (result.next()) {
+                 user = buildUser(result);
+            }
+            return Optional.ofNullable(user);
         } catch (SQLException e) {
             throw new DaoException(e);
         }

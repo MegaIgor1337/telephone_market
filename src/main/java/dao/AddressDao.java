@@ -2,6 +2,7 @@ package dao;
 
 import dao.filter.AddressFilter;
 import entity.address.Address;
+import entity.user.User;
 import exception.DaoException;
 import util.ConnectionManager;
 
@@ -47,6 +48,11 @@ public class AddressDao implements Dao<Long, Address> {
     private static String SAVE_SQL = """
             insert into address(country, city, street, house, flat, user_id) 
             values (?, ?, ?, ?, ?, ?)
+            """;
+
+    private static String FIND_BY_USER_ID = """
+            select id, country, street, house, flat, city, user_id from address
+            where user_id = ?
             """;
 
     private Address buildAddress(ResultSet result) throws SQLException {
@@ -188,6 +194,20 @@ public class AddressDao implements Dao<Long, Address> {
             if (generatedKeys.next())
                 address.setId(generatedKeys.getLong("id"));
             return address;
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
+    }
+
+    public List<Address> getAddressesByUserId(Long id) {
+        try (var connection = ConnectionManager.get();
+             var statement = connection.prepareStatement(FIND_BY_USER_ID)) {
+            List<Address> addresses = new ArrayList<>();
+            statement.setLong(1, id);
+            var result = statement.executeQuery();
+            while (result.next())
+                addresses.add(buildAddress(result));
+            return addresses;
         } catch (SQLException e) {
             throw new DaoException(e);
         }

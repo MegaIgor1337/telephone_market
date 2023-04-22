@@ -1,6 +1,7 @@
 package exception;
 
 import lombok.Getter;
+import validator.Error;
 
 import java.util.List;
 

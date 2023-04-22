@@ -1,19 +1,18 @@
-package mapper;
+package mapper.user;
 
 import dao.AddressDao;
-import dto.CreateUserDto;
+import dto.user.CreateUserDto;
 import entity.user.Gender;
 import entity.user.Role;
 import entity.user.User;
 import lombok.NoArgsConstructor;
-import util.LocalDateFormatter;
+import mapper.Mapper;
 
 import static lombok.AccessLevel.PRIVATE;
 
 @NoArgsConstructor(access = PRIVATE)
 public class CreateUserMapper implements Mapper<CreateUserDto, User> {
 
-    private AddressDao addressDao = AddressDao.getInstance();
     private static final CreateUserMapper INSTANCE = new CreateUserMapper();
 
     @Override
@@ -23,8 +22,8 @@ public class CreateUserMapper implements Mapper<CreateUserDto, User> {
                 .password(object.getPassword())
                 .passportNo(object.getPassportNo())
                 .email(object.getEmail())
-                .gender(Gender.valueOf(object.getGender()))
                 .role(Role.valueOf(object.getRole()))
+                .gender(Gender.valueOf(object.getGender()))
                 .build();
     }
 

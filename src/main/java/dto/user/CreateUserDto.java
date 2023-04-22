@@ -1,4 +1,4 @@
-package dto;
+package dto.user;
 
 import lombok.Builder;
 import lombok.Value;
@@ -9,8 +9,8 @@ public class CreateUserDto {
     String name;
     String password;
     String passportNo;
-    String addressId;
     String email;
     String role;
     String gender;
+
 }
