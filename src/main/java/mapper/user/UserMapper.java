@@ -22,6 +22,7 @@ public class UserMapper implements Mapper<User, UserDto> {
                 .email(object.getEmail())
                 .role(object.getRole())
                 .gender(object.getGender())
+                .balance(object.getBalance())
                 .build();
     }
 

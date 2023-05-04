@@ -22,6 +22,11 @@
 <a href="${pageContext.request.contextPath}/changePassportNo">
     <button type="button"> Change passport number</button>
 </a><br/>
+<p1>Balance: </p1>
+<%=userDto.getBalance() + "$"%>
+<a href="${pageContext.request.contextPath}/putMoney">
+    <button type="button"> Put money </button>
+</a><br/>
 <a href="${pageContext.request.contextPath}/address">
     <button type="button"> Add delivery address </button>
 </a>

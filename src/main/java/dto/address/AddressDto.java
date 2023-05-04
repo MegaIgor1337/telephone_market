@@ -1,18 +1,18 @@
 package dto.address;
 
 import dto.user.UserDto;
-import entity.user.User;
-import lombok.Builder;
-import lombok.Value;
+import lombok.*;
 
-@Value
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class AddressDto {
-    Long id;
-    String country;
-    String city;
-    String street;
-    String house;
-    String flat;
-    UserDto user;
+    private Long id;
+    private String country;
+    private String city;
+    private String street;
+    private String house;
+    private String flat;
+    private UserDto userDto;
 }

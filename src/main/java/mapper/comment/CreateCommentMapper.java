@@ -8,13 +8,13 @@ import mapper.user.UserMapper;
 
 public class CreateCommentMapper implements Mapper<CreateCommentDto, Comment> {
     public static final CreateCommentMapper INSTANCE = new CreateCommentMapper();
-    private final UserDao userDao = UserDao.getInstance();
+    private final UserDao userDao = UserDao.getINSTANCE();
     @Override
     public Comment mapFrom(CreateCommentDto object) {
         return Comment.builder()
                 .id(Long.valueOf(object.getId()))
                 .comment(object.getComment())
-                .user(userDao.findById(Long.valueOf(object.getUserId())).get())
+                .user(userDao.find(Long.valueOf(object.getUserId())).get())
                 .build();
     }
 

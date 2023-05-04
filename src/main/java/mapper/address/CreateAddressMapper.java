@@ -17,7 +17,7 @@ import static lombok.AccessLevel.PRIVATE;
 
 public class CreateAddressMapper implements Mapper<CreateAddressDto, Address> {
     private static final CreateAddressMapper INSTANCE = new CreateAddressMapper();
-    private final UserDao userDao = UserDao.getInstance();
+    private final UserDao userDao = UserDao.getINSTANCE();
 
     public static CreateAddressMapper getInstance() {
         return INSTANCE;
@@ -33,7 +33,7 @@ public class CreateAddressMapper implements Mapper<CreateAddressDto, Address> {
                     .street(object.getStreet())
                     .house(object.getHouse())
                     .flat(object.getFlat())
-                    .user(userDao.findById(Long.valueOf(object.getUserId())).get())
+                    .user(userDao.find(Long.valueOf(object.getUserId())).get())
                     .build();
     }
 }

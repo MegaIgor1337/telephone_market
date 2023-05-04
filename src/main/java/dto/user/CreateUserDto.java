@@ -1,16 +1,16 @@
 package dto.user;
 
-import lombok.Builder;
-import lombok.Value;
+import lombok.*;
 
-@Value
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class CreateUserDto {
-    String name;
-    String password;
-    String passportNo;
-    String email;
-    String role;
-    String gender;
-
+    private String name;
+    private String password;
+    private String passportNo;
+    private String email;
+    private String role;
+    private String gender;
 }

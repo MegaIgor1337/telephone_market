@@ -4,6 +4,7 @@ import dao.CommentDao;
 import dto.comment.CommentDto;
 import dto.user.UserDto;
 import entity.comment.Comment;
+import entity.comment.CommentStatus;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -20,9 +21,7 @@ public class CommentsServlet extends HttpServlet {
     private final CommentService commentService = CommentService.getInstance();
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-        req.setAttribute("comments", commentService.get());
-        System.out.println(commentService.get());
+        req.setAttribute("comments", commentService.getAccessedComments());
         req.getRequestDispatcher(JspHelper.getPath("comments")).forward(req, resp);
     }
 
@@ -30,8 +29,12 @@ public class CommentsServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String comment = req.getParameter("comment");
         UserDto userDto = (UserDto) req.getSession().getAttribute("userDto");
-        commentService.save(CommentDto.builder()
-                .id(0L).comment(comment).userDto(userDto).build());
+        CommentDto commentDto = CommentDto.builder()
+                .comment(comment)
+                .userDto(userDto)
+                .commentStatus(CommentStatus.MODERATING)
+                .build();
+        commentService.save(commentDto);
         resp.sendRedirect("/menu");
     }
 }

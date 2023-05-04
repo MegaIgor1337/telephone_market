@@ -1,14 +1,17 @@
 package dto.comment;
 
 import dto.user.UserDto;
+import entity.comment.CommentStatus;
 import entity.user.User;
-import lombok.Builder;
-import lombok.Value;
+import lombok.*;
 
-@Value
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class CommentDto {
-    Long id;
-    String comment;
-    UserDto userDto;
+    private Long id;
+    private String comment;
+    private UserDto userDto;
+    private CommentStatus commentStatus;
 }

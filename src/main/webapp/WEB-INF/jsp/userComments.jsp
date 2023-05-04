@@ -20,14 +20,14 @@
     int i = 0;
     if (userComments != null && !userComments.isEmpty()) {
         for (CommentDto comment : userComments) {
-        i++;
+            i++;
 %>
 <p>
-<%=i%>)
-<%= comment.getComment() %>
+        <%=i%>)
+        <%= comment.getComment() %>
 <form method="post" action="${pageContext.request.contextPath}/userComments">
     <input type="hidden" name="commentId" value="<%=comment.getId()%>"/>
-    <button type="submit" value="Delete">Delete</button></form>
+    <button type="submit" value="Delete">Delete</button>
 </form>
 </p>
 <%

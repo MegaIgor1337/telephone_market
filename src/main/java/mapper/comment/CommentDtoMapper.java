@@ -6,15 +6,16 @@ import mapper.Mapper;
 import mapper.user.UserDtoMapper;
 import mapper.user.UserMapper;
 
-public class CommentDtoMapper implements Mapper<Comment, CommentDto> {
+public class CommentDtoMapper implements Mapper<CommentDto, Comment> {
     private static final CommentDtoMapper INSTANCE = new CommentDtoMapper();
-    private final UserMapper userMapper = UserMapper.getInstance();
+    private final UserDtoMapper userDtoMapper = UserDtoMapper.getInstance();
     @Override
-    public CommentDto mapFrom(Comment object) {
-        return CommentDto.builder()
+    public Comment mapFrom(CommentDto object) {
+        return Comment.builder()
                 .id(object.getId())
                 .comment(object.getComment())
-                .userDto(userMapper.mapFrom(object.getUser()))
+                .user(userDtoMapper.mapFrom(object.getUserDto()))
+                .status(object.getCommentStatus())
                 .build();
     }
 

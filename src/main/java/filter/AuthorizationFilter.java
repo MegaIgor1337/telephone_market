@@ -20,6 +20,7 @@ public class AuthorizationFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
             throws IOException, ServletException {
         var uri = ((HttpServletRequest) servletRequest).getRequestURI();
+
         if (isPublicPath(uri) || isUserLoggedIn(servletRequest)) {
             filterChain.doFilter(servletRequest, servletResponse);
         } else {

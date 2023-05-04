@@ -4,26 +4,50 @@ import entity.brand.Brand;
 import entity.color.Color;
 import entity.country.Country;
 import entity.model.Model;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import entity.order.Order;
+import entity.orderProduct.OrderProduct;
+import entity.promoCode.PromoCode;
+import entity.promoCodeProduct.PromoCodeProduct;
+import lombok.*;
 
+import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Entity
 public class Product {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "brand_id")
     private Brand brand;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "model_id")
     private Model model;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "color_id")
     private Color color;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "country_id")
     private Country country;
+    @Column(name = "count_on_storage")
     private int storageCount;
     private BigDecimal cost;
+
+    @ToString.Exclude
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    private List<OrderProduct> orders = new ArrayList<>();
+
+    @ToString.Exclude
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    private List<PromoCodeProduct> promoCodes = new ArrayList<>();
 
 
 }

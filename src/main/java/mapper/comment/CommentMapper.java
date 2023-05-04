@@ -14,6 +14,7 @@ public class CommentMapper implements Mapper<Comment, CommentDto> {
                 .id(object.getId())
                 .comment(object.getComment())
                 .userDto(userMapper.mapFrom(object.getUser()))
+                .commentStatus(object.getStatus())
                 .build();
     }
 

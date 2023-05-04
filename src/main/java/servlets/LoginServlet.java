@@ -1,12 +1,14 @@
 package servlets;
 
 import dto.user.UserDto;
+import entity.user.Role;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.SneakyThrows;
+import service.CommentService;
 import service.UserService;
 import util.JspHelper;
 
@@ -15,6 +17,7 @@ import java.io.IOException;
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
     private final UserService userService = UserService.getInstance();
+    private final CommentService commentService = CommentService.getInstance();
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.getRequestDispatcher(JspHelper.getPath("login"))
@@ -38,6 +41,11 @@ public class LoginServlet extends HttpServlet {
     @SneakyThrows
     private void onLoginSuccess(UserDto user, HttpServletRequest req, HttpServletResponse resp) {
         req.getSession().setAttribute("userDto", user);
-        resp.sendRedirect("/menu");
+        if (user.getRole().equals(Role.ADMIN)) {
+            req.getSession().setAttribute("sizeModerateComments", commentService.getModerateComments().size());
+            resp.sendRedirect("/admin");
+        } else {
+            resp.sendRedirect("/menu");
+        }
     }
 }

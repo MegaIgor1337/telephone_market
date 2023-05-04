@@ -1,18 +1,17 @@
 package dto.address;
 
-import lombok.Builder;
-import lombok.Setter;
-import lombok.Value;
+import lombok.*;
 
-@Value
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class CreateAddressDto {
-    String id;
-    String country;
-    String city;
-    String street;
-    String house;
-    String flat;
-    String userId;
-
+    private String id;
+    private String country;
+    private String city;
+    private String street;
+    private String house;
+    private String flat;
+    private String userId;
 }

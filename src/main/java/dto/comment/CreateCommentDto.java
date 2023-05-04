@@ -1,12 +1,14 @@
 package dto.comment;
 
-import lombok.Builder;
-import lombok.Value;
+import lombok.*;
 
-@Value
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class CreateCommentDto {
-    String id;
-    String comment;
-    String userId;
+    private String id;
+    private String comment;
+    private String userId;
+    private String commentStatus;
 }

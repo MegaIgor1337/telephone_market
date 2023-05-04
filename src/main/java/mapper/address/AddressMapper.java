@@ -1,7 +1,6 @@
 package mapper.address;
 
 import dto.address.AddressDto;
-import dto.user.UserDto;
 import entity.address.Address;
 import lombok.NoArgsConstructor;
 import mapper.Mapper;
@@ -27,7 +26,7 @@ public class AddressMapper implements Mapper<Address, AddressDto> {
                 .street(object.getStreet())
                 .house(object.getHouse())
                 .flat(object.getFlat())
-                .user(userMapper.mapFrom(object.getUser()))
+                .userDto(userMapper.mapFrom(object.getUser()))
                 .build();
     }
 }

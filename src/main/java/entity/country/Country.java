@@ -1,18 +1,26 @@
 package entity.country;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import entity.product.Product;
+import lombok.*;
 
-import java.util.Objects;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Entity
 public class Country {
+    @Id
+    @GeneratedValue
     private Long id;
-    private String country;
+    private String name;
+
+    @Builder.Default
+    @ToString.Exclude
+    @OneToMany(mappedBy = "country", cascade = CascadeType.ALL)
+    private List<Product> products = new ArrayList<>();
 
 }
