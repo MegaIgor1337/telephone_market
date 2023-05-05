@@ -1,6 +1,5 @@
 package dao;
 
-import entity.country.Country;
 import junit.framework.TestCase;
 
 public class CountryDaoTest extends TestCase {

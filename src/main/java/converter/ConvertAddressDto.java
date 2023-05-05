@@ -1,6 +1,6 @@
 package converter;
 
-import dto.address.CreateAddressDto;
+import dto.CreateAddressDto;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.NoArgsConstructor;
 

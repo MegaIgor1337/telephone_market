@@ -1,6 +1,5 @@
-package dto.address;
+package dto;
 
-import dto.user.UserDto;
 import lombok.*;
 
 @Data

@@ -1,9 +1,9 @@
 package service;
 
 import dao.UserDao;
-import dto.user.CreateUserDto;
-import dto.user.UserDto;
-import entity.user.User;
+import dto.CreateUserDto;
+import dto.UserDto;
+import entity.User;
 import exception.ValidationException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

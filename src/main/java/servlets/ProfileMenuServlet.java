@@ -1,7 +1,7 @@
 package servlets;
 
-import dto.address.AddressDto;
-import dto.user.UserDto;
+import dto.AddressDto;
+import dto.UserDto;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;

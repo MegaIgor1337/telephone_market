@@ -1,7 +1,5 @@
-package entity.orderProduct;
+package entity;
 
-import entity.order.Order;
-import entity.product.Product;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

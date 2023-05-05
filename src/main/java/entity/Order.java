@@ -1,8 +1,5 @@
-package entity.order;
+package entity;
 
-import entity.orderProduct.OrderProduct;
-import entity.product.Product;
-import entity.user.User;
 import lombok.*;
 
 import javax.persistence.*;

@@ -1,8 +1,6 @@
-package dto.comment;
+package dto;
 
-import dto.user.UserDto;
-import entity.comment.CommentStatus;
-import entity.user.User;
+import entity.enums.CommentStatus;
 import lombok.*;
 
 @Data

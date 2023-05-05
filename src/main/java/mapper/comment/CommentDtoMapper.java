@@ -1,10 +1,9 @@
 package mapper.comment;
 
-import dto.comment.CommentDto;
-import entity.comment.Comment;
+import dto.CommentDto;
+import entity.Comment;
 import mapper.Mapper;
 import mapper.user.UserDtoMapper;
-import mapper.user.UserMapper;
 
 public class CommentDtoMapper implements Mapper<CommentDto, Comment> {
     private static final CommentDtoMapper INSTANCE = new CommentDtoMapper();

@@ -1,7 +1,7 @@
 package servlets;
 
-import dto.comment.CommentDto;
-import dto.user.UserDto;
+import dto.CommentDto;
+import dto.UserDto;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;

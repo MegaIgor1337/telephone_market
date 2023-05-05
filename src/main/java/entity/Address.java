@@ -1,10 +1,8 @@
-package entity.address;
+package entity;
 
-import entity.user.User;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.Objects;
 
 @Data
 @AllArgsConstructor

@@ -1,4 +1,4 @@
-package entity.comment;
+package entity.enums;
 
 public enum CommentStatus {
     MODERATING,

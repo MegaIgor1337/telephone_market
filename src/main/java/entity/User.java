@@ -1,15 +1,13 @@
-package entity.user;
+package entity;
 
-import entity.address.Address;
-import entity.comment.Comment;
-import entity.order.Order;
+import entity.enums.Gender;
+import entity.enums.Role;
 import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Data
 @AllArgsConstructor

@@ -1,6 +1,5 @@
 package dao;
 
-import entity.model.Model;
 import junit.framework.TestCase;
 
 public class ModelDaoTest extends TestCase {

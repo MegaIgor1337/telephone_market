@@ -1,4 +1,4 @@
-package dto.comment;
+package dto;
 
 import lombok.*;
 

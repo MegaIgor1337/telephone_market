@@ -1,14 +1,12 @@
 package service;
 
 import dao.CommentDao;
-import dto.comment.CommentDto;
-import entity.comment.Comment;
-import entity.comment.CommentStatus;
-import entity.user.User;
+import dto.CommentDto;
+import entity.Comment;
+import entity.enums.CommentStatus;
 import mapper.comment.CommentDtoMapper;
 import mapper.comment.CommentMapper;
 import mapper.user.UserDtoMapper;
-import mapper.user.UserMapper;
 
 import java.util.List;
 

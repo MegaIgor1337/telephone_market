@@ -1,9 +1,6 @@
 package dao;
 
-import entity.brand.Brand;
 import junit.framework.TestCase;
-
-import java.util.List;
 
 public class BrandDaoTest extends TestCase {
 //    private static final BrandDao brandDao = BrandDao.getINSTANCE();

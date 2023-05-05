@@ -1,4 +1,4 @@
-package entity.promoCode;
+package entity.enums;
 
 public enum PromoCodeStatus {
     ACTIVE,

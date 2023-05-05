@@ -1,10 +1,8 @@
 package service;
 
 import dao.AddressDao;
-import dto.address.AddressDto;
-import dto.address.CreateAddressDto;
-import dto.user.UserDto;
-import entity.user.Gender;
+import dto.AddressDto;
+import dto.CreateAddressDto;
 import exception.ValidationException;
 import lombok.NoArgsConstructor;
 import mapper.address.AddressMapper;

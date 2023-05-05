@@ -1,7 +1,7 @@
 package servlets;
 
-import dto.user.UserDto;
-import entity.user.Role;
+import dto.UserDto;
+import entity.enums.Role;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;

@@ -1,7 +1,7 @@
 package filter;
 
-import dto.user.UserDto;
-import entity.user.Role;
+import dto.UserDto;
+import entity.enums.Role;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;

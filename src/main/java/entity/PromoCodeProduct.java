@@ -1,7 +1,7 @@
-package entity.promoCodeProduct;
+package entity;
 
-import entity.product.Product;
-import entity.promoCode.PromoCode;
+import entity.Product;
+import entity.PromoCode;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

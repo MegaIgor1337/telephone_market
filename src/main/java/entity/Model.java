@@ -1,6 +1,5 @@
-package entity.country;
+package entity;
 
-import entity.product.Product;
 import lombok.*;
 
 import javax.persistence.*;
@@ -12,15 +11,16 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @Entity
-public class Country {
+public class Model {
     @Id
-    @GeneratedValue
+    @EqualsAndHashCode.Include
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
-
+    private String model;
     @Builder.Default
+    @OneToMany(mappedBy = "model", cascade = CascadeType.ALL)
     @ToString.Exclude
-    @OneToMany(mappedBy = "country", cascade = CascadeType.ALL)
     private List<Product> products = new ArrayList<>();
+
 
 }

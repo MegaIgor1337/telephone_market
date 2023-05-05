@@ -1,10 +1,9 @@
 package mapper.user;
 
-import dao.AddressDao;
-import dto.user.CreateUserDto;
-import entity.user.Gender;
-import entity.user.Role;
-import entity.user.User;
+import dto.CreateUserDto;
+import entity.enums.Gender;
+import entity.enums.Role;
+import entity.User;
 import lombok.NoArgsConstructor;
 import mapper.Mapper;
 

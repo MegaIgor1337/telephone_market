@@ -1,7 +1,7 @@
-package entity.comment;
+package entity;
 
 
-import entity.user.User;
+import entity.enums.CommentStatus;
 import lombok.*;
 
 import javax.persistence.*;

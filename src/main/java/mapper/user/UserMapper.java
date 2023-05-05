@@ -1,7 +1,7 @@
 package mapper.user;
 
-import dto.user.UserDto;
-import entity.user.User;
+import dto.UserDto;
+import entity.User;
 import lombok.NoArgsConstructor;
 import mapper.Mapper;
 

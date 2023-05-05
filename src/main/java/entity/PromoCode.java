@@ -1,8 +1,7 @@
-package entity.promoCode;
+package entity;
 
 
-import entity.product.Product;
-import entity.promoCodeProduct.PromoCodeProduct;
+import entity.enums.PromoCodeStatus;
 import lombok.*;
 
 import javax.persistence.*;

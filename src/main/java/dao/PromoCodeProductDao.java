@@ -1,8 +1,7 @@
 package dao;
 
-import entity.promoCodeProduct.PromoCodeProduct;
+import entity.PromoCodeProduct;
 import lombok.AccessLevel;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

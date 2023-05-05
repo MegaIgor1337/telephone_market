@@ -1,11 +1,10 @@
 package validator;
 
-import dto.user.CreateUserDto;
-import entity.user.Gender;
-import entity.user.Role;
+import dto.CreateUserDto;
+import entity.enums.Gender;
+import entity.enums.Role;
 import lombok.NoArgsConstructor;
 
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

@@ -1,6 +1,6 @@
 package dao;
 
-import entity.orderProduct.OrderProduct;
+import entity.OrderProduct;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

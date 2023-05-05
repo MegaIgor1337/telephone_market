@@ -1,6 +1,6 @@
 package validator;
 
-import dto.address.CreateAddressDto;
+import dto.CreateAddressDto;
 
 public class CreateAddressValidator implements Validator<CreateAddressDto> {
     private static final CreateAddressValidator INSTANCE = new CreateAddressValidator();

@@ -1,7 +1,7 @@
 package servlets.changeParams;
 
 import converter.ConvertAddressDto;
-import dto.address.CreateAddressDto;
+import dto.CreateAddressDto;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;

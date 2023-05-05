@@ -1,10 +1,8 @@
-package dto.user;
+package dto;
 
 
-import dto.address.AddressDto;
-import entity.address.Address;
-import entity.user.Gender;
-import entity.user.Role;
+import entity.enums.Gender;
+import entity.enums.Role;
 import lombok.*;
 
 import java.math.BigDecimal;

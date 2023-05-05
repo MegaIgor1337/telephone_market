@@ -1,13 +1,11 @@
 package dao;
 
-import entity.user.Gender;
-import entity.user.Role;
-import entity.user.User;
+import entity.enums.Gender;
+import entity.enums.Role;
+import entity.User;
 import junit.framework.TestCase;
 
 import java.math.BigDecimal;
-import java.util.List;
-import java.util.Optional;
 
 public class UserDaoTest extends TestCase {
     private static final UserDao userDao = UserDao.getINSTANCE();

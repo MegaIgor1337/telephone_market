@@ -1,6 +1,5 @@
 package dao;
 
-import entity.color.Color;
 import junit.framework.TestCase;
 
 public class ColorDaoTest extends TestCase {

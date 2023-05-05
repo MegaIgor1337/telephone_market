@@ -1,6 +1,6 @@
 package converter;
 
-import dto.user.CreateUserDto;
+import dto.CreateUserDto;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.NoArgsConstructor;
 

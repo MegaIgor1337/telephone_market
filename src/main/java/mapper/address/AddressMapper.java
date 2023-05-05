@@ -1,7 +1,7 @@
 package mapper.address;
 
-import dto.address.AddressDto;
-import entity.address.Address;
+import dto.AddressDto;
+import entity.Address;
 import lombok.NoArgsConstructor;
 import mapper.Mapper;
 import mapper.user.UserMapper;

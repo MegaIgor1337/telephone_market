@@ -1,27 +1,25 @@
-package entity.model;
+package entity;
 
-import entity.product.Product;
 import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Entity
-public class Model {
+public class Color {
     @Id
     @EqualsAndHashCode.Include
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String model;
+    private String color;
     @Builder.Default
-    @OneToMany(mappedBy = "model", cascade = CascadeType.ALL)
     @ToString.Exclude
+    @OneToMany(mappedBy = "color", cascade = CascadeType.ALL)
     private List<Product> products = new ArrayList<>();
-
 
 }

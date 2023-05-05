@@ -1,10 +1,9 @@
 package servlets;
 
 import converter.ConvertAddressDto;
-import dto.address.CreateAddressDto;
-import dto.user.UserDto;
+import dto.CreateAddressDto;
+import dto.UserDto;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;

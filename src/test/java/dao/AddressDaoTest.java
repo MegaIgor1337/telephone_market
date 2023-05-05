@@ -1,12 +1,6 @@
 package dao;
 
-import entity.address.Address;
-import entity.user.Gender;
-import entity.user.Role;
-import entity.user.User;
 import junit.framework.TestCase;
-
-import java.math.BigDecimal;
 
 public class AddressDaoTest extends TestCase {
 //    private final AddressDao addressDao = AddressDao.getINSTANCE();

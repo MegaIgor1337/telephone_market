@@ -1,10 +1,8 @@
 package servlets;
 
-import dao.CommentDao;
-import dto.comment.CommentDto;
-import dto.user.UserDto;
-import entity.comment.Comment;
-import entity.comment.CommentStatus;
+import dto.CommentDto;
+import dto.UserDto;
+import entity.enums.CommentStatus;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;

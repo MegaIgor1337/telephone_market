@@ -1,8 +1,8 @@
 package servlets;
 
 import converter.ConvertUserDto;
-import entity.user.Gender;
-import entity.user.Role;
+import entity.enums.Gender;
+import entity.enums.Role;
 import exception.ValidationException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;

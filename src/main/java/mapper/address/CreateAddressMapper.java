@@ -1,13 +1,8 @@
 package mapper.address;
 
 import dao.UserDao;
-import dto.address.CreateAddressDto;
-import dto.user.CreateUserDto;
-import dto.user.UserDto;
-import entity.address.Address;
-import entity.user.Gender;
-import entity.user.Role;
-import entity.user.User;
+import dto.CreateAddressDto;
+import entity.Address;
 import lombok.NoArgsConstructor;
 import mapper.Mapper;
 

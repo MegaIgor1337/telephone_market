@@ -1,20 +1,11 @@
-package entity.product;
+package entity;
 
-import entity.brand.Brand;
-import entity.color.Color;
-import entity.country.Country;
-import entity.model.Model;
-import entity.order.Order;
-import entity.orderProduct.OrderProduct;
-import entity.promoCode.PromoCode;
-import entity.promoCodeProduct.PromoCodeProduct;
 import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Data
 @AllArgsConstructor

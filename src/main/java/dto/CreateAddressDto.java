@@ -1,4 +1,4 @@
-package dto.address;
+package dto;
 
 import lombok.*;
 

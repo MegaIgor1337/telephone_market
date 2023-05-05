@@ -1,14 +1,6 @@
 package dao;
 
-import entity.address.Address;
-import entity.user.Gender;
-import entity.user.Role;
-import entity.user.User;
-import entity.order.Order;
 import junit.framework.TestCase;
-
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 public class OrderDaoTest extends TestCase {
 //    private static final OrderDao orderDao = OrderDao.getINSTANCE();

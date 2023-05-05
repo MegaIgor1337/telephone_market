@@ -1,4 +1,4 @@
-package dto.user;
+package dto;
 
 import lombok.*;
 
