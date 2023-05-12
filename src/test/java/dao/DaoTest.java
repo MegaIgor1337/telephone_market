@@ -7,12 +7,9 @@ import entity.User;
 import entity.enums.Gender;
 import entity.enums.Role;
 import org.hibernate.SessionFactory;
-import util.HibernateUtil;
-import lombok.Cleanup;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import util.HibernateUtil;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import utils.TestDataImporter;
@@ -31,16 +28,16 @@ public class DaoTest {
     private final AddressDao addressDao = AddressDao.getINSTANCE();
     private final SessionFactory sessionFactory = HibernateUtil.buildSessionFactory();
     private final UserDao userDao = UserDao.getINSTANCE();
-    private  Integer sizeUsers;
-//    @BeforeAll
-//    public void initDb() {
-//        TestDataImporter.importData(sessionFactory);
-//        System.out.println();
-//    }
-//    @AfterAll
-//     public void close() {
-//        sessionFactory.close();
-//     }
+    private  Integer  sizeUsers;
+    @BeforeAll
+    public void initDb() {
+        TestDataImporter.importData(sessionFactory);
+        System.out.println();
+    }
+    @AfterAll
+    public void close() {
+        sessionFactory.close();
+    }
     @Test
     public void testAddressesFindByUserId() {
         List<Address> addresses = addressDao.findByUserId(sessionFactory, 1L);
@@ -53,27 +50,30 @@ public class DaoTest {
         assertThat(2).isEqualTo(comments.size());
     }
 
-//    @Test
-//    public void testSave() {
-//        User user = User.builder()
-//                .name("Inna")
-//                .password("Fjllwe2")
-//                .email("jgdkjgd@mail.ru")
-//                .role(Role.USER)
-//                .gender(Gender.FEMALE)
-//                .passportNo("JJ425112")
-//                .balance(BigDecimal.valueOf(0))
-//                .build();
-//        userDao.save(sessionFactory, user);
-//        assertThat(userDao.get(sessionFactory).size()).isEqualTo(5);
-//    }
+    @Test
+    public void testSave() {
+        User user = User.builder()
+                .name("Inna")
+                .password("Fjllwe2")
+                .email("jgdkjgd@mail.ru")
+                .role(Role.USER)
+                .gender(Gender.FEMALE)
+                .passportNo("JJ425112")
+                .balance(BigDecimal.valueOf(0))
+                .build();
+        userDao.save(sessionFactory, user);
+        assertThat(userDao.get(sessionFactory).size()).isEqualTo(5);
+    }
 
     @Test
     public void testFindAll() {
         List<User> results = userDao.get(sessionFactory);
         sizeUsers = results.size();
         List<String> fullNames = results.stream().map(User::getName).collect(toList());
-        assertThat(fullNames).containsExactlyInAnyOrder("Igor", "Maksim321", "Gennadiy22", "Georgiy");
+        assertThat(fullNames).containsExactlyInAnyOrder("Igor",
+                "Maksim321",
+                "Gennadiy22",
+                "Georgiy");
     }
 
     @Test
@@ -89,13 +89,13 @@ public class DaoTest {
         assertThat(user1.getEmail()).isEqualTo("Ghsdsdst4@mail.ru");
     }
 
-//    @Test
-//    public void testDelete() {
-//        userDao.delete(userDao.get(sessionFactory).stream().sorted((o1, o2) -> Long.compare(o1.getId(), o2.getId()))
-//                .toList().get(userDao.get(sessionFactory).size() - 1).getId(), sessionFactory);
-//        if (sizeUsers !=  userDao.get(sessionFactory).size())
-//            fail("user has not been deleted");
-//    }
+    @Test
+    public void testDelete() {
+        userDao.delete(userDao.get(sessionFactory).stream().sorted((o1, o2) -> Long.compare(o1.getId(), o2.getId()))
+                .toList().get(userDao.get(sessionFactory).size() - 1).getId(), sessionFactory);
+        if (sizeUsers !=  userDao.get(sessionFactory).size())
+            fail("user has not been deleted");
+    }
 
     @Test
     public void testFind() {
