@@ -9,12 +9,14 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import service.UserService;
 import util.JspHelper;
 
 import java.io.IOException;
 
 @WebServlet("/registration")
+@Slf4j
 public class RegistrationServlet extends HttpServlet {
     private final UserService userService = UserService.getInstance();
     private final ConvertUserDto convertUserDto = ConvertUserDto.getInstance();
@@ -33,6 +35,7 @@ public class RegistrationServlet extends HttpServlet {
         try {
             var userDto = userService.create(createUserDto);
             req.getSession().setAttribute("userDto", userDto);
+            log.info("User logged: {}", userDto);
             resp.sendRedirect("/address");
         } catch (ValidationException exception) {
             req.setAttribute("errors", exception.getErrors());

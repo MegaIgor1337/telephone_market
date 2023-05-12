@@ -4,6 +4,7 @@ import dto.CommentDto;
 import entity.Comment;
 import mapper.Mapper;
 import mapper.user.UserDtoMapper;
+import org.hibernate.Session;
 
 public class CommentDtoMapper implements Mapper<CommentDto, Comment> {
     private static final CommentDtoMapper INSTANCE = new CommentDtoMapper();

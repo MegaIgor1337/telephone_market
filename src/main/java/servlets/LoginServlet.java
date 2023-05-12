@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import service.CommentService;
 import service.UserService;
 import util.JspHelper;
@@ -15,6 +16,7 @@ import util.JspHelper;
 import java.io.IOException;
 
 @WebServlet("/login")
+@Slf4j
 public class LoginServlet extends HttpServlet {
     private final UserService userService = UserService.getInstance();
     private final CommentService commentService = CommentService.getInstance();
@@ -40,6 +42,7 @@ public class LoginServlet extends HttpServlet {
 
     @SneakyThrows
     private void onLoginSuccess(UserDto user, HttpServletRequest req, HttpServletResponse resp) {
+        log.info("User logged: {}", user);
         req.getSession().setAttribute("userDto", user);
         if (user.getRole().equals(Role.ADMIN)) {
             req.getSession().setAttribute("sizeModerateComments", commentService.getModerateComments().size());

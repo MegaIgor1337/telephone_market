@@ -4,6 +4,8 @@ import dto.UserDto;
 import entity.User;
 import lombok.NoArgsConstructor;
 import mapper.Mapper;
+import org.hibernate.Hibernate;
+import org.hibernate.proxy.HibernateProxy;
 
 import static lombok.AccessLevel.PRIVATE;
 

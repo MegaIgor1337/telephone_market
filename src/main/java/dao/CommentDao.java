@@ -16,10 +16,9 @@ public class CommentDao implements Dao<Long, Comment> {
     @Getter
     private static final CommentDao INSTANCE = new CommentDao();
 
-    public List<Comment> findByUserId(Long id) {
-        Configuration configuration = new Configuration();
-        configuration.configure();
-        try (SessionFactory sessionFactory = configuration.buildSessionFactory();
+    public List<Comment> findByUserId(SessionFactory sessionFactory, Long id) {
+
+        try (
              Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             List<Comment> eList = session.createQuery("FROM Comment where user.id = " + id + " ",

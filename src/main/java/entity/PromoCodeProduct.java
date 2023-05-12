@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "promo_code_product", schema = "public")
@@ -21,14 +22,14 @@ public class PromoCodeProduct {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "promo_code_id")
     private PromoCode promoCode;
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private Product product;
     @Column(name = "date_of_begin")
-    private Timestamp dateOfBegin;
+    private LocalDateTime dateOfBegin;
     @Column(name = "date_od_end")
-    private Timestamp dateOfEnd;
+    private LocalDateTime dateOfEnd;
 }

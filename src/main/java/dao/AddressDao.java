@@ -15,10 +15,8 @@ public class AddressDao implements Dao<Long, Address> {
     @Getter
     private static final AddressDao INSTANCE = new AddressDao();
 
-    public List<Address> findByUserId(Long id) {
-        Configuration configuration = new Configuration();
-        configuration.configure();
-        try (SessionFactory sessionFactory = configuration.buildSessionFactory();
+    public List<Address> findByUserId(SessionFactory sessionFactory, Long id) {
+        try (
              Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             List<Address> eList = session.createQuery("FROM Address where user.id = " + id + " ",

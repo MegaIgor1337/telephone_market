@@ -5,6 +5,7 @@ import entity.Address;
 import lombok.NoArgsConstructor;
 import mapper.Mapper;
 import mapper.user.UserMapper;
+import org.hibernate.Session;
 
 import static lombok.AccessLevel.PRIVATE;
 
@@ -18,7 +19,7 @@ public class AddressMapper implements Mapper<Address, AddressDto> {
     }
 
     @Override
-    public AddressDto mapFrom(Address object) {
+    public AddressDto mapFrom( Address object) {
         return AddressDto.builder()
                 .id(object.getId())
                 .country(object.getCountry())

@@ -19,6 +19,7 @@ public class PromoCode {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Double discount;
+    private String name;
     @Enumerated(EnumType.STRING)
     private PromoCodeStatus status;
 
