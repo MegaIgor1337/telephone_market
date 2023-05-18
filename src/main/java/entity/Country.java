@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @Entity
-public class Country {
+public class Country implements BaseEntity<Long> {
     @Id
     @GeneratedValue
     private Long id;

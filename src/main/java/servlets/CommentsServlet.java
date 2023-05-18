@@ -16,7 +16,7 @@ import java.io.IOException;
 
 @WebServlet("/comments")
 public class CommentsServlet extends HttpServlet {
-    private final CommentService commentService = CommentService.getInstance();
+    private final CommentService commentService = CommentService.getINSTANCE();
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setAttribute("comments", commentService.getAccessedComments());

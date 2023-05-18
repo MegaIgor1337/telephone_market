@@ -3,6 +3,7 @@ package entity;
 
 import entity.enums.PromoCodeStatus;
 import lombok.*;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -13,8 +14,9 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "PromoCodes")
 @Table(name = "promo_code", schema = "public")
-public class PromoCode {
+public class PromoCode implements BaseEntity<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

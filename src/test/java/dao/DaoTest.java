@@ -24,10 +24,13 @@ import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
 @TestInstance(PER_CLASS)
 public class DaoTest {
-    private final CommentDao commentDao = CommentDao.getINSTANCE();
-    private final AddressDao addressDao = AddressDao.getINSTANCE();
-    private final SessionFactory sessionFactory = HibernateUtil.buildSessionFactory();
-    private final UserDao userDao = UserDao.getINSTANCE();
+    private final SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+    private final CommentRepository commentRepository = new CommentRepository(HibernateUtil
+            .getSessionFromFactory(sessionFactory));
+    private final AddressRepository addressRepository = new AddressRepository(HibernateUtil
+            .getSessionFromFactory(sessionFactory));
+    private final UserRepository userRepository = new UserRepository(HibernateUtil
+            .getSessionFromFactory(sessionFactory));
     private  Integer  sizeUsers;
     @BeforeAll
     public void initDb() {
@@ -40,13 +43,13 @@ public class DaoTest {
     }
     @Test
     public void testAddressesFindByUserId() {
-        List<Address> addresses = addressDao.findByUserId(sessionFactory, 1L);
+        List<Address> addresses = addressRepository.findByUserId(1L);
         assertThat(1).isEqualTo(addresses.size());
     }
 
     @Test
     public void testFindByUserId() {
-        List<Comment> comments = commentDao.findByUserId(sessionFactory, 2L);
+        List<Comment> comments = commentRepository.findByUserId(2L);
         assertThat(2).isEqualTo(comments.size());
     }
 
@@ -61,13 +64,13 @@ public class DaoTest {
                 .passportNo("JJ425112")
                 .balance(BigDecimal.valueOf(0))
                 .build();
-        userDao.save(sessionFactory, user);
-        assertThat(userDao.get(sessionFactory).size()).isEqualTo(5);
+        userRepository.save(user);
+        assertThat(userRepository.findAll().size()).isEqualTo(5);
     }
 
     @Test
     public void testFindAll() {
-        List<User> results = userDao.get(sessionFactory);
+        List<User> results = userRepository.findAll();
         sizeUsers = results.size();
         List<String> fullNames = results.stream().map(User::getName).collect(toList());
         assertThat(fullNames).containsExactlyInAnyOrder("Igor",
@@ -78,29 +81,29 @@ public class DaoTest {
 
     @Test
     public void testUpdate() {
-        User user = userDao.find(sessionFactory, 1L).isPresent()
-                ? userDao.find(sessionFactory, 1L).get()
+        User user = userRepository.findById(1L).isPresent()
+                ? userRepository.findById(1L).get()
                 : fail("user is null");
         user.setEmail("Ghsdsdst4@mail.ru");
-        userDao.update(sessionFactory, user);
-        User user1 = userDao.find(sessionFactory, 1L).isPresent()
-                ? userDao.find(sessionFactory, 1L).get()
+        userRepository.update(user);
+        User user1 = userRepository.findById(1L).isPresent()
+                ? userRepository.findById(1L).get()
                 : fail("user1 is null");
         assertThat(user1.getEmail()).isEqualTo("Ghsdsdst4@mail.ru");
     }
 
     @Test
     public void testDelete() {
-        userDao.delete(userDao.get(sessionFactory).stream().sorted((o1, o2) -> Long.compare(o1.getId(), o2.getId()))
-                .toList().get(userDao.get(sessionFactory).size() - 1).getId(), sessionFactory);
-        if (sizeUsers !=  userDao.get(sessionFactory).size())
+        userRepository.delete(userRepository.findAll().stream().sorted((o1, o2) -> Long.compare(o1.getId(), o2.getId()))
+                .toList().get(userRepository.findAll().size() - 1).getId());
+        if (sizeUsers != userRepository.findAll().size())
             fail("user has not been deleted");
     }
 
     @Test
     public void testFind() {
-        User user = userDao.find(sessionFactory, 1L).isPresent()
-                ? userDao.find(sessionFactory, 1L).get() : null;
+        User user = userRepository.findById(1L).isPresent()
+                ? userRepository.findById(1L).get() : null;
         assertThat(user.getName()).isEqualTo("Igor");
     }
 

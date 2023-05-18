@@ -1,9 +1,10 @@
 package service;
 
-import dao.AddressDao;
+import dao.AddressRepository;
 import dto.AddressDto;
 import dto.CreateAddressDto;
 import exception.ValidationException;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import mapper.address.AddressMapper;
 import mapper.address.CreateAddressMapper;
@@ -17,11 +18,13 @@ import static lombok.AccessLevel.PRIVATE;
 
 @NoArgsConstructor(access = PRIVATE)
 public class AddressService {
+    private final SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+   @Getter
     private static final AddressService INSTANCE = new AddressService();
     private final AddressMapper addressMapper = AddressMapper.getInstance();
-    private final AddressDao addressDao = AddressDao.getINSTANCE();
-    private final SessionFactory sessionFactory = HibernateUtil.buildSessionFactory();
-    private final CreateAddressMapper createAddressMapper = CreateAddressMapper.getInstance();
+    private final AddressRepository addressRepository = new AddressRepository(
+            HibernateUtil.getSessionFromFactory(sessionFactory));
+    private final CreateAddressMapper createAddressMapper = CreateAddressMapper.getINSTANCE();
     private final CreateAddressValidator createAddressValidator = CreateAddressValidator.getInstance();
     public AddressDto save(CreateAddressDto createAddressDto) {
         var validationResult = createAddressValidator.isValid(createAddressDto);
@@ -29,22 +32,19 @@ public class AddressService {
             throw new ValidationException(validationResult.getErrors());
         }
         var userEntity = createAddressMapper.mapFrom(createAddressDto);
-        return addressMapper.mapFrom(addressDao
-                .find(sessionFactory, addressDao.save(sessionFactory, userEntity)).get());
+        return addressMapper.mapFrom(addressRepository.save(userEntity));
     }
 
-    public boolean update(CreateAddressDto createAddressDto) {
-        return addressDao.update(sessionFactory, createAddressMapper.mapFrom(createAddressDto));
+    public void update(CreateAddressDto createAddressDto) {
+        addressRepository.update(createAddressMapper.mapFrom(createAddressDto));
     }
-    public boolean delete(Long id) {
-        return addressDao.delete(id, sessionFactory);
+    public void delete(Long id) {
+         addressRepository.delete(id);
     }
 
     public List<AddressDto> getAddresses(Long id) {
-        return addressDao.findByUserId(sessionFactory, id)
+        return addressRepository.findByUserId(id)
                 .stream().map(addressMapper::mapFrom).toList();
     }
-    public static AddressService getInstance() {
-        return INSTANCE;
-    }
+
 }

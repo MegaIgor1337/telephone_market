@@ -18,8 +18,8 @@
   Moderate comments (<%=request.getSession().getAttribute("sizeModerateComments")%>)
 </a><br/>
 2)
-<a href="${pageContext.request.contextPath}/comments">
-  View all comments
+<a href="${pageContext.request.contextPath}/accessedComments">
+  View accessed comments
 </a><br/>
 3)
 <a href="${pageContext.request.contextPath}/profileMenu">

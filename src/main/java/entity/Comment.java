@@ -12,12 +12,13 @@ import javax.persistence.*;
 @Builder
 @Entity
 @Table(name = "comments", schema = "public")
-public class Comment {
+public class Comment implements BaseEntity<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     String comment;
     @ManyToOne(fetch = FetchType.EAGER)
+    @ToString.Exclude
     @JoinColumn(name = "user_id")
     User user;
     @Enumerated(EnumType.STRING)

@@ -11,7 +11,7 @@ import java.io.IOException;
 
 @WebServlet("/deleteAddress")
 public class DeleteAddressServlet extends HttpServlet {
-    private final AddressService addressService = AddressService.getInstance();
+    private final AddressService addressService = AddressService.getINSTANCE();
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.sendRedirect("/profileMenu");

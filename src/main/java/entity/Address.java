@@ -9,7 +9,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Builder
 @Entity
-public class Address {
+public class Address implements BaseEntity<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

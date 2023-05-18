@@ -1,7 +1,6 @@
-package servlets;
+package servlets.admin;
 
 import dto.CommentDto;
-import dto.UserDto;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -13,17 +12,15 @@ import util.JspHelper;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/userComments")
-public class UserCommentsServlet extends HttpServlet {
+@WebServlet("/accessedComments")
+public class AccessedComments extends HttpServlet {
     private final CommentService commentService = CommentService.getINSTANCE();
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        UserDto userDto =  (UserDto)req.getSession().getAttribute("userDto");
-        List<CommentDto> userComments = commentService.findCommentsByUserId(
-                userDto.getId()
-        );
-        req.getSession().setAttribute("userComments", userComments);
-        req.getRequestDispatcher(JspHelper.getPath("userComments")).forward(req, resp);
+        List<CommentDto> commentsDto = commentService.getAccessedComments();
+        req.getSession().setAttribute("accessedComments", commentsDto);
+        req.getRequestDispatcher(JspHelper.getPath("accessedCommentsForAdmin"))
+                .forward(req, resp);
     }
 
     @Override
@@ -32,5 +29,4 @@ public class UserCommentsServlet extends HttpServlet {
         commentService.deleteComment(id);
         doGet(req, resp);
     }
-
 }

@@ -14,7 +14,7 @@ import java.util.List;
 
 @WebServlet("/moderateComments")
 public class ModerateCommentsServlet extends HttpServlet {
-    private final CommentService commentService = CommentService.getInstance();
+    private final CommentService commentService = CommentService.getINSTANCE();
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         List<CommentDto> commentsDto = commentService.getModerateComments();

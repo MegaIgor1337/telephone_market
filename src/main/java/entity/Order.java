@@ -14,7 +14,7 @@ import java.util.List;
 @Builder
 @Entity
 @Table(name = "\"order\"")
-public class Order {
+public class Order implements BaseEntity<Long>{
     @Id
     @EqualsAndHashCode.Include
     @GeneratedValue(strategy = GenerationType.IDENTITY)

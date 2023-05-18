@@ -15,7 +15,7 @@ import java.io.IOException;
 @WebServlet("/changeAddress")
 public class ChangeAddressServlet extends HttpServlet {
     private final ConvertAddressDto convertAddressDto = ConvertAddressDto.getInstance();
-    private final AddressService addressService = AddressService.getInstance();
+    private final AddressService addressService = AddressService.getINSTANCE();
     private long addressId;
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

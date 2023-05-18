@@ -19,7 +19,7 @@ import java.io.IOException;
 @Slf4j
 public class LoginServlet extends HttpServlet {
     private final UserService userService = UserService.getInstance();
-    private final CommentService commentService = CommentService.getInstance();
+    private final CommentService commentService = CommentService.getINSTANCE();
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.getRequestDispatcher(JspHelper.getPath("login"))

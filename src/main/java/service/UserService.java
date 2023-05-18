@@ -1,6 +1,6 @@
 package service;
 
-import dao.UserDao;
+import dao.UserRepository;
 import dto.CreateUserDto;
 import dto.UserDto;
 import entity.User;
@@ -9,7 +9,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import mapper.user.CreateUserMapper;
 import mapper.user.UserMapper;
-import org.hibernate.Hibernate;
 import org.hibernate.SessionFactory;
 import util.HibernateUtil;
 import validator.CreateUserValidator;
@@ -24,20 +23,22 @@ import static lombok.AccessLevel.PRIVATE;
 
 @NoArgsConstructor(access = PRIVATE)
 public class UserService {
+
     @Getter
     private static final UserService INSTANCE = new UserService();
 
     private final CreateUserValidator createUserValidator = CreateUserValidator.getInstance();
-    private final UserDao userDao = UserDao.getINSTANCE();
     private final CreateUserMapper createUserMapper = CreateUserMapper.getInstance();
     private final UserMapper userMapper = UserMapper.getInstance();
-    private final SessionFactory sessionFactory = HibernateUtil.buildSessionFactory();
+    private final SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+    private final UserRepository userRepository = new UserRepository(HibernateUtil
+            .getSessionFromFactory(sessionFactory));
     public static UserService getInstance() {
         return INSTANCE;
     }
 
     public Optional<UserDto> login(String login, String password) {
-        return userDao.get(sessionFactory)
+        return userRepository.findAll()
                 .stream()
                 .filter(it -> it.getName()
                                       .equals(login)
@@ -53,11 +54,11 @@ public class UserService {
         }
         var userEntity = createUserMapper.mapFrom(userDto);
         userEntity.setBalance(BigDecimal.valueOf(0.0));
-        return userMapper.mapFrom(userDao.find(sessionFactory, userDao.save(sessionFactory, userEntity)).get());
+        return userMapper.mapFrom(userRepository.save(userEntity));
     }
 
     private boolean validateOnName(CreateUserDto userDto, ValidationResult validationResult) {
-        List<User> users = userDao.get(sessionFactory).stream()
+        List<User> users = userRepository.findAll().stream()
                 .filter(it -> it.getName().equals(userDto.getName())).toList();
         if (!users.isEmpty()) {
             validationResult.add(Error.of("invalid.login", "This login is already used"));
@@ -68,7 +69,7 @@ public class UserService {
     }
 
     private boolean validateOnEmail(CreateUserDto userDto, ValidationResult validationResult) {
-        List<User> users = userDao.get(sessionFactory).stream()
+        List<User> users = userRepository.findAll().stream()
                 .filter(it -> it.getEmail().equals(userDto.getEmail())).toList();
         if (!users.isEmpty()) {
             validationResult.add(Error.of("invalid.email", "This email is already used"));

@@ -1,9 +1,12 @@
 package service;
 
-import dao.CommentDao;
+import dao.CommentRepository;
 import dto.CommentDto;
 import entity.Comment;
 import entity.enums.CommentStatus;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import mapper.comment.CommentDtoMapper;
 import mapper.comment.CommentMapper;
 import mapper.user.UserDtoMapper;
@@ -11,60 +14,52 @@ import org.hibernate.SessionFactory;
 import util.HibernateUtil;
 
 import java.util.List;
-
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CommentService {
+    private final SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+    @Getter
     private static final CommentService INSTANCE = new CommentService();
-    private final CommentDao commentDao = CommentDao.getINSTANCE();
     private final CommentMapper commentMapper = CommentMapper.getInstance();
     private final UserDtoMapper userDtoMapper = UserDtoMapper.getInstance();
-    private final SessionFactory sessionFactory = HibernateUtil.buildSessionFactory();
-
+    private final CommentRepository commentRepository = new CommentRepository(HibernateUtil
+            .getSessionFromFactory(sessionFactory));
     private final CommentDtoMapper commentDtoMapper = CommentDtoMapper.getInstance();
 
+
     public List<CommentDto> getAccessedComments() {
-        return commentDao.get(sessionFactory).stream()
-                .filter(it -> it.getStatus().equals(CommentStatus.ACCESSED))
-                .map(commentMapper::mapFrom).toList();
+        return commentRepository.getAccessedComments()
+                .stream().map(commentMapper::mapFrom).toList();
     }
 
+
     public CommentDto save(CommentDto commentDto) {
-        return commentMapper.mapFrom(
-                commentDao.find(
-                        sessionFactory,
-                        commentDao.save(
-                                sessionFactory,
-                                commentDtoMapper.mapFrom(commentDto)
-                        )
-                ).get()
-        );
+        return commentMapper.mapFrom(commentRepository.save(commentDtoMapper.mapFrom(commentDto)));
     }
 
     public List<CommentDto> findCommentsByUserId(Long id) {
-        return commentDao.findByUserId(sessionFactory, id).stream().map(commentMapper::mapFrom).toList();
+        return commentRepository.findByUserId(id).stream().map(commentMapper::mapFrom).toList();
     }
 
     public List<CommentDto> getModerateComments() {
-        return commentDao.get(sessionFactory).stream().filter(it -> it.getStatus().equals(CommentStatus.MODERATING))
+        return commentRepository.findAll().stream().filter(it -> it.getStatus().equals(CommentStatus.MODERATING))
                 .map(commentMapper::mapFrom).toList();
     }
 
     public void updateCommentFromModeratingToAccess(Long id) {
-        Comment comment = commentDao.find(sessionFactory, id).get();
+        Comment comment = commentRepository.findById(id).get();
         comment.setStatus(CommentStatus.ACCESSED);
-        commentDao.update(sessionFactory, comment);
+        commentRepository.update(comment);
     }
 
     public void updateCommentFromModeratingToDelete(Long id) {
-        Comment comment = commentDao.find(sessionFactory, id).get();
+        Comment comment = commentRepository.findById(id).get();
         comment.setStatus(CommentStatus.DELETED);
-        commentDao.update(sessionFactory, comment);
+        commentRepository.update(comment);
     }
 
     public void deleteComment(Long id) {
-        commentDao.delete(id, sessionFactory);
+        commentRepository.delete(id);
     }
 
-    public static CommentService getInstance() {
-        return INSTANCE;
-    }
+
 }

@@ -30,6 +30,7 @@ public class AuthorizationFilter implements Filter {
 
     private boolean isUserLoggedIn(ServletRequest servletRequest) {
         var user = ((HttpServletRequest) servletRequest).getSession().getAttribute("userDto");
+
         return user != null;
     }
 

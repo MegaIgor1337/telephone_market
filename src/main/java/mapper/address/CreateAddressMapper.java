@@ -1,11 +1,11 @@
 package mapper.address;
 
-import dao.UserDao;
+import dao.UserRepository;
 import dto.CreateAddressDto;
 import entity.Address;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import mapper.Mapper;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import util.HibernateUtil;
 
@@ -14,13 +14,13 @@ import static lombok.AccessLevel.PRIVATE;
 @NoArgsConstructor(access = PRIVATE)
 
 public class CreateAddressMapper implements Mapper<CreateAddressDto, Address> {
-    private static final CreateAddressMapper INSTANCE = new CreateAddressMapper();
-    private final UserDao userDao = UserDao.getINSTANCE();
-    private final SessionFactory sessionFactory = HibernateUtil.buildSessionFactory();
+    private final SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
 
-    public static CreateAddressMapper getInstance() {
-        return INSTANCE;
-    }
+    @Getter
+    private static final CreateAddressMapper INSTANCE = new CreateAddressMapper();
+    private final UserRepository userDao = new UserRepository(HibernateUtil
+            .getSessionFromFactory(sessionFactory));
+
 
     @Override
     public Address mapFrom(CreateAddressDto object) {
@@ -32,7 +32,7 @@ public class CreateAddressMapper implements Mapper<CreateAddressDto, Address> {
                     .street(object.getStreet())
                     .house(object.getHouse())
                     .flat(object.getFlat())
-                    .user(userDao.find(sessionFactory, Long.valueOf(object.getUserId())).get())
+                    .user(userDao.findById(Long.valueOf(object.getUserId())).get())
                     .build();
     }
 }
