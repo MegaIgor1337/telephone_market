@@ -4,6 +4,10 @@
         xmlns:ehcache='http://www.ehcache.org/v3'
         xsi:schemaLocation="http://www.ehcache.org/v3 http://www.ehcache.org/schema/ehcache-core-3.1.xsd">
     <ehcache:cache alias="PromoCodes" uses-template="simple"/>
+    <ehcache:cache alias="Models" uses-template="simple"/>
+    <ehcache:cache alias="Countries" uses-template="simple"/>
+    <ehcache:cache alias="Colors" uses-template="simple"/>
+    <ehcache:cache alias="Brands" uses-template="simple"/>
     <ehcache:cache-template name="simple">
         <ehcache:expiry>
             <ehcache:ttl>10</ehcache:ttl>

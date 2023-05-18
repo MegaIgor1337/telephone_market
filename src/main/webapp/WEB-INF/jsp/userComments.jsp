@@ -1,5 +1,6 @@
 <%@ page import="java.util.List" %>
-<%@ page import="dto.CommentDto" %><%--
+<%@ page import="dto.CommentDto" %>
+<%@ page import="entity.enums.CommentStatus" %><%--
   Created by IntelliJ IDEA.
   User: tawer
   Date: 21.04.2023
@@ -23,13 +24,18 @@
             i++;
 %>
 <p>
-        <%=i%>)
-        <%= comment.getComment() %>
+    <%=i%>)
+    <%= comment.getComment() %>
+</p>
+<p><%=comment.getCommentStatus()%>
+</p>
+
 <form method="post" action="${pageContext.request.contextPath}/userComments">
     <input type="hidden" name="commentId" value="<%=comment.getId()%>"/>
+
     <button type="submit" value="Delete">Delete</button>
 </form>
-</p>
+
 <%
     }
 } else {
