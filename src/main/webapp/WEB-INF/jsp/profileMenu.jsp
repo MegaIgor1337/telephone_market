@@ -6,7 +6,7 @@
     <title>Profile</title>
 </head>
 <body>
-<% UserDto userDto = (UserDto) request.getSession().getAttribute("userDto");%>
+<%UserDto userDto = (UserDto) request.getSession().getAttribute("userDto");%>
 <p1>Login:</p1>
 <%=userDto.getName()%>
 <a href="${pageContext.request.contextPath}/changeLogin">

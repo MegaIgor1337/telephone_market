@@ -18,7 +18,7 @@ import java.io.IOException;
 @WebServlet("/registration")
 @Slf4j
 public class RegistrationServlet extends HttpServlet {
-    private final UserService userService = UserService.getInstance();
+    private final UserService userService = UserService.getINSTANCE();
     private final ConvertUserDto convertUserDto = ConvertUserDto.getInstance();
 
     @Override

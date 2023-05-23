@@ -30,6 +30,11 @@ public class Product implements BaseEntity<Long> {
     private Country country;
     @Column(name = "count_on_storage")
     private int storageCount;
+
+    @Builder.Default
+    @ToString.Exclude
+    @OneToMany(mappedBy = "product")
+    private List<Favourite> favourites = new ArrayList<>();
     private BigDecimal cost;
 
     @ToString.Exclude

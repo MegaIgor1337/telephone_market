@@ -26,6 +26,7 @@
         <mapping class="entity.OrderProduct"/>
         <mapping class="entity.PromoCode"/>
         <mapping class="entity.PromoCodeProduct"/>
+        <mapping class="entity.Favourite"/>
         <!-- DB schema will be updated if needed -->
         <!-- <property name="hibernate.hbm2ddl.auto">update</property> -->
     </session-factory>

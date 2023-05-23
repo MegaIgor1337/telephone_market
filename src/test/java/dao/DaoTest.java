@@ -7,11 +7,8 @@ import entity.User;
 import entity.enums.Gender;
 import entity.enums.Role;
 import org.hibernate.SessionFactory;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.*;
 import util.HibernateUtil;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 import utils.TestDataImporter;
 
 import java.math.BigDecimal;

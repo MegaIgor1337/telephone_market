@@ -84,6 +84,9 @@ public class TestDataImporter {
                     LocalDateTime.now(), null);
             PromoCodeProduct promoCodeProduct2 = savePromoCodeProduct(session, product2, promoCode1,
                     LocalDateTime.now(), null);
+
+            Favourite favourite1 = saveFavourite(session,  product2, user1, LocalDateTime.now());
+            Favourite favourite2 = saveFavourite(session,  product3, user2, LocalDateTime.now());
         }
     }
 
@@ -216,6 +219,17 @@ public class TestDataImporter {
                 .build();
         session.save(promoCodeProduct);
         return promoCodeProduct;
+    }
+
+
+    private Favourite saveFavourite(Session session, Product product, User user, LocalDateTime localDateTime) {
+        Favourite favourite = Favourite.builder()
+                .user(user)
+                .product(product)
+                .date(localDateTime)
+                .build();
+        session.save(favourite);
+        return favourite;
     }
 
 }

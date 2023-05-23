@@ -49,4 +49,8 @@ public class User implements BaseEntity<Long> {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Order> orders = new ArrayList<>();
 
+    @Builder.Default
+    @ToString.Exclude
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Favourite> favourites = new ArrayList<>();
 }
