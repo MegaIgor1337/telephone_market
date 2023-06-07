@@ -1,5 +1,5 @@
 <%@ page import="java.util.List" %>
-<%@ page import="dto.CommentDto" %>
+<%@ page import="market.dto.CommentDto" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>

@@ -1,0 +1,19 @@
+
+logging:
+  level:
+    root: INFO
+    database.pool: INFO
+  file:
+    name: market
+    path: /
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/online_telephone_market
+    username: postgres
+    password: 1234
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    properties.hibernate:
+      show_sql: true
+      format_sql: true
+      hbm2ddl.auto: create

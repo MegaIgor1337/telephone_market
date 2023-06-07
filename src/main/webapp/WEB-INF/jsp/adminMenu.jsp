@@ -1,5 +1,5 @@
 <%@ page import="java.util.List" %>
-<%@ page import="dto.CommentDto" %><%--
+<%@ page import="market.dto.CommentDto" %><%--
   Created by IntelliJ IDEA.
   User: tawer
   Date: 02.05.2023

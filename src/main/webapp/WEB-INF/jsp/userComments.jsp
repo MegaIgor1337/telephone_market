@@ -1,6 +1,6 @@
 <%@ page import="java.util.List" %>
-<%@ page import="dto.CommentDto" %>
-<%@ page import="entity.enums.CommentStatus" %><%--
+<%@ page import="market.dto.CommentDto" %>
+<%@ page import="market.enums.CommentStatus" %><%--
   Created by IntelliJ IDEA.
   User: tawer
   Date: 21.04.2023
