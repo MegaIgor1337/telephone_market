@@ -1,20 +1,19 @@
-package project.dao;
+package project.repository;
 
 
 import jakarta.persistence.EntityManager;
+import lombok.RequiredArgsConstructor;
 import market.ApplicationRunner;
-import market.entity.Address;
-import market.entity.Comment;
 import market.entity.User;
 import market.enums.Gender;
 import market.enums.Role;
 import market.repository.AddressRepository;
-import market.repository.CommentRepository;
 import market.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 import project.TestApplicationRunner;
@@ -26,41 +25,26 @@ import java.util.stream.Collectors;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 
 @Transactional
 @SpringBootTest(classes = {ApplicationRunner.class,TestApplicationRunner.class})
 @ExtendWith(SpringExtension.class)
-public class DaoTest {
+@RequiredArgsConstructor
+public class UserRepositoryTest {
     private final EntityManager entityManager;
 
     private final AddressRepository addressRepository;
-    private final CommentRepository commentRepository;
     private final UserRepository userRepository;
 
-    @Autowired
-    public DaoTest(EntityManager entityManager,
-                   AddressRepository addressRepository, CommentRepository commentRepository,
-                   UserRepository userRepository) {
-        this.entityManager = entityManager;
-        this.addressRepository = addressRepository;
-        this.commentRepository = commentRepository;
-        this.userRepository = userRepository;
-    }
 
 
 
-    @Test
-    public void testAddressesFindByUserId() {
-        List<Address> addresses = addressRepository.findByUserId(1L);
-        assertThat(1).isEqualTo(addresses.size());
-    }
 
-    @Test
-    public void testFindByUserId() {
-        List<Comment> comments = commentRepository.findByUserId(2L);
-        assertThat(2).isEqualTo(comments.size());
-    }
+
+
+
 
     @Test
     public void testSave() {
@@ -114,5 +98,15 @@ public class DaoTest {
                 ? userRepository.findById(1L).get() : null;
         assertThat(user.getName()).isEqualTo("Igor");
     }
+
+    @Test
+    public void testPage() {
+        var pageable = PageRequest.of(1,2, Sort.by("id"));
+        var users = userRepository.findAll(pageable);
+        assertFalse(users.isEmpty());
+        assertThat(users).hasSize(2);
+    }
+
+
 
 }
