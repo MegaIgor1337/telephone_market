@@ -20,32 +20,39 @@ public class EnteredProductInfoValidator implements Validator<CreateUserProductD
     @Override
     public ValidationResult isValid(CreateUserProductDto object) {
         var validationResult = new ValidationResult();
-        if (!brands.stream().map(BrandDto::getBrand).toList()
-                .contains(object.getBrand()) && !object.getBrand().equals(EMPTY_PARAM)) {
-            validationResult.add(Error.of(Error.getMessage(BRAND), BRAND_ENTERED_INVALID));
+        if (object.getColor() != null || object.getCount() != null || object.getModel() != null
+        || object.getBrand() != null || object.getCountry() != null) {
+            if (!EMPTY_PARAM.equals(object.getBrand()) && !brands.stream().map(BrandDto::getBrand).toList()
+                    .contains(object.getBrand())) {
+                validationResult.add(Error.of(Error.getMessage(BRAND), BRAND_ENTERED_INVALID));
+            }
+            if (!models.stream().map(ModelDto::getModel).toList()
+                    .contains(object.getModel()) && !EMPTY_PARAM.equals(object.getModel())) {
+                validationResult.add(Error.of(Error.getMessage(MODEL), MODEL_ENTERED_INVALID));
+            }
+            if (!colors.stream().map(ColorDto::getColor).toList()
+                    .contains(object.getColor()) && !EMPTY_PARAM.equals(object.getColor())) {
+                validationResult.add(Error.of(Error.getMessage(COLOR), COLOR_ENTERED_INVALID));
+            }
+            if (!countries.stream().map(CountryDto::getCountry).toList()
+                    .contains(object.getCountry()) && !EMPTY_PARAM.equals(object.getCountry())) {
+                validationResult.add(Error.of(Error.getMessage(COUNTRY), COUNTRY_ENTERED_INVALID));
+            }
+            if (!EMPTY_PARAM.equals(object.getCount()) && Integer.parseInt(object.getCount()) < 1) {
+                validationResult.add(Error.of(Error.getMessage(COUNT), COUNT_ENTERED_INVALID));
+            }
         }
-        if (!models.stream().map(ModelDto::getModel).toList()
-                .contains(object.getModel()) && !object.getModel().equals(EMPTY_PARAM)) {
-            validationResult.add(Error.of(Error.getMessage(MODEL), MODEL_ENTERED_INVALID));
+        if (object.getMaxPrice() != null) {
+            var maxPrice = !EMPTY_PARAM.equals(object.getMaxPrice()) ? new BigDecimal(object.getMaxPrice()) : null;
+            if (maxPrice != null && maxPrice.compareTo(BigDecimal.ZERO) < 0) {
+                validationResult.add(Error.of(Error.getMessage(MONEY), MONEY_LESS_ENTERED_INVALID));
+            }
         }
-        if (!colors.stream().map(ColorDto::getColor).toList()
-                .contains(object.getColor()) && !object.getColor().equals(EMPTY_PARAM)) {
-            validationResult.add(Error.of(Error.getMessage(COLOR), COLOR_ENTERED_INVALID));
-        }
-        if (!countries.stream().map(CountryDto::getCountry).toList()
-                .contains(object.getCountry()) && !object.getCountry().equals(EMPTY_PARAM)) {
-            validationResult.add(Error.of(Error.getMessage(COUNTRY), COUNTRY_ENTERED_INVALID));
-        }
-        var minPrice = !object.getMinPrice().equals(EMPTY_PARAM) ? new BigDecimal(object.getMinPrice()) : null;
-        var maxPrice = !object.getMaxPrice().equals(EMPTY_PARAM) ? new BigDecimal(object.getMaxPrice()) : null;
-        if (minPrice != null && minPrice.compareTo(BigDecimal.ZERO) < 0) {
-            validationResult.add(Error.of(Error.getMessage(MONEY), MONEY_LESS_ENTERED_INVALID));
-        }
-        if (maxPrice != null && maxPrice.compareTo(BigDecimal.ZERO) < 0) {
-            validationResult.add(Error.of(Error.getMessage(MONEY), MONEY_LESS_ENTERED_INVALID));
-        }
-        if (!object.getCount().equals(EMPTY_PARAM) && Integer.parseInt(object.getCount()) < 1) {
-            validationResult.add(Error.of(Error.getMessage(COUNT), COUNT_ENTERED_INVALID));
+        if (object.getMinPrice() != null) {
+            var minPrice = !EMPTY_PARAM.equals(object.getMinPrice()) ? new BigDecimal(object.getMinPrice()) : null;
+            if (minPrice != null && minPrice.compareTo(BigDecimal.ZERO) < 0) {
+                validationResult.add(Error.of(Error.getMessage(MONEY), MONEY_LESS_ENTERED_INVALID));
+            }
         }
         return validationResult;
     }

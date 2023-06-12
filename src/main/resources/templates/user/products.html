@@ -8,7 +8,7 @@
 <a th:href="@{/users/menu}">
     <button type="button">Back to menu</button>
 </a>
-<form method="POST" th:action="@{/users/{userId}/products(userId=${userDto.id})}">
+<form method="GET" th:action="@{/users/{userId}/products(userId=${userDto.id})}">
     <label for="brand">Brand:</label>
     <input type="text" id="brand" name="brand" th:value="${brand}" list="brandDataList">
     <datalist id="brandDataList">
@@ -98,7 +98,7 @@
 </table>
 
 <div th:if="${not #lists.isEmpty(products)}">
-    <form th:if="${not #lists.isEmpty(products)}" method="get" th:action="@{/users/{userId}/products(userId=${userDto.id})}">
+    <form th:if="${not #lists.isEmpty(products)}" method="GET" th:action="@{/users/{userId}/products(userId=${userDto.id})}">
     <input type="hidden" name="country" th:value="${country}"/>
     <input type="hidden" name="color" th:value="${color}"/>
     <input type="hidden" name="model" th:value="${model}"/>

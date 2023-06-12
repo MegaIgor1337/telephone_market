@@ -64,32 +64,32 @@ public class ProductService {
 
     private Specification<Product> getSpecifications(CreateUserProductDto createUserProductDto) {
         Specification<Product> specification = Specification.where(null);
-        if (!createUserProductDto.getModel().equals(EMPTY_PARAM)) {
+        if (createUserProductDto.getModel() != null && !createUserProductDto.getModel().equals(EMPTY_PARAM)) {
             specification = specification
                     .and((root, query, cb) -> cb.equal(root.get(MODEL).get(MODEL), createUserProductDto.getModel()));
         }
-        if (!createUserProductDto.getCountry().equals(EMPTY_PARAM)) {
+        if (createUserProductDto.getCountry() != null && !createUserProductDto.getCountry().equals(EMPTY_PARAM)) {
             specification = specification
                     .and((root, query, cb) -> cb.equal(root.get(COUNTRY).get(COUNTRY), createUserProductDto.getCountry()));
         }
-        if (!createUserProductDto.getColor().equals(EMPTY_PARAM)) {
+        if (createUserProductDto.getColor() != null && !createUserProductDto.getColor().equals(EMPTY_PARAM)) {
             specification = specification
                     .and((root, query, cb) -> cb.equal(root.get(COLOR).get(COLOR), createUserProductDto.getColor()));
         }
-        if (!createUserProductDto.getBrand().equals(EMPTY_PARAM)) {
+        if (createUserProductDto.getBrand() != null && !createUserProductDto.getBrand().equals(EMPTY_PARAM)) {
             specification = specification
                     .and((root, query, cb) -> cb.equal(root.get(BRAND).get(BRAND), createUserProductDto.getBrand()));
         }
-        if (!createUserProductDto.getCount().equals(EMPTY_PARAM)) {
+        if (createUserProductDto.getCount() != null && !createUserProductDto.getCount().equals(EMPTY_PARAM)) {
             specification = specification
                     .and((root, query, cb) -> cb.equal(root.get(COUNT), createUserProductDto.getCount()));
         }
-        if (!createUserProductDto.getMinPrice().equals(EMPTY_PARAM)) {
+        if (createUserProductDto.getMinPrice() != null && !createUserProductDto.getMinPrice().equals(EMPTY_PARAM)) {
             specification = specification
                     .and((root, query, cb) -> cb.greaterThanOrEqualTo(root.get(COST),
                             Double.parseDouble(createUserProductDto.getMinPrice())));
         }
-        if (!createUserProductDto.getMaxPrice().equals(EMPTY_PARAM)) {
+        if (createUserProductDto.getMaxPrice() != null && !createUserProductDto.getMaxPrice().equals(EMPTY_PARAM)) {
             specification = specification
                     .and((root, query, cb) -> cb.lessThanOrEqualTo(root.get(COST),
                             Double.parseDouble(createUserProductDto.getMaxPrice())));
