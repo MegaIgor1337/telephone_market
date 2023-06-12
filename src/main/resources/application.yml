@@ -2,11 +2,15 @@
 logging:
   level:
     root: INFO
-    database.pool: INFO
+    market.database.pool: INFO
   file:
     name: market
     path: /
 spring:
+  mvc:
+    view:
+      prefix: /WEB-INF/jsp/
+      suffix: .jsp
   datasource:
     url: jdbc:postgresql://localhost:5432/online_telephone_market
     username: postgres

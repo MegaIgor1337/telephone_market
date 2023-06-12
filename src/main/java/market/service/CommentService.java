@@ -6,9 +6,7 @@ import market.dto.CommentDto;
 import market.entity.Comment;
 import market.enums.CommentStatus;
 import lombok.RequiredArgsConstructor;
-import market.mapper.comment.CommentDtoMapper;
-import market.mapper.comment.CommentMapper;
-import market.mapper.user.UserDtoMapper;
+import market.mapper.CommentMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,28 +17,28 @@ import java.util.stream.Collectors;
 public class CommentService {
 
     private final CommentMapper commentMapper;
-    private final UserDtoMapper userDtoMapper;
     private final CommentRepository commentRepository;
-    private final CommentDtoMapper commentDtoMapper;
 
 
     public List<CommentDto> getAccessedComments() {
         return commentRepository.getAccessedComments()
-                .stream().map(commentMapper::mapFrom).collect(Collectors.toList());
+                .stream().map(commentMapper::commentToCommentDto).collect(Collectors.toList());
     }
 
 
     public CommentDto save(CommentDto commentDto) {
-        return commentMapper.mapFrom(commentRepository.save(commentDtoMapper.mapFrom(commentDto)));
+        return commentMapper.commentToCommentDto(commentRepository
+                .save(commentMapper.commentDtoToComment(commentDto)));
     }
 
     public List<CommentDto> findCommentsByUserId(Long id) {
-        return commentRepository.findByUserId(id).stream().map(commentMapper::mapFrom).collect(Collectors.toList());
+        return commentRepository.findByUserId(id).stream()
+                .map(commentMapper::commentToCommentDto).collect(Collectors.toList());
     }
 
     public List<CommentDto> getModerateComments() {
         return commentRepository.findAll().stream().filter(it -> it.getStatus().equals(CommentStatus.MODERATING))
-                .map(commentMapper::mapFrom).collect(Collectors.toList());
+                .map(commentMapper::commentToCommentDto).collect(Collectors.toList());
     }
 
     public void updateCommentFromModeratingToAccess(Long id) {

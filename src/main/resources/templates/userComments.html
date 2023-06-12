@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Comments</title>
+
+</head>
+<body>
+<a th:href="@{/users/menu}">
+    <button type="button">Back to menu</button>
+</a> <br/>
+<th:block th:if="${userComments != null and not #lists.isEmpty(userComments)}">
+    <th:block th:each="comment, status : ${userComments}">
+        <span th:text="${(status.index + 1)}")></span> <span th:text="${comment.comment}"></span>
+        <span th:text="${comment.commentStatus}"> </span>
+        <form method="post"
+              th:action="@{/users/{userId}/personalComments(userId=${userDto.id})}">
+            <input type="hidden" name="commentId" th:value="${comment.id}"/>
+            <button type="submit" value="Delete">Delete</button>
+        </form>
+    </th:block>
+</th:block>
+<th:block th:unless="${userComments != null and not #lists.isEmpty(userComments)}">
+    <p>You do not have any comments</p>
+</th:block>
+</body>
+</html>

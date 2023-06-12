@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <title>Menu</title>
+</head>
+<body>
+1)
+<a th:href="@{/admin/menu/moderateComments}">
+  Moderate comments  (<span th:text="${sizeModerateComments}"></span>)
+</a><br/>
+2)
+<a th:href="@{/admin/menu/accessedComments}">
+  View accessed comments
+</a><br/>
+3)
+<a th:href="@{/profileMenu}">
+  View profile
+</a><br/>
+4)
+<a th:href="@{/products}">
+  View all users
+</a><br/>
+5)
+<a th:href="@{/addComment}">
+  View all products
+</a><br/>
+6)
+<a th:href="@{/logout}">
+  View promo codes
+</a><br/>
+7)
+<a th:href="@{/logout}">
+  Log out
+</a><br/>
+</body>
+</html>

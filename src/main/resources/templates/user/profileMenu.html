@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile</title>
+</head>
+<body>
+<a th:href="@{/users/menu}">
+    <button type="button">Back to menu</button>
+</a>
+<p>Login:</p>
+<span th:text="${userDto.name}"></span>
+<a th:href="@{/users/{userId}/profileMenu/changeLogin(userId=${userDto.id})}">
+    <button type="button"> Change name</button>
+</a>
+<p>Email:</p>
+<span th:text="${userDto.email}"></span>
+<a th:href="@{/users/{userId}/profileMenu/changeEmail(userId=${userDto.id})}">
+    <button type="button"> Change email</button>
+</a>
+<p>Passport number:</p>
+<span th:text="${userDto.passportNo}"></span>
+<a th:href="@{/users/{userId}/profileMenu/changePassportNo(userId=${userDto.id})}">
+    <button type="button"> Change passport number</button>
+</a>
+<p>Balance: </p>
+<span th:text="${userDto.balance} + '$'"></span>
+<a th:href="@{/users/{userId}/profileMenu/putMoney(userId=${userDto.id})}">
+    <button type="button"> Put money </button>
+</a>
+<br/>
+<a th:href="@{/address/addAddress}">
+    <button type="button"> Add delivery address </button>
+</a>
+<a th:href="@{/users/menu}">
+    <button type="button"> Main menu </button>
+</a>
+<p>Your delivery addresses:</p>
+<table>
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>Country</th>
+        <th>City</th>
+        <th>Street</th>
+        <th>House</th>
+        <th>Flat</th>
+        <th></th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="address, loop : ${addresses}">
+        <td th:text="${loop.index + 1}"></td>
+        <td th:text="${address.country}"></td>
+        <td th:text="${address.city}"></td>
+        <td th:text="${address.street}"></td>
+        <td th:text="${address.house}"></td>
+        <td th:text="${address.flat}"></td>
+        <td>
+            <form method="get" th:action="@{/address/changeAddress}">
+                <input type="hidden" name="addressId" th:value="${address.id}"/>
+                <input type="submit" value="Change"/>
+            </form>
+        </td>
+        <td>
+            <form method="post" th:action="@{/address/deleteAddress}">
+                <input type="hidden" name="addressId" th:value="${address.id}"/>
+                <button type="submit" value="Delete">Delete</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

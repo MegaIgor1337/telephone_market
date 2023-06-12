@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<a th:href="@{/users/menu}">
+    <button type="button">Back to menu</button>
+</a>
+<form method="POST" th:action="@{/users/{userId}/products(userId=${userDto.id})}">
+    <label for="brand">Brand:</label>
+    <input type="text" id="brand" name="brand" th:value="${brand}" list="brandDataList">
+    <datalist id="brandDataList">
+        <option th:each="brand : ${brands}" th:value="${brand.brand}"></option>
+    </datalist>
+    <br>
+    <label for="model">Model:</label>
+    <input type="text" id="model" name="model" th:value="${model}" list="modelDataList">
+    <datalist id="modelDataList">
+        <option th:each="model : ${models}" th:value="${model.model}"></option>
+    </datalist>
+    <br>
+    <label for="color">Color:</label>
+    <input type="text" id="color" name="color" th:value="${color}" list="colorDataList">
+    <datalist id="colorDataList">
+        <option th:each="color : ${colors}" th:value="${color.color}"></option>
+    </datalist>
+    <br>
+    <label for="country">Country:</label>
+    <input type="text" id="country" name="country" th:value="${country}" list="countryDataList">
+    <datalist id="countryDataList">
+        <option th:each="country : ${countries}" th:value="${country.country}"></option>
+    </datalist>
+    <br>
+    <label for="minPrice">Min price:</label>
+    <input type="number" id="minPrice" name="minPrice" step="any" th:value="${minPrice}">
+    <br>
+    <label for="maxPrice">Max price:</label>
+    <input type="number" id="maxPrice" name="maxPrice" step="any" th:value="${maxPrice}">
+    <br>
+    <label for="count">Count:</label>
+    <input type="number" id="count" name="count" th:value="${count}">
+    <br>
+    <input type="submit" value="Search">
+</form>
+<div th:if="${errors != null}" style="color: red">
+    <span th:each="error : ${errors}" th:text="${error.message}"></span>
+    <br/>
+</div>
+<div th:if="${messageIfSearchedProductsEmpty != null}">
+    <p style="font-weight: bold;"><span th:text="${messageIfSearchedProductsEmpty}"></span></p>
+    <p style="font-weight: bold;">All products:</p>
+</div>
+<table th:if="${not #lists.isEmpty(products)}">
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>Brand</th>
+        <th>Model</th>
+        <th>Color</th>
+        <th>Country</th>
+        <th>Price</th>
+        <th></th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="productDto, loop : ${products}">
+        <td th:text="${loop.index + 1}"></td>
+        <td th:text="${productDto.brand.brand}"></td>
+        <td th:text="${productDto.model.model}"></td>
+        <td th:text="${productDto.color.color}"></td>
+        <td th:text="${productDto.country.country}"></td>
+        <td th:text="${productDto.cost}"></td>
+        <td>
+            <form method="get" th:action="@{/users/{userId}/products/addToFavourite(userId=${userDto.id})}">
+                <input type="hidden" name="productId" th:value="${productDto.id}"/>
+                <input type="submit" value="Add to favourite" th:unless="${favourites.contains(productDto)}"/>
+                <span th:if="${favourites.contains(productDto)}">Product already in favourites</span>
+            </form>
+        </td>
+        <td>
+            <span th:unless="${productsInBasket.contains(productDto)}">
+                <form method="post" th:action="@{/users/{userId}/products/addToBasket(userId=${userDto.id})}">
+                    <input type="hidden" name="addressId" th:value="${productDto.id}"/>
+                    <button type="submit" value="submit">
+                        Add to basket
+                    </button>
+                </form>
+            </span>
+            <span th:if="${productsInBasket.contains(productDto)}">
+                Product already in basket
+            </span>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<div th:if="${not #lists.isEmpty(products)}">
+    <form th:if="${not #lists.isEmpty(products)}" method="get" th:action="@{/users/{userId}/products(userId=${userDto.id})}">
+    <input type="hidden" name="country" th:value="${country}"/>
+    <input type="hidden" name="color" th:value="${color}"/>
+    <input type="hidden" name="model" th:value="${model}"/>
+    <input type="hidden" name="brand" th:value="${brand}"/>
+    <input type="hidden" name="minPrice" th:value="${minPrice}"/>
+    <input type="hidden" name="maxPrice" th:value="${maxPrice}"/>
+    <input type="hidden" name="count" th:value="${count}"/>
+    <button th:if="${products.hasPrevious}" type="submit" name="page" value="0">First</button>
+    <button th:if="${products.hasPrevious}" type="submit" name="page" th:value="${products.number - 1}">Previous</button>
+    <button th:if="${products.hasNext}" type="submit" name="page" th:value="${products.number + 1}">Next</button>
+    <button th:if="${products.hasNext}" type="submit" name="page" th:value="${products.totalPages - 1}">Last</button>
+</form>
+
+</div>
+</body>
+</html>

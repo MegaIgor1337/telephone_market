@@ -3,6 +3,7 @@ package market.entity;
 import lombok.*;
 
 import jakarta.persistence.*;
+import market.enums.OrderStatus;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -25,7 +26,7 @@ public class Order implements BaseEntity<Long>{
     private User user;
     private BigDecimal cost;
     private LocalDateTime date;
-    private Boolean delivered;
+    private OrderStatus status;
     @Column(name = "date_of_delivery")
     private LocalDateTime dateOfDelivery;
     @ToString.Exclude

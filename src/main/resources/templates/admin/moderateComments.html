@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>Moderate Comments</title>
+</head>
+<body>
+<form method="get" th:action="@{/admin/menu}">
+    <button type="submit" name="button"> Back to menu </button>
+</form>
+<h1>Comments:</h1>
+<ul>
+    <th:block th:if="${not #lists.isEmpty(moderateComments)}">
+        <th:block th:each="comment, counter : ${moderateComments}">
+            <li>
+                <b th:text="${counter.count + ': ' + comment.userDto.name + ' -'}"></b>
+                <span style="color: gray" th:text="${#strings.toLowerCase(comment.comment)}"></span>
+            </li>
+            <form method="post" th:action="@{/admin/menu/moderateComments}">
+                <input type="hidden" name="commentId" th:value="${comment.id}"/>
+                <button type="submit" value="access" name="value"> Access </button>
+                <button type="submit" value="delete" name="value"> Delete </button>
+            </form>
+        </th:block>
+    </th:block>
+</ul>
+</body>
+</html>

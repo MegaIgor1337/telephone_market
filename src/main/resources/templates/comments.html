@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>Comments</title>
+</head>
+<body>
+<a th:href="@{/users/{userId}/personalComments(userId=${userDto.id})}">
+    <button type="button"> View your comments </button>
+</a>
+<a th:href="@{/users/menu}">
+    <button type="button">Back to menu</button>
+</a>
+<a th:href="@{/users/{userId}/addComment(userId=${userDto.id})}">
+    <button type="button">Add comment</button>
+</a>
+<h1>Comments:</h1>
+<ul>
+    <th:block th:if="${not #lists.isEmpty(comments)}">
+        <th:block th:each="comment, counter : ${comments}">
+            <li>
+                <b th:text="${counter.count + ': ' + comment.userDto.name + ' -'}"></b>
+                <span style="color: gray" th:text="${#strings.toLowerCase(comment.comment)}"></span>
+            </li>
+        </th:block>
+    </th:block>
+</ul>
+</body>
+</html>

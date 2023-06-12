@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+1)
+<a th:href="@{/market}">
+    About us
+</a><br/>
+2)
+<a th:href="@{/comments}">
+    View comments
+</a><br/>
+3)
+<a th:href="@{/users/{userId}/profileMenu(userId=${userDto.id})}">
+    Profile
+</a><br/>
+4)
+<a th:href="@{/users/{userId}/products(userId=${userDto.id})}">
+    Catalog
+</a><br/>
+5)
+<a th:href="@{/logout}">
+    Log out
+</a><br/>
+6)
+<a th:href="@{/users/{userId}/addComment(userId=${userDto.id})}">
+    Add comment
+</a><br/>
+7)
+<a th:href="@{/users/{userId}/addComment(userId=${userDto.id})}">
+    Basket
+</a><br/>
+8)
+<a th:href="@{/users/{userId}/addComment(userId=${userDto.id})}">
+    Order history
+</a><br/>
+9)
+<a th:href="@{/logout}">
+    Favourite
+</a><br/>
+</body>
+</html>

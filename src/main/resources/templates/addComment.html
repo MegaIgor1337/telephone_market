@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add comment</title>
+</head>
+<body>
+<form method="post" th:action="@{/users/{id}/addComment(id=${userDto.id})}">
+    <label for="comment">Write comment:</label>
+    <br/>
+    <textarea id="comment" name="comment" rows="5" cols="40"></textarea>
+    <br/>
+    <button type="submit">Send</button>
+    <a th:href="@{users/menu}">
+        <button type="button">Back to menu</button>
+    </a>
+</form>
+</body>
+</html>
+

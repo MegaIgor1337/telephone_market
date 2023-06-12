@@ -14,6 +14,8 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 import project.TestApplicationRunner;
+
+import static market.util.StringContainer.ID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -27,7 +29,7 @@ public class ProductRepositoryTest {
 
     @Test
     void testPage() {
-        var pageable = PageRequest.of(1, 3, Sort.by("id"));
+        var pageable = PageRequest.of(1, 3, Sort.by(ID));
         var products = productRepository.findAllBy(pageable);
         assertFalse(products.isEmpty());
         assertThat(products).hasSize(2);

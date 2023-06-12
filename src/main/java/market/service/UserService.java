@@ -1,125 +1,135 @@
 package market.service;
 
+import market.dto.*;
 import market.repository.UserRepository;
-import market.dto.CreateUserDto;
-import market.dto.UserDto;
-import market.entity.User;
 import market.exception.ValidationException;
 import lombok.RequiredArgsConstructor;
-import market.mapper.user.CreateUserMapper;
-import market.mapper.user.UserDtoMapper;
-import market.mapper.user.UserMapper;
+import market.mapper.CreateUserMapper;
+import market.mapper.UserMapper;
+import market.validator.*;
 import org.springframework.stereotype.Service;
-import market.validator.CreateUserValidator;
-import market.validator.Error;
-import market.validator.ValidationResult;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
+
 
 @RequiredArgsConstructor
 @Service
+@Transactional
 public class UserService {
 
-
-
+    private final UserPasswordValidator userPasswordValidator;
     private final CreateUserValidator createUserValidator;
     private final CreateUserMapper createUserMapper;
+    private final UsernameValidator usernameValidator;
     private final UserMapper userMapper;
-    private final UserDtoMapper userDtoMapper;
+    private final LoginUserValidator loginUserValidator;
     private final UserRepository userRepository;
-
+    private final UserEmailValidator userEmailValidator;
+    private final BalanceValidator balanceValidator;
+    private final UserPassportNoValidator userPassportNoValidator;
     public Optional<UserDto> login(String login, String password) {
-        return userRepository.findAll()
+        Optional<UserDto> userDto = userRepository.findAll()
                 .stream()
                 .filter(it -> it.getName()
                                       .equals(login)
                                                    && it.getPassword().equals(password))
-                .map(userMapper::mapFrom).findFirst();
+                .map(userMapper::userToUserDto).findFirst();
+        var validationResult = loginUserValidator.isValid(userDto);
+        if (!validationResult.isValid()) {
+            throw new ValidationException(validationResult.getErrors());
+        }
+        return userDto;
+    }
+
+
+    private List<IValidateUserInfoDto> getValidateInfo() {
+        return userRepository.findAllByNameNotNullAndEmailNotNull();
     }
 
     public UserDto create(CreateUserDto userDto) {
+        createUserValidator.putUserValidationInfo(getValidateInfo());
         var validationResult = createUserValidator.isValid(userDto);
-        if (!validationResult.isValid() || validateOnName(userDto, validationResult)
-            || validateOnEmail(userDto, validationResult)) {
+        if (!validationResult.isValid()) {
             throw new ValidationException(validationResult.getErrors());
         }
-        var userEntity = createUserMapper.mapFrom(userDto);
+        var userEntity = createUserMapper.createUserDtoToUser(userDto);
         userEntity.setBalance(BigDecimal.valueOf(0.0));
-        return userMapper.mapFrom(userRepository.save(userEntity));
+        return userMapper.userToUserDto(userRepository.save(userEntity));
     }
 
-    public void setNewLogin(UserDto userDto, String newLogin) {
+    private List<INameUserDto> getAllNames() {
+        return userRepository.findAllByNameNotNull();
+    }
+
+    private List<IEmailUserDto> getAllEmails() {
+        return userRepository.findAllByEmailNotNull();
+    }
+
+    public void setNewLogin(UserDto userDto, String newLogin, String password) {
+        validateOldPassword(userDto, password);
+        usernameValidator.putUsersNames(getAllNames());
+        var validationResultName = usernameValidator.isValid(newLogin);
+        if (!validationResultName.isValid()) {
+            throw new ValidationException(validationResultName.getErrors());
+        }
         userDto.setName(newLogin);
-        userRepository.save(userDtoMapper.mapFrom(userDto));
+        userRepository.saveAndFlush(userMapper.userDtotoUser(userDto));
     }
-    private boolean validateOnName(CreateUserDto userDto, ValidationResult validationResult) {
-        List<User> users = userRepository.findAll().stream()
-                .filter(it -> it.getName().equals(userDto.getName())).collect(Collectors.toList());
-        if (!users.isEmpty()) {
-            validationResult.add(Error.of("invalid.login", "This login is already used"));
-            return true;
-        } else {
-            return false;
+
+    public void setNewPassword(UserDto userDto, String oldPassword, String newPassword) {
+        validateOldPassword(userDto, oldPassword);
+        var validationResultNewPassword = userPasswordValidator.isValid(newPassword);
+        if (!validationResultNewPassword.isValid()) {
+            throw new ValidationException(validationResultNewPassword.getErrors());
+        }
+        userDto.setPassword(newPassword);
+        userRepository.save(userMapper.userDtotoUser(userDto));
+    }
+
+    private void validateOldPassword(UserDto userDto, String password) {
+        var validationResultPassword = userPasswordValidator.isValid(userDto, password);
+        if (!validationResultPassword.isValid()) {
+            throw new ValidationException(validationResultPassword.getErrors());
         }
     }
 
-    public boolean validatePassword(String password) {
-        Pattern patternForPassword = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9@#$%]).{8,}$");
-        Matcher matcherForPassword = patternForPassword.matcher(password);
-        return matcherForPassword.find();
-    }
-
-    public boolean validateOnNewName(String newName) {
-        List<User> users = userRepository.findAll().stream()
-                .filter(it -> it.getName().equals(newName)).collect(Collectors.toList());
-        return users.isEmpty();
-    }
-
-    public boolean validateOnPassword(UserDto userDto, String enteredPassword) {
-        return userDto.getPassword().equals(enteredPassword);
-    }
-
-    private boolean validateOnEmail(CreateUserDto userDto, ValidationResult validationResult) {
-        List<User> users = userRepository.findAll().stream()
-                .filter(it -> it.getEmail().equals(userDto.getEmail())).collect(Collectors.toList());
-        if (!users.isEmpty()) {
-            validationResult.add(Error.of("invalid.email", "This email is already used"));
-            return true;
-        } else {
-            return false;
+    public void setNewPassportNo(UserDto userDto, String newPassportNo, String password) {
+        validateOldPassword(userDto, password);
+        var validationResultPassportNo = userPassportNoValidator.isValid(newPassportNo);
+        if (!validationResultPassportNo.isValid()) {
+            throw new ValidationException(validationResultPassportNo.getErrors());
         }
-    }
-
-    public void setNewPassword(UserDto userDto, String password) {
-        userDto.setPassword(password);
-        userRepository.save(userDtoMapper.mapFrom(userDto));
-    }
-
-    public boolean validatePassportNo(String passportNo) {
-        Pattern patternForPassportNo = Pattern.compile("^[a-zA-Z]{2}\\d{6}$");
-        Matcher matcherForPassportNo = patternForPassportNo.matcher(passportNo);
-        return matcherForPassportNo.find();
-    }
-
-    public boolean validateEmail(String email) {
-        Pattern patternForEmail = Pattern.compile("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
-        Matcher matcherForEmail = patternForEmail.matcher(email);
-        return matcherForEmail.find();
-    }
-
-    public void setNewPassportNo(UserDto userDto, String newPassportNo) {
         userDto.setPassportNo(newPassportNo);
-        userRepository.save(userDtoMapper.mapFrom(userDto));
+        userRepository.save(userMapper.userDtotoUser(userDto));
     }
 
-    public void setNewEmail(UserDto userDto, String newEmail) {
+    public void setNewEmail(UserDto userDto, String newEmail, String password) {
+        validateOldPassword(userDto, password);
+        userEmailValidator.putEmails(getAllEmails());
+        var validationResultEmail = userEmailValidator.isValid(newEmail);
+        if (!validationResultEmail.isValid()) {
+            throw new ValidationException(validationResultEmail.getErrors());
+        }
         userDto.setEmail(newEmail);
-        userRepository.save(userDtoMapper.mapFrom(userDto));
+        userRepository.save(userMapper.userDtotoUser(userDto));
     }
 
+    public Optional<UserDto> putMoney(Long id, String money) {
+        var validationResult = balanceValidator.isValid(money);
+        if (!validationResult.isValid()) {
+            throw new ValidationException(validationResult.getErrors());
+        }
+        var userDto = userRepository.findById(id);
+        if (userDto.isPresent()) {
+            var balance = userDto.get().getBalance();
+            var newBalance = balance.add(new BigDecimal(money));
+            userDto.get().setBalance(newBalance);
+            return Optional.of(userMapper.userToUserDto(userRepository
+                    .saveAndFlush(userDto.get())));
+        }
+        return Optional.empty();
+    }
 }

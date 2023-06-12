@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>changeLogin</title>
+</head>
+<body>
+<a th:href="@{/users/{userId}/profileMenu(userId=${userDto.id})}">
+    <button type="button">Back to menu</button>
+</a>
+<form th:action="@{/users/{userId}/profileMenu/changeLogin(userId=${userDto.id})}" method="post">
+    <label for="password">Password:
+        <input type="password" name="password" id="password" th:value="${password}" required>
+    </label><br>
+    <label>New Login:
+        <input type="text" name="newLogin" id="newLogin" th:value="${newLogin}" required>
+    </label>
+    <label for="submit">
+        <input type="submit" value="send" id="submit">
+    </label>
+</form>
+<div th:if="${errors != null}" style="color: red">
+    <span th:each="error : ${errors}" th:text="${error.message}"></span>
+    <br/>
+</div>
+</body>
+</html>

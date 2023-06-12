@@ -6,8 +6,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CreateAddressDto {
-    private String id;
+public class CreateAddressDto implements ICreateAddressDto {
     private String country;
     private String city;
     private String street;

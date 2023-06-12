@@ -1,56 +1,59 @@
 package market.validator;
 
+import lombok.RequiredArgsConstructor;
 import market.dto.CreateUserDto;
+import market.dto.IValidateUserInfoDto;
 import market.enums.Gender;
 import market.enums.Role;
-import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static lombok.AccessLevel.PRIVATE;
+import static market.util.StringContainer.*;
+
 @Component
-@NoArgsConstructor(access = PRIVATE)
+@RequiredArgsConstructor
 public class CreateUserValidator implements Validator<CreateUserDto> {
-
-    private static final CreateUserValidator INSTANCE = new CreateUserValidator();
-
+    private List<IValidateUserInfoDto> validateUserInfoList;
     @Override
     public ValidationResult isValid(CreateUserDto object) {
         var validationResult = new ValidationResult();
-        Pattern patternForPassword = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9@#$%]).{8,}$");
+        Pattern patternForPassword = Pattern.compile(REGEX_FOR_PASSWORD);
         Matcher matcherForPassword = patternForPassword.matcher(object.getPassword());
-        Pattern patternForPassportNo = Pattern.compile("^[a-zA-Z]{2}\\d{6}$");
+        Pattern patternForPassportNo = Pattern.compile(REGEX_FOR_PASSPORT);
         Matcher matcherForPassportNo = patternForPassportNo.matcher(object.getPassportNo());
-        Pattern patternForEmail = Pattern.compile("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
+        Pattern patternForEmail = Pattern.compile(REGEX_FOR_EMAIL);
         Matcher matcherForEmail = patternForEmail.matcher(object.getEmail());
+        if (validateUserInfoList.stream().map(IValidateUserInfoDto::getName).toList().contains(object.getName())) {
+            validationResult.add(Error.of(Error.getMessage(NAME), LOGIN_IS_USED));
+        }
+        if (validateUserInfoList.stream().map(IValidateUserInfoDto::getEmail).toList().contains(object.getEmail())) {
+            validationResult.add(Error.of(Error.getMessage(EMAIL), EMAIL_IS_USED));
+        }
         if (!matcherForPassword.find()) {
-            validationResult.add(Error.of("invalid.password",
-                    "Password is simple." +
-                    " The password must be at least 8 characters " +
-                    "long, contain at least 1 uppercase letter, 1 lowercase letter," +
-                    " and EITHER a special character OR a number."));
+            validationResult.add(Error.of(Error.getMessage(PASSWORD), PASSWORD_IS_INVALID));
         }
         if (Gender.find(object.getGender()).isEmpty()) {
-            validationResult.add(Error.of("invalid.gender", "Gender is invalid"));
+            validationResult.add(Error.of(Error.getMessage(GENDER), GENDER_IS_INVALID));
         }
         if (!matcherForPassportNo.find()) {
-            validationResult.add(Error.of("invalid.passportNo",
-                    "Passport number is invalid"));
+            validationResult.add(Error.of(Error.getMessage(PASSPORT_NO), PASSPORT_IS_INVALID));
         }
         if (!matcherForEmail.find()) {
-            validationResult.add(Error.of("invalid.email", "Email is invalid"));
+            validationResult.add(Error.of(Error.getMessage(EMAIL), EMAIL_IS_WRONG));
         }
 
         if (Role.find(object.getRole()).isEmpty()) {
-            validationResult.add(Error.of("invalid.role", "Role is invalid"));
+            validationResult.add(Error.of(Error.getMessage(ROLE), ROLE_IS_INVALID));
         }
         return validationResult;
     }
 
-
-    public static CreateUserValidator getInstance() {
-        return INSTANCE;
+    public void putUserValidationInfo(List<IValidateUserInfoDto> list) {
+        this.validateUserInfoList = list;
     }
+
+
 }
