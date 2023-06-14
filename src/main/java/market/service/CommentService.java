@@ -8,12 +8,14 @@ import market.enums.CommentStatus;
 import lombok.RequiredArgsConstructor;
 import market.mapper.CommentMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class CommentService {
 
     private final CommentMapper commentMapper;
@@ -26,10 +28,12 @@ public class CommentService {
     }
 
 
+    @Transactional
     public CommentDto save(CommentDto commentDto) {
         return commentMapper.commentToCommentDto(commentRepository
                 .save(commentMapper.commentDtoToComment(commentDto)));
     }
+
 
     public List<CommentDto> findCommentsByUserId(Long id) {
         return commentRepository.findByUserId(id).stream()
@@ -41,18 +45,16 @@ public class CommentService {
                 .map(commentMapper::commentToCommentDto).collect(Collectors.toList());
     }
 
+    @Transactional
     public void updateCommentFromModeratingToAccess(Long id) {
-        Comment comment = commentRepository.findById(id).get();
-        comment.setStatus(CommentStatus.ACCESSED);
-        commentRepository.save(comment);
+        var comment = commentRepository.findById(id).orElse(null);
+        if (comment != null) {
+            comment.setStatus(CommentStatus.ACCESSED);
+            commentRepository.saveAndFlush(comment);
+        }
     }
 
-    public void updateCommentFromModeratingToDelete(Long id) {
-        Comment comment = commentRepository.findById(id).get();
-        comment.setStatus(CommentStatus.DELETED);
-        commentRepository.save(comment);
-    }
-
+    @Transactional
     public void deleteComment(Long id) {
         if (commentRepository.findById(id).isPresent()) {
             commentRepository.delete(commentRepository.findById(id).get());

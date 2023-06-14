@@ -1,30 +1,29 @@
 package market.service;
 
 import lombok.RequiredArgsConstructor;
-import market.dto.CreateUserProductDto;
+import market.dto.ProductFilter;
 import market.dto.ProductDto;
 import market.entity.Product;
 import market.enums.OrderStatus;
 import market.exception.ValidationException;
-import market.mapper.ListToPageMapper;
 import market.mapper.ProductMapper;
 import market.repository.ProductRepository;
 import market.validator.EnteredProductInfoValidator;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 import static market.util.StringContainer.*;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class ProductService {
     private final ProductRepository productRepository;
-    private final ListToPageMapper listToPageMapper;
     private final ProductMapper productMapper;
     private final BrandService brandService;
     private final ModelService modelService;
@@ -47,7 +46,7 @@ public class ProductService {
                 .stream().map(productMapper::productToProductDto).toList();
     }
 
-    public Page<ProductDto> getProductsByPredicates(CreateUserProductDto createUserProductDto, PageRequest pageRequest) {
+    public Page<ProductDto> getProductsByPredicates(ProductFilter createUserProductDto, Pageable pageable) {
         enteredProductInfoValidator.putBrands(brandService.getAllBrands());
         enteredProductInfoValidator.putColors(colorService.getAllColors());
         enteredProductInfoValidator.putModels(modelService.getAllModels());
@@ -57,12 +56,12 @@ public class ProductService {
             throw new ValidationException(validationResult.getErrors());
         }
         Specification<Product> specification = getSpecifications(createUserProductDto);
-        return listToPageMapper.convertListToPage(productRepository.findAll(specification)
-                .stream().map(productMapper::productToProductDto).toList(), pageRequest);
+        return productRepository.findAll(specification, pageable)
+                .map(productMapper::productToProductDto);
     }
 
 
-    private Specification<Product> getSpecifications(CreateUserProductDto createUserProductDto) {
+    private Specification<Product> getSpecifications(ProductFilter createUserProductDto) {
         Specification<Product> specification = Specification.where(null);
         if (createUserProductDto.getModel() != null && !createUserProductDto.getModel().equals(EMPTY_PARAM)) {
             specification = specification

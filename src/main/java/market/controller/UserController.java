@@ -10,6 +10,7 @@ import market.service.*;
 import market.validator.Error;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +24,7 @@ import static market.util.StringContainer.*;
 @RequiredArgsConstructor
 @RequestMapping("/users")
 @SessionAttributes({USER_DTO, USER_COMMENTS, PRODUCTS_IN_BASKET, MESSAGE_IF_SEARCHED_PRODUCTS_EMPTY,
-        ADDRESSES, ERRORS, ID, PRODUCTS, FAVOURITES, SEARCHED_PRODUCTS,
+        ADDRESSES, ERRORS, ID, PRODUCTS, FAVOURITES, SEARCHED_PRODUCTS, PRICE_QUERIES,
         CREATE_USER_PRODUCT_DTO})
 public class UserController {
     private final CommentService commentService;
@@ -190,9 +191,8 @@ public class UserController {
     @GetMapping("/{id}/products")
     public String viewProducts(@PathVariable(ID) Long id,
                                @RequestParam(name = PAGE, defaultValue = ZERO) Integer page,
-                               Model m, RedirectAttributes redirectAttributes, String color,
-                               String country, String model, String brand, String count,
-                               String minPrice, String maxPrice) {
+                               Model m, RedirectAttributes redirectAttributes,
+                               ProductFilter createUserProductDto) {
         m.addAttribute(ERRORS, Error.of(EMPTY_PARAM, EMPTY_PARAM));
         m.addAttribute(MODELS, modelService.getAllModels());
         m.addAttribute(COUNTRIES, countryService.getAllCountries());
@@ -202,15 +202,21 @@ public class UserController {
                 .getProductsByUserIdInFavourites(id));
         m.addAttribute(PRODUCTS_IN_BASKET, productService
                 .getProductsByUserIdAndOrderStatus(id, OrderStatus.WAITING_PAID));
+        m.addAttribute(PRICE_QUERIES, List.of(CHEAP_FIRST, REACH_FIRST));
         try {
-            var pageable = PageRequest.of(page, 2);
-            var createUserProductDto = createUserProductConverter.convert(brand, model, color,
-                    country, maxPrice, minPrice, count);
-            var searchedProducts = createUserProductDto == null ? Page.empty() : productService
-                    .getProductsByPredicates(createUserProductDto, pageable);
+            PageRequest pageable;
+            if (CHEAP_FIRST.equals(createUserProductDto.getPriceQuery())) {
+                pageable = PageRequest.of(page, 2, Sort.by(COST));
+            } else if (REACH_FIRST.equals(createUserProductDto.getPriceQuery())) {
+                pageable = PageRequest.of(page, 2, Sort.by(COST).descending());
+            } else {
+                pageable = PageRequest.of(page, 2);
+            }
+            var searchedProducts = productService
+                                .getProductsByPredicates(createUserProductDto, pageable);
             var products = searchedProducts.isEmpty() ? productService.getProducts(pageable) : searchedProducts;
             m.addAttribute(PRODUCTS, products);
-            redirectAttributes(redirectAttributes, color, country, model, minPrice, maxPrice, count, brand);
+            redirectAttributes(redirectAttributes, createUserProductDto);
             return "redirect:/users/products";
         } catch (ValidationException e) {
             m.addAttribute(ERRORS, e.getErrors());
@@ -226,15 +232,22 @@ public class UserController {
 
 
 
-    private void redirectAttributes(RedirectAttributes redirectAttributes, String color,
-                                    String country, String model, String minPrice, String maxPrice,
-                                    String count, String brand) {
-        if (country != null) redirectAttributes.addFlashAttribute(COUNTRY, country);
-        if (color != null) redirectAttributes.addFlashAttribute(COLOR, color);
-        if (model != null) redirectAttributes.addFlashAttribute(MODEL, model);
-        if (minPrice != null) redirectAttributes.addFlashAttribute(MIN_PRICE, minPrice);
-        if (maxPrice != null) redirectAttributes.addFlashAttribute(MAX_PRICE, maxPrice);
-        if (count != null) redirectAttributes.addFlashAttribute(COUNT, count);
-        if (brand != null) redirectAttributes.addFlashAttribute(BRAND, brand);
+    private void redirectAttributes(RedirectAttributes redirectAttributes, ProductFilter createUserProductDto) {
+        if (createUserProductDto.getCountry() != null) redirectAttributes.addFlashAttribute(COUNTRY,
+                createUserProductDto.getCountry());
+        if (createUserProductDto.getColor() != null) redirectAttributes.addFlashAttribute(COLOR,
+                createUserProductDto.getColor());
+        if (createUserProductDto.getModel() != null) redirectAttributes.addFlashAttribute(MODEL,
+                createUserProductDto.getModel());
+        if (createUserProductDto.getMinPrice() != null) redirectAttributes.addFlashAttribute(MIN_PRICE,
+                createUserProductDto.getMinPrice());
+        if (createUserProductDto.getMaxPrice() != null) redirectAttributes.addFlashAttribute(MAX_PRICE,
+                createUserProductDto.getMaxPrice());
+        if (createUserProductDto.getCount() != null) redirectAttributes.addFlashAttribute(COUNT,
+                createUserProductDto.getCount());
+        if (createUserProductDto.getBrand() != null) redirectAttributes.addFlashAttribute(BRAND,
+                createUserProductDto.getBrand());
+        if (createUserProductDto.getPriceQuery() != null) redirectAttributes.addFlashAttribute(SELECTED_PRICE_QUERY,
+                createUserProductDto.getPriceQuery());
     }
 }

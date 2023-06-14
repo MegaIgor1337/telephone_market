@@ -35,7 +35,7 @@ public class AdminController {
         if (value.equals(ACCESS)) {
             commentService.updateCommentFromModeratingToAccess(Long.valueOf(commentId));
         } else {
-            commentService.updateCommentFromModeratingToDelete(Long.valueOf(commentId));
+            commentService.deleteComment(Long.valueOf(commentId));
         }
         model.addAttribute(SIZE_MODERATE_COMMENTS, commentService.getModerateComments().size());
         return "redirect:/admin/menu/moderateComments";

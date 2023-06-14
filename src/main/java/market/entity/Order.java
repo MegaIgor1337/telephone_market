@@ -26,6 +26,7 @@ public class Order implements BaseEntity<Long>{
     private User user;
     private BigDecimal cost;
     private LocalDateTime date;
+    @Enumerated(EnumType.STRING)
     private OrderStatus status;
     @Column(name = "date_of_delivery")
     private LocalDateTime dateOfDelivery;

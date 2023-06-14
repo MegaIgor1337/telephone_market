@@ -17,7 +17,7 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
-@Transactional
+@Transactional(readOnly = true)
 public class UserService {
 
     private final UserPasswordValidator userPasswordValidator;
@@ -49,6 +49,7 @@ public class UserService {
         return userRepository.findAllByNameNotNullAndEmailNotNull();
     }
 
+    @Transactional
     public UserDto create(CreateUserDto userDto) {
         createUserValidator.putUserValidationInfo(getValidateInfo());
         var validationResult = createUserValidator.isValid(userDto);
@@ -68,6 +69,7 @@ public class UserService {
         return userRepository.findAllByEmailNotNull();
     }
 
+    @Transactional
     public void setNewLogin(UserDto userDto, String newLogin, String password) {
         validateOldPassword(userDto, password);
         usernameValidator.putUsersNames(getAllNames());
@@ -79,6 +81,7 @@ public class UserService {
         userRepository.saveAndFlush(userMapper.userDtotoUser(userDto));
     }
 
+    @Transactional
     public void setNewPassword(UserDto userDto, String oldPassword, String newPassword) {
         validateOldPassword(userDto, oldPassword);
         var validationResultNewPassword = userPasswordValidator.isValid(newPassword);
@@ -96,6 +99,7 @@ public class UserService {
         }
     }
 
+    @Transactional
     public void setNewPassportNo(UserDto userDto, String newPassportNo, String password) {
         validateOldPassword(userDto, password);
         var validationResultPassportNo = userPassportNoValidator.isValid(newPassportNo);
@@ -106,6 +110,7 @@ public class UserService {
         userRepository.save(userMapper.userDtotoUser(userDto));
     }
 
+    @Transactional
     public void setNewEmail(UserDto userDto, String newEmail, String password) {
         validateOldPassword(userDto, password);
         userEmailValidator.putEmails(getAllEmails());
@@ -117,6 +122,7 @@ public class UserService {
         userRepository.save(userMapper.userDtotoUser(userDto));
     }
 
+    @Transactional
     public Optional<UserDto> putMoney(Long id, String money) {
         var validationResult = balanceValidator.isValid(money);
         if (!validationResult.isValid()) {

@@ -11,37 +11,38 @@ import static market.util.StringContainer.*;
 
 @Component
 @NoArgsConstructor
-public class EnteredProductInfoValidator implements Validator<CreateUserProductDto> {
+public class EnteredProductInfoValidator implements Validator<ProductFilter> {
     private List<BrandDto> brands;
     private List<ModelDto> models;
     private List<CountryDto> countries;
     private List<ColorDto> colors;
 
     @Override
-    public ValidationResult isValid(CreateUserProductDto object) {
+    public ValidationResult isValid(ProductFilter object) {
         var validationResult = new ValidationResult();
-        if (object.getColor() != null || object.getCount() != null || object.getModel() != null
-        || object.getBrand() != null || object.getCountry() != null) {
-            if (!EMPTY_PARAM.equals(object.getBrand()) && !brands.stream().map(BrandDto::getBrand).toList()
-                    .contains(object.getBrand())) {
-                validationResult.add(Error.of(Error.getMessage(BRAND), BRAND_ENTERED_INVALID));
-            }
-            if (!models.stream().map(ModelDto::getModel).toList()
-                    .contains(object.getModel()) && !EMPTY_PARAM.equals(object.getModel())) {
-                validationResult.add(Error.of(Error.getMessage(MODEL), MODEL_ENTERED_INVALID));
-            }
-            if (!colors.stream().map(ColorDto::getColor).toList()
-                    .contains(object.getColor()) && !EMPTY_PARAM.equals(object.getColor())) {
-                validationResult.add(Error.of(Error.getMessage(COLOR), COLOR_ENTERED_INVALID));
-            }
-            if (!countries.stream().map(CountryDto::getCountry).toList()
-                    .contains(object.getCountry()) && !EMPTY_PARAM.equals(object.getCountry())) {
-                validationResult.add(Error.of(Error.getMessage(COUNTRY), COUNTRY_ENTERED_INVALID));
-            }
-            if (!EMPTY_PARAM.equals(object.getCount()) && Integer.parseInt(object.getCount()) < 1) {
-                validationResult.add(Error.of(Error.getMessage(COUNT), COUNT_ENTERED_INVALID));
-            }
+
+        if (object.getBrand() != null &&
+            !EMPTY_PARAM.equals(object.getBrand()) && !brands.stream().map(BrandDto::getBrand).toList()
+                .contains(object.getBrand())) {
+            validationResult.add(Error.of(Error.getMessage(BRAND), BRAND_ENTERED_INVALID));
         }
+        if (object.getModel() != null && !models.stream().map(ModelDto::getModel).toList()
+                .contains(object.getModel()) && !EMPTY_PARAM.equals(object.getModel())) {
+            validationResult.add(Error.of(Error.getMessage(MODEL), MODEL_ENTERED_INVALID));
+        }
+        if (object.getCount() != null && !colors.stream().map(ColorDto::getColor).toList()
+                .contains(object.getColor()) && !EMPTY_PARAM.equals(object.getColor())) {
+            validationResult.add(Error.of(Error.getMessage(COLOR), COLOR_ENTERED_INVALID));
+        }
+        if (object.getCountry() != null && !countries.stream().map(CountryDto::getCountry).toList()
+                .contains(object.getCountry()) && !EMPTY_PARAM.equals(object.getCountry())) {
+            validationResult.add(Error.of(Error.getMessage(COUNTRY), COUNTRY_ENTERED_INVALID));
+        }
+        if (object.getCount() != null && !EMPTY_PARAM.equals(object.getCount()) && Integer.parseInt(object.getCount()) < 1)
+
+
+            validationResult.add(Error.of(Error.getMessage(COUNT), COUNT_ENTERED_INVALID));
+
         if (object.getMaxPrice() != null) {
             var maxPrice = !EMPTY_PARAM.equals(object.getMaxPrice()) ? new BigDecimal(object.getMaxPrice()) : null;
             if (maxPrice != null && maxPrice.compareTo(BigDecimal.ZERO) < 0) {

@@ -11,7 +11,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 public class CountryService {
     private final CountryRepository countryRepository;
     private final CountryMapper countryMapper;

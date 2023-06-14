@@ -9,12 +9,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Data
-public class CreateUserProductDto {
+public class ProductFilter {
     private String brand;
     private String model;
     private String color;
     private String country;
     private String count;
     private String minPrice;
+    private String priceQuery;
     private String maxPrice;
 }

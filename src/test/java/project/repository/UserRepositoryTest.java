@@ -16,6 +16,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 import project.TestApplicationRunner;
+import project.annotation.IT;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -27,9 +28,7 @@ import static org.assertj.core.api.Assertions.fail;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 
-@Transactional
-@SpringBootTest(classes = {ApplicationRunner.class,TestApplicationRunner.class})
-@ExtendWith(SpringExtension.class)
+@IT
 @RequiredArgsConstructor
 public class UserRepositoryTest {
     private final EntityManager entityManager;

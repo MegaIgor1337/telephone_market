@@ -88,6 +88,19 @@
             <artifactId>jakarta.servlet.jsp.jstl</artifactId>
             <version>3.0.1</version>
         </dependency>
+        <dependency>
+            <groupId>com.querydsl</groupId>
+            <artifactId>querydsl-jpa</artifactId>
+            <version>${querydsl.version}</version>
+            <classifier>jakarta</classifier>
+        </dependency>
+        <dependency>
+            <groupId>com.querydsl</groupId>
+            <artifactId>querydsl-apt</artifactId>
+            <scope>provided</scope>
+            <version>${querydsl.version}</version>
+            <classifier>jakarta</classifier>
+        </dependency>
     </dependencies>
 
     <build>

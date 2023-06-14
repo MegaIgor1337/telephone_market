@@ -1,0 +1,81 @@
+package project.controller;
+
+
+import lombok.RequiredArgsConstructor;
+import market.dto.UserDto;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import project.annotation.IT;
+
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+@IT
+@RequiredArgsConstructor
+@AutoConfigureMockMvc
+public class AddressControllerTest {
+    private final MockMvc mockMvc;
+
+    @Test
+    void testAddress() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/address/addAddress"))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.view().name("/address"));
+    }
+
+    @Test
+    void testAddAddress() throws Exception {
+
+        UserDto userDto = new UserDto();
+        userDto.setId(1L); // Задайте значение идентификатора пользователя
+        mockMvc.perform(MockMvcRequestBuilders.post("/address/addAddress")
+                        .param("country", "TestCountry")
+                        .param("city", "TestCity")
+                        .param("street", "TestStreet")
+                        .param("house", "TestHouse")
+                        .param("flat", "TestFlat")
+                        .sessionAttr("userDto", userDto)) // Установка атрибута в сессии
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/users/menu"));
+    }
+
+    @Test
+    void changeAddress() throws Exception {
+        String addressId = "2";
+        mockMvc.perform(MockMvcRequestBuilders.get("/address/changeAddress")
+                        .param("addressId", addressId))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.view().name("/changeAddress"))
+                .andExpect(MockMvcResultMatchers.model().attribute("userDto", addressId));
+    }
+
+
+    @Test
+    public void testChangeAddress() throws Exception {
+        UserDto userDto = new UserDto();
+        userDto.setId(2L); //
+        mockMvc.perform(MockMvcRequestBuilders.post("/address/changeAddress")
+                        .param("country", "Country")
+                        .param("city", "City")
+                        .param("street", "Street")
+                        .param("house", "House")
+                        .param("flat", "Flat")
+                        .sessionAttr("userDto", userDto)
+                        .sessionAttr("addressId", "2")
+                )
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/users/menu"));
+    }
+
+    @Test
+    void delete() throws Exception{
+        mockMvc.perform(MockMvcRequestBuilders.post("/address/deleteAddress")
+                        .param("addressId", "2")
+                )
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/users/menu"));
+    }
+}

@@ -12,7 +12,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 public class ColorService {
     private final ColorRepository colorRepository;
     private final ColorMapper colorMapper;

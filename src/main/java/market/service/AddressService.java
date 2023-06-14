@@ -13,12 +13,14 @@ import market.mapper.AddressMapper;
 import market.mapper.CreateAddressMapper;
 import org.springframework.stereotype.Service;
 import market.validator.CreateAddressValidator;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class AddressService {
 
     private final AddressMapper addressMapper;

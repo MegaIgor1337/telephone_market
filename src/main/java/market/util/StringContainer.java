@@ -89,10 +89,11 @@ public class StringContainer {
 
     public static final String SPRING = "spring";
     public static final String USER = "user";
-    public static final String EXPRESSION_CREATE_COMMENT = "java(userRepository.findById(Long.valueOf(createCommentDto.getUserId())).get())";
-    public static final String EXPRESSION_CREATE_UPDATE_ADDRESS = "java(userRepository.findById(Long.valueOf(createUpdateAddressDto.getUserId())).get())";
-    public static final String EXPRESSION_CREATE_ADDRESS = "java(userRepository.findById(Long.valueOf(createAddressDto.getUserId())).get())";
-
-
-
+    public static final String EXPRESSION_CREATE_COMMENT = "java(userRepository.findById(Long.valueOf(createCommentDto.getUserId())).orElse(null))";
+    public static final String EXPRESSION_CREATE_UPDATE_ADDRESS = "java(userRepository.findById(Long.valueOf(createUpdateAddressDto.getUserId())).orElse(null))";
+    public static final String EXPRESSION_CREATE_ADDRESS = "java(userRepository.findById(Long.valueOf(createAddressDto.getUserId())).orElse(null))";
+    public static final String PRICE_QUERIES = "priceQueries";
+    public static final String CHEAP_FIRST = "Cheap first";
+    public static final String REACH_FIRST = "Reach first";
+    public static final String SELECTED_PRICE_QUERY = "selectedPriceQuery";
 }

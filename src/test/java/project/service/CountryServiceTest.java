@@ -1,36 +1,30 @@
-package project.repository;
+package project.service;
 
 
 import lombok.RequiredArgsConstructor;
 import market.ApplicationRunner;
-import market.repository.ProductRepository;
+import market.service.CountryService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 import project.TestApplicationRunner;
 import project.annotation.IT;
 
+import static java.util.stream.Collectors.toList;
 import static market.util.StringContainer.ID;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
-
+import static org.assertj.core.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 @IT
 @RequiredArgsConstructor
-public class ProductRepositoryTest {
-    private final ProductRepository productRepository;
-
+public class CountryServiceTest {
+    private final CountryService countryService;
     @Test
-    void testPage() {
-        var pageable = PageRequest.of(1, 3, Sort.by(ID));
-        var products = productRepository.findAllBy(pageable);
-        assertFalse(products.isEmpty());
-        assertThat(products).hasSize(2);
-
+    void getCountries() {
+        var result = countryService.getAllCountries();
+        assertThat(result).hasSize(3);
     }
 }

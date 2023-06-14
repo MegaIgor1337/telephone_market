@@ -42,6 +42,12 @@
     <label for="count">Count:</label>
     <input type="number" id="count" name="count" th:value="${count}">
     <br>
+    <label for="priceQuery">Price query:</label><br/>
+    <label th:each="priceQuery : ${priceQueries}">
+        <input type="radio" id="priceQuery" name="priceQuery" th:value="${priceQuery}"
+               th:checked="${priceQuery == selectedPriceQuery}" th:text="${priceQuery}">
+        <br/>
+    </label>
     <input type="submit" value="Search">
 </form>
 <div th:if="${errors != null}" style="color: red">
@@ -98,19 +104,23 @@
 </table>
 
 <div th:if="${not #lists.isEmpty(products)}">
-    <form th:if="${not #lists.isEmpty(products)}" method="GET" th:action="@{/users/{userId}/products(userId=${userDto.id})}">
-    <input type="hidden" name="country" th:value="${country}"/>
-    <input type="hidden" name="color" th:value="${color}"/>
-    <input type="hidden" name="model" th:value="${model}"/>
-    <input type="hidden" name="brand" th:value="${brand}"/>
-    <input type="hidden" name="minPrice" th:value="${minPrice}"/>
-    <input type="hidden" name="maxPrice" th:value="${maxPrice}"/>
-    <input type="hidden" name="count" th:value="${count}"/>
-    <button th:if="${products.hasPrevious}" type="submit" name="page" value="0">First</button>
-    <button th:if="${products.hasPrevious}" type="submit" name="page" th:value="${products.number - 1}">Previous</button>
-    <button th:if="${products.hasNext}" type="submit" name="page" th:value="${products.number + 1}">Next</button>
-    <button th:if="${products.hasNext}" type="submit" name="page" th:value="${products.totalPages - 1}">Last</button>
-</form>
+    <form th:if="${not #lists.isEmpty(products)}" method="GET"
+          th:action="@{/users/{userId}/products(userId=${userDto.id})}">
+        <input type="hidden" name="country" th:value="${country}"/>
+        <input type="hidden" name="color" th:value="${color}"/>
+        <input type="hidden" name="model" th:value="${model}"/>
+        <input type="hidden" name="brand" th:value="${brand}"/>
+        <input type="hidden" name="minPrice" th:value="${minPrice}"/>
+        <input type="hidden" name="maxPrice" th:value="${maxPrice}"/>
+        <input type="hidden" name="count" th:value="${count}"/>
+        <input type="hidden" name="priceQuery" th:value="${selectedPriceQuery}"/>
+        <button th:if="${products.hasPrevious}" type="submit" name="page" value="0">First</button>
+        <button th:if="${products.hasPrevious}" type="submit" name="page" th:value="${products.number - 1}">Previous
+        </button>
+        <button th:if="${products.hasNext}" type="submit" name="page" th:value="${products.number + 1}">Next</button>
+        <button th:if="${products.hasNext}" type="submit" name="page" th:value="${products.totalPages - 1}">Last
+        </button>
+    </form>
 
 </div>
 </body>

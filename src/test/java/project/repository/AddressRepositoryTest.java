@@ -11,14 +11,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 import project.TestApplicationRunner;
+import project.annotation.IT;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@Transactional
-@SpringBootTest(classes = {ApplicationRunner.class, TestApplicationRunner.class})
-@ExtendWith(SpringExtension.class)
+@IT
 @RequiredArgsConstructor
 public class AddressRepositoryTest {
 
