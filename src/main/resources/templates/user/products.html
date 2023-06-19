@@ -54,10 +54,6 @@
     <span th:each="error : ${errors}" th:text="${error.message}"></span>
     <br/>
 </div>
-<div th:if="${messageIfSearchedProductsEmpty != null}">
-    <p style="font-weight: bold;"><span th:text="${messageIfSearchedProductsEmpty}"></span></p>
-    <p style="font-weight: bold;">All products:</p>
-</div>
 <table th:if="${not #lists.isEmpty(products)}">
     <thead>
     <tr>
@@ -80,8 +76,9 @@
         <td th:text="${productDto.country.country}"></td>
         <td th:text="${productDto.cost}"></td>
         <td>
-            <form method="get" th:action="@{/users/{userId}/products/addToFavourite(userId=${userDto.id})}">
+            <form method="post" th:action="@{/users/{userId}/products/addToFavourite(userId=${userDto.id})}">
                 <input type="hidden" name="productId" th:value="${productDto.id}"/>
+                <input type="hidden" name="pageFB" th:value="${products.number}"/>
                 <input type="submit" value="Add to favourite" th:unless="${favourites.contains(productDto)}"/>
                 <span th:if="${favourites.contains(productDto)}">Product already in favourites</span>
             </form>
@@ -89,7 +86,9 @@
         <td>
             <span th:unless="${productsInBasket.contains(productDto)}">
                 <form method="post" th:action="@{/users/{userId}/products/addToBasket(userId=${userDto.id})}">
-                    <input type="hidden" name="addressId" th:value="${productDto.id}"/>
+                    <input type="hidden" name="productId" th:value="${productDto.id}"/>
+                    <input type="hidden" name="count" th:value="${count}"/>
+                    <input type="hidden" name="pageFB" th:value="${products.number}"/>
                     <button type="submit" value="submit">
                         Add to basket
                     </button>

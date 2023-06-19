@@ -1,19 +1,17 @@
 package market.controller;
 
 import lombok.RequiredArgsConstructor;
-import market.converter.CreateUserProductConverter;
 import market.dto.*;
-import market.enums.CommentStatus;
 import market.enums.OrderStatus;
+import market.exception.LackOfMoneyException;
 import market.exception.ValidationException;
 import market.service.*;
 import market.validator.Error;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
@@ -24,25 +22,25 @@ import static market.util.StringContainer.*;
 @RequiredArgsConstructor
 @RequestMapping("/users")
 @SessionAttributes({USER_DTO, USER_COMMENTS, PRODUCTS_IN_BASKET, MESSAGE_IF_SEARCHED_PRODUCTS_EMPTY,
-        ADDRESSES, ERRORS, ID, PRODUCTS, FAVOURITES, SEARCHED_PRODUCTS, PRICE_QUERIES,
-        CREATE_USER_PRODUCT_DTO})
+        ADDRESSES, ERRORS, ID, PRODUCTS, FAVOURITES, PRICE_QUERIES, PAGE_FB, ORDER,
+        CREATE_USER_PRODUCT_DTO, DISCOUNTED_ORDER, PAGE_F})
 public class UserController {
     private final CommentService commentService;
     private final AddressService addressService;
-    private final CreateUserProductConverter createUserProductConverter;
     private final ProductService productService;
     private final UserService userService;
+    private final OrderService orderService;
+    private final FavouriteService favouriteService;
     private final ModelService modelService;
     private final ColorService colorService;
     private final CountryService countryService;
     private final BrandService brandService;
+    private OrderDto discountedOrder;
 
     @GetMapping("/menu")
     public String userMenu(Model model) {
         model.addAttribute(ERRORS, Error.of(EMPTY_PARAM, EMPTY_PARAM));
-        model.addAttribute(SEARCHED_PRODUCTS, Page.empty());
-        model.addAttribute(MESSAGE_IF_SEARCHED_PRODUCTS_EMPTY, EMPTY_PARAM);
-        return "user/menu";
+        return "/user/menu";
     }
 
     @GetMapping("/{id}/addComment")
@@ -51,15 +49,9 @@ public class UserController {
     }
 
     @PostMapping("/{id}/addComment")
-    public String addComment(@PathVariable(ID) Long id, Model model,
+    public String addComment(@PathVariable(ID) Long id,
                              String comment) {
-        UserDto userDto = (UserDto) model.getAttribute(USER_DTO);
-        CommentDto commentDto = CommentDto.builder()
-                .comment(comment)
-                .userDto(userDto)
-                .commentStatus(CommentStatus.MODERATING)
-                .build();
-        commentService.save(commentDto);
+        commentService.save(comment, id);
         return "redirect:/users/menu";
     }
 
@@ -129,10 +121,10 @@ public class UserController {
 
     @GetMapping("/{id}/profileMenu/changePassportNo")
     public String changePassportNo(@PathVariable(ID) Long id) {
-        return "user/changePassportNo";
+        return "/user/changePassportNo";
     }
 
-    @PostMapping("users/{id}/profileMenu/changePassportNo")
+    @PostMapping("/{id}/profileMenu/changePassportNo")
     public String changePassportNo(@PathVariable(ID) Long id, Model model,
                                    @SessionAttribute UserDto userDto, String newPassportNo,
                                    String password, RedirectAttributes redirectAttributes) {
@@ -192,7 +184,7 @@ public class UserController {
     public String viewProducts(@PathVariable(ID) Long id,
                                @RequestParam(name = PAGE, defaultValue = ZERO) Integer page,
                                Model m, RedirectAttributes redirectAttributes,
-                               ProductFilter createUserProductDto) {
+                               ProductFilter filter) {
         m.addAttribute(ERRORS, Error.of(EMPTY_PARAM, EMPTY_PARAM));
         m.addAttribute(MODELS, modelService.getAllModels());
         m.addAttribute(COUNTRIES, countryService.getAllCountries());
@@ -204,21 +196,15 @@ public class UserController {
                 .getProductsByUserIdAndOrderStatus(id, OrderStatus.WAITING_PAID));
         m.addAttribute(PRICE_QUERIES, List.of(CHEAP_FIRST, REACH_FIRST));
         try {
-            PageRequest pageable;
-            if (CHEAP_FIRST.equals(createUserProductDto.getPriceQuery())) {
-                pageable = PageRequest.of(page, 2, Sort.by(COST));
-            } else if (REACH_FIRST.equals(createUserProductDto.getPriceQuery())) {
-                pageable = PageRequest.of(page, 2, Sort.by(COST).descending());
-            } else {
-                pageable = PageRequest.of(page, 2);
-            }
-            var searchedProducts = productService
-                                .getProductsByPredicates(createUserProductDto, pageable);
-            var products = searchedProducts.isEmpty() ? productService.getProducts(pageable) : searchedProducts;
+            String pageM = (String) m.getAttribute(PAGE_FB);
+            String pageFB = EMPTY_PARAM.equals(pageM) || pageM == null ? page.toString() : pageM;
+            var products = productService.getProductsByPredicates(filter, Integer.parseInt(pageFB));
             m.addAttribute(PRODUCTS, products);
-            redirectAttributes(redirectAttributes, createUserProductDto);
+            m.addAttribute(PAGE_FB, EMPTY_PARAM);
+            redirectAttributes(redirectAttributes, filter);
             return "redirect:/users/products";
         } catch (ValidationException e) {
+            redirectAttributes(redirectAttributes, filter);
             m.addAttribute(ERRORS, e.getErrors());
             return "redirect:/users/products";
         }
@@ -250,4 +236,110 @@ public class UserController {
         if (createUserProductDto.getPriceQuery() != null) redirectAttributes.addFlashAttribute(SELECTED_PRICE_QUERY,
                 createUserProductDto.getPriceQuery());
     }
+
+    @PostMapping("/{id}/products/addToFavourite")
+    public String addToFavourite(@PathVariable(ID) Long id, Model model,
+                                 String productId, String pageFB, ProductFilter productFilter,
+                                 RedirectAttributes redirectAttributes) {
+        favouriteService.addFavourite(id, Long.valueOf(productId));
+        model.addAttribute(PAGE_FB, pageFB);
+        redirectAttributes(redirectAttributes, productFilter);
+        return "redirect:/users/{id}/products";
+    }
+
+    @PostMapping("/{id}/products/addToBasket")
+    public String addToBasket(@PathVariable(ID) Long id, String productId, String pageFB,
+                              Model model, String count, ProductFilter productFilter,
+                              RedirectAttributes redirectAttributes) {
+        orderService.addProductToBasket(id, productId, count);
+        model.addAttribute(PAGE_FB, pageFB);
+        redirectAttributes(redirectAttributes, productFilter);
+        return "redirect:/users/{id}/products";
+    }
+
+    @GetMapping("/{id}/order")
+    public String order(@PathVariable(ID) Long id, Model model,
+                        @RequestParam(name = PAGE, defaultValue = ZERO) Integer page) {
+        String pageM = (String) model.getAttribute(PAGE_OR);
+        String pageFB = EMPTY_PARAM.equals(pageM) || pageM == null ? page.toString() : pageM;
+        model.addAttribute(PAGE_OR, EMPTY_PARAM);
+        var order = orderService.findByUserIdActiveBasket(id, Integer.valueOf(pageFB));
+        var presentOrder = order.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        var modelOrder = discountedOrder == null  ? presentOrder : orderService
+                .getOrderDtoWithPage(discountedOrder, Integer.valueOf(pageFB));
+        model.addAttribute(ORDER, modelOrder);
+        return "user/order";
+    }
+
+    @PostMapping("/{id}/order/delete")
+    public String deleteProductFromBasket(@PathVariable(ID) Long id, String productId,
+                                String pageOr, Model model) {
+        orderService.deleteProductFromBasket(Long.valueOf(productId), id);
+        model.addAttribute(PAGE_OR, pageOr);
+        return "redirect:/users/{id}/order";
+    }
+
+    @GetMapping("/{id}/order/paidOrder")
+    public String payiedOrder() {
+        return "user/paidOrder";
+    }
+
+    @PostMapping("/{id}/order/pay")
+    public String payOrder(@PathVariable(ID) Long id, Model model,
+                           @SessionAttribute OrderDtoWithPage order) {
+        try {
+            discountedOrder = null;
+            var userDto = (UserDto) model.getAttribute(USER_DTO);
+            orderService.payOrder(userDto, order);
+            return "redirect:/users/{id}/order/paidOrder";
+        } catch (LackOfMoneyException e) {
+            model.addAttribute(ERRORS, e.getErrors());
+            return "redirect:/users/{id}/profileMenu/putMoney";
+        }
+    }
+
+    @PostMapping("/{id}/order/promoCode")
+    public String searchPromoCode(@PathVariable(ID) Long id, Model model,
+                                  String promoCode, RedirectAttributes redirectAttributes) {
+        try {
+            discountedOrder = orderService.acceptPromoCode(promoCode, id);
+            return "redirect:/users/{id}/order";
+        } catch (ValidationException e) {
+            redirectAttributes.addFlashAttribute(PROMO_CODE, promoCode);
+            model.addAttribute(ERRORS, e.getErrors());
+            return "redirect:/users/{id}/order";
+        }
+    }
+
+
+    @GetMapping("/{id}/favourite")
+    public String viewFavourite(@PathVariable(ID) Long id, Model model,
+                                @RequestParam(name = PAGE, defaultValue = ZERO) Integer page) {
+        String pageM = (String) model.getAttribute(PAGE_F);
+        model.addAttribute(PRODUCTS_IN_BASKET, productService
+                .getProductsByUserIdAndOrderStatus(id, OrderStatus.WAITING_PAID));
+        String pageF = EMPTY_PARAM.equals(pageM) || pageM == null ? page.toString() : pageM;
+        model.addAttribute(PAGE_F, EMPTY_PARAM);
+        var favourites = favouriteService.getFavouritesByUserId(id, Integer.valueOf(pageF));
+        model.addAttribute(FAVOURITE_PRODUCTS, favourites);
+        return "user/favourite";
+    }
+
+    @PostMapping("/{id}/favourite/deleteFavourite")
+    public String deleteFavourite(@PathVariable(ID) Long id, Model model, String pageF,
+                                  Long favouriteId) {
+        model.addAttribute(PAGE_F, pageF);
+        favouriteService.deleteProductFromFavourite(favouriteId);
+        return "redirect:/users/{id}/favourite";
+    }
+
+    @PostMapping("/{id}/favourite/addToBasketFromFavourite")
+    public String addToBasketFromFavourite(@PathVariable(ID) Long id, Model model, String pageF,
+                                           String productId) {
+        orderService.addProductToBasket(id, productId, null);
+        model.addAttribute(PAGE_F, pageF);
+        return "redirect:/users/{id}/favourite";
+    }
+
+
 }

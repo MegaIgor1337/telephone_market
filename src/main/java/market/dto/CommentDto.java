@@ -10,6 +10,6 @@ import lombok.*;
 public class CommentDto {
     private Long id;
     private String comment;
-    private UserDto userDto;
-    private CommentStatus commentStatus;
+    private UserDto user;
+    private CommentStatus status;
 }

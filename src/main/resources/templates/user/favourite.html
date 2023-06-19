@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<a th:href="@{/users/menu}">
+    <button type="button">Back to menu</button>
+</a>
+<span th:if="${#lists.isEmpty(favouriteProducts.content)}">
+    <p> You do not have favourites </p>
+</span>
+
+<table th:if="${not #lists.isEmpty(favouriteProducts)}">
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>Brand</th>
+        <th>Model</th>
+        <th>Color</th>
+        <th>Country</th>
+        <th>Price</th>
+        <th></th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="favourite, loop : ${favouriteProducts}">
+        <td th:text="${loop.index + 1}"></td>
+        <td th:text="${favourite.product.brand.brand}"></td>
+        <td th:text="${favourite.product.model.model}"></td>
+        <td th:text="${favourite.product.color.color}"></td>
+        <td th:text="${favourite.product.country.country}"></td>
+        <td th:text="${favourite.product.cost}"></td>
+        <td>
+            <form method="post" th:action="@{/users/{userId}/favourite/deleteFavourite(userId=${userDto.id})}">
+                <input type="hidden" name="favouriteId" th:value="${favourite.id}"/>
+                <input type="hidden" name="pageF" th:value="${favouriteProducts.number}"/>
+                <input type="submit" value="Delete"/>
+            </form>
+        </td>
+        <td>
+            <span th:unless="${productsInBasket.contains(favourite.product)}">
+                <form method="post"
+                      th:action="@{/users/{userId}/favourite/addToBasketFromFavourite(userId=${userDto.id})}">
+                    <input type="hidden" name="productId" th:value="${favourite.product.id}"/>
+                    <input type="hidden" name="pageF" th:value="${favouriteProducts.number}"/>
+                    <input type="submit" value="Add to basket"/>
+                </form>
+            </span>
+            <span th:if="${productsInBasket.contains(favourite.product)}">
+                Product already in basket
+            </span>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<div th:if="${not #lists.isEmpty(favouriteProducts)}">
+    <form th:if="${not #lists.isEmpty(favouriteProducts)}" method="GET"
+          th:action="@{/users/{userId}/favourite(userId=${userDto.id})}">
+        <button th:if="${favouriteProducts.hasPrevious}" type="submit" name="page" value="0">First</button>
+        <button th:if="${favouriteProducts.hasPrevious}" type="submit" name="page"
+                th:value="${favouriteProducts.number - 1}">Previous
+        </button>
+        <button th:if="${favouriteProducts.hasNext}" type="submit" name="page"
+                th:value="${favouriteProducts.number + 1}">Next
+        </button>
+        <button th:if="${favouriteProducts.hasNext}" type="submit" name="page"
+                th:value="${favouriteProducts.totalPages - 1}">Last
+        </button>
+    </form>
+
+</div>
+</body>
+</html>

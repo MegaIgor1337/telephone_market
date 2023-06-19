@@ -19,7 +19,6 @@ public class Comment implements BaseEntity<Long> {
     private Long id;
     private String comment;
     @ManyToOne(fetch = FetchType.EAGER)
-    @ToString.Exclude
     @JoinColumn(name = "user_id")
     private User user;
     @Enumerated(EnumType.STRING)

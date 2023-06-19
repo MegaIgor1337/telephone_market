@@ -10,7 +10,9 @@ import market.mapper.ProductMapper;
 import market.repository.ProductRepository;
 import market.validator.EnteredProductInfoValidator;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,10 +21,13 @@ import java.util.List;
 
 import static market.util.StringContainer.*;
 
+
+
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class ProductService {
+    private final Integer pageSize = 2;
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
     private final BrandService brandService;
@@ -30,6 +35,7 @@ public class ProductService {
     private final CountryService countryService;
     private final ColorService colorService;
     private final EnteredProductInfoValidator enteredProductInfoValidator;
+
 
     public Page<ProductDto> getProducts(Pageable pageable) {
         return productRepository.findAllBy(pageable)
@@ -46,52 +52,64 @@ public class ProductService {
                 .stream().map(productMapper::productToProductDto).toList();
     }
 
-    public Page<ProductDto> getProductsByPredicates(ProductFilter createUserProductDto, Pageable pageable) {
+
+
+
+
+
+    public Page<ProductDto> getProductsByPredicates(ProductFilter filter, Integer page) {
         enteredProductInfoValidator.putBrands(brandService.getAllBrands());
         enteredProductInfoValidator.putColors(colorService.getAllColors());
         enteredProductInfoValidator.putModels(modelService.getAllModels());
         enteredProductInfoValidator.putCountries(countryService.getAllCountries());
-        var validationResult = enteredProductInfoValidator.isValid(createUserProductDto);
+        var validationResult = enteredProductInfoValidator.isValid(filter);
         if (!validationResult.isValid()) {
             throw new ValidationException(validationResult.getErrors());
         }
-        Specification<Product> specification = getSpecifications(createUserProductDto);
+        Specification<Product> specification = getSpecifications(filter);
+        Sort sort = Sort.by(ID);
+        if (CHEAP_FIRST.equals(filter.getPriceQuery())) {
+            sort = Sort.by(COST);
+        } else if (REACH_FIRST.equals(filter.getPriceQuery())) {
+            sort = Sort.by(COST).descending();
+        }
+        var pageable = PageRequest.of(page, pageSize, sort);
         return productRepository.findAll(specification, pageable)
                 .map(productMapper::productToProductDto);
     }
 
 
-    private Specification<Product> getSpecifications(ProductFilter createUserProductDto) {
+    public Specification<Product> getSpecifications(ProductFilter filter) {
         Specification<Product> specification = Specification.where(null);
-        if (createUserProductDto.getModel() != null && !createUserProductDto.getModel().equals(EMPTY_PARAM)) {
+        if (filter.getModel() != null && !filter.getModel().isBlank()) {
             specification = specification
-                    .and((root, query, cb) -> cb.equal(root.get(MODEL).get(MODEL), createUserProductDto.getModel()));
+                    .and((root, query, cb) -> cb.equal(root.get(MODEL).get(MODEL), filter.getModel()));
         }
-        if (createUserProductDto.getCountry() != null && !createUserProductDto.getCountry().equals(EMPTY_PARAM)) {
+        if (filter.getCountry() != null && !filter.getCountry().isBlank()) {
             specification = specification
-                    .and((root, query, cb) -> cb.equal(root.get(COUNTRY).get(COUNTRY), createUserProductDto.getCountry()));
+                    .and((root, query, cb) -> cb.equal(root.get(COUNTRY).get(COUNTRY), filter.getCountry()));
         }
-        if (createUserProductDto.getColor() != null && !createUserProductDto.getColor().equals(EMPTY_PARAM)) {
+        if (filter.getColor() != null && !filter.getColor().isBlank()) {
             specification = specification
-                    .and((root, query, cb) -> cb.equal(root.get(COLOR).get(COLOR), createUserProductDto.getColor()));
+                    .and((root, query, cb) -> cb.equal(root.get(COLOR).get(COLOR), filter.getColor()));
         }
-        if (createUserProductDto.getBrand() != null && !createUserProductDto.getBrand().equals(EMPTY_PARAM)) {
+        if (filter.getBrand() != null && !filter.getBrand().isBlank()) {
             specification = specification
-                    .and((root, query, cb) -> cb.equal(root.get(BRAND).get(BRAND), createUserProductDto.getBrand()));
+                    .and((root, query, cb) -> cb.equal(root.get(BRAND).get(BRAND), filter.getBrand()));
         }
-        if (createUserProductDto.getCount() != null && !createUserProductDto.getCount().equals(EMPTY_PARAM)) {
+        if (filter.getCount() != null && !filter.getCount().isBlank()) {
             specification = specification
-                    .and((root, query, cb) -> cb.equal(root.get(COUNT), createUserProductDto.getCount()));
+                    .and((root, query, cb) -> cb.greaterThanOrEqualTo(root.get(STORAGE_COUNT), filter.getCount()));
         }
-        if (createUserProductDto.getMinPrice() != null && !createUserProductDto.getMinPrice().equals(EMPTY_PARAM)) {
+        if (filter.getMinPrice() != null && !filter.getMinPrice().isBlank()) {
             specification = specification
                     .and((root, query, cb) -> cb.greaterThanOrEqualTo(root.get(COST),
-                            Double.parseDouble(createUserProductDto.getMinPrice())));
+                            Double.parseDouble(filter.getMinPrice())));
         }
-        if (createUserProductDto.getMaxPrice() != null && !createUserProductDto.getMaxPrice().equals(EMPTY_PARAM)) {
+        if (filter.getMaxPrice() != null && !filter.getMaxPrice().isBlank()) {
             specification = specification
                     .and((root, query, cb) -> cb.lessThanOrEqualTo(root.get(COST),
-                            Double.parseDouble(createUserProductDto.getMaxPrice())));
+                            Double.parseDouble(filter.getMaxPrice())));
         }
         return specification;
     }

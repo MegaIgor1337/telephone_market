@@ -38,7 +38,7 @@ public class CommentServiceTest {
         CommentDto commentDto = commentMapper.commentToCommentDto(comment.get());
         commentDto.setComment("wowowow");
         commentDto.setId(null);
-        var result = commentService.save(commentDto);
+        var result = commentService.save(commentDto.getComment(), 1L);
         assertThat(result.getId()).isEqualTo(5);
     }
 

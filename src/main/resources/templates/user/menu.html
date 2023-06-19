@@ -30,7 +30,7 @@
     Add comment
 </a><br/>
 7)
-<a th:href="@{/users/{userId}/addComment(userId=${userDto.id})}">
+<a th:href="@{/users/{userId}/order(userId=${userDto.id})}">
     Basket
 </a><br/>
 8)
@@ -38,7 +38,7 @@
     Order history
 </a><br/>
 9)
-<a th:href="@{/logout}">
+<a th:href="@{/users/{userId}/favourite(userId=${userDto.id})}">
     Favourite
 </a><br/>
 </body>

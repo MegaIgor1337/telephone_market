@@ -96,4 +96,18 @@ public class StringContainer {
     public static final String CHEAP_FIRST = "Cheap first";
     public static final String REACH_FIRST = "Reach first";
     public static final String SELECTED_PRICE_QUERY = "selectedPriceQuery";
+    public static final String STORAGE_COUNT = "storageCount";
+    public static final String PAGE_FB = "pageFB";
+    public static final String ORDER = "order";
+    public static final String PAGE_OR = "pageOr";
+    public static final String LACK_OF_MONEY_INVALID = "Insufficient funds to pay.";
+    public static final String MESSAGE = "message";
+    public static final String AFTER_PAY_MESSAGE = "Your order has been sent for moderating.";
+    public static final String PROMO_CODE = "promoCode";
+    public static final String INCORRECT_PROMO_CODE = "This promo code does not exist.";
+    public static final String DISCOUNTED_ORDER = "discountedOrder";
+    public static final String FIRST_ORDER_PROMO_CODE = "FIRST";
+    public static final String INCORRECT_FIRST_ORDER = "You already have orders. ";
+    public static final String FAVOURITE_PRODUCTS = "favouriteProducts";
+    public static final String PAGE_F = "pageF";
 }

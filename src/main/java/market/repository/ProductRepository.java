@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
@@ -16,7 +17,8 @@ import static market.util.StringContainer.ID;
 import static market.util.StringContainer.STATUS;
 
 @Repository
-public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpecificationExecutor<Product> {
+public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpecificationExecutor<Product>,
+        QuerydslPredicateExecutor<Product> {
     Page<Product> findAllBy(Pageable pageable);
     @Query("SELECT p FROM Product p " +
            "JOIN FETCH p.orders op " +
@@ -29,4 +31,13 @@ public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpec
                    "JOIN FETCH p.favourites f " +
                    "where f.user.id = :id")
     List<Product> findAllByInFavouritesAndUserId(@Param(ID) Long id);
+
+
+    @Query(value = "select p from Product p " +
+                   "JOIN p.orders op " +
+                   "JOIN op.order o " +
+                   "where o.id = :orderId")
+    List<Product> findAlByOrderId(Long orderId);
+
+
 }

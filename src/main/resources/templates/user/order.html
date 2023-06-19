@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Order</title>
+</head>
+<body>
+<a th:href="@{/users/menu}">
+    <button type="button">Back to menu</button>
+</a>
+<form th:if="${not #lists.isEmpty(order.products.content)}" method="POST"
+      th:action="@{/users/{userId}/order/promoCode(userId=${userDto.id})}">
+    <label for="promoCode">Promo code:
+        <input type="text" name="promoCode" id="promoCode" th:value="${promoCode}">
+    </label>
+    <label for="send">
+        <input type="submit" value="send" id="send">
+    </label>
+</form>
+<div th:if="${errors != null}" style="color: red">
+    <span th:each="error : ${errors}" th:text="${error.message}"></span>
+    <br/>
+</div>
+
+<span th:if="${not #lists.isEmpty(order.products.content)}">
+    Price:
+        <span th:text="${order.cost}">
+            Cost
+        </span>
+    </span>
+<form th:if="${not #lists.isEmpty(order.products.content)}" method="POST"
+      th:action="@{/users/{userId}/order/pay(userId=${userDto.id})}">
+    <label for="submit">
+        <input type="submit" value="pay" id="submit">
+    </label>
+</form>
+<span th:if="${#lists.isEmpty(order.products.content)}">
+    <p>
+        You do not have products in basket.
+    </p>
+</span>
+<table th:if="${not #lists.isEmpty(order.products.content)}">
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>Brand</th>
+        <th>Model</th>
+        <th>Color</th>
+        <th>Country</th>
+        <th>Count</th>
+        <th>Price</th>
+        <th></th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="orderProduct, loop : ${order.products}">
+        <td th:text="${loop.index + 1}"></td>
+        <td th:text="${orderProduct.product.brand.brand}"></td>
+        <td th:text="${orderProduct.product.model.model}"></td>
+        <td th:text="${orderProduct.product.color.color}"></td>
+        <td th:text="${orderProduct.product.country.country}"></td>
+        <td th:text="${orderProduct.userCount}"></td>
+        <td th:text="${orderProduct.userCount * orderProduct.product.cost}"></td>
+        <td>
+            <form method="post" th:action="@{/users/{userId}/order/delete(userId=${userDto.id})}">
+                <input type="hidden" name="productId" th:value="${orderProduct.product.id}"/>
+                <input type="hidden" name="pageOr" th:value="${order.products.number}"/>
+                <input type="submit" value="Delete from basket"/>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<div th:if="${not #lists.isEmpty(order.products)}">
+    <form th:if="${not #lists.isEmpty(order.products)}" method="GET"
+          th:action="@{/users/{userId}/order(userId=${userDto.id})}">
+        <button th:if="${order.products.hasPrevious}" type="submit" name="page" value="0">First</button>
+        <button th:if="${order.products.hasPrevious}" type="submit" name="page" th:value="${order.products.number - 1}">
+            Previous
+        </button>
+        <button th:if="${order.products.hasNext}" type="submit" name="page" th:value="${order.products.number + 1}">
+            Next
+        </button>
+        <button th:if="${order.products.hasNext}" type="submit" name="page" th:value="${order.products.totalPages - 1}">
+            Last
+        </button>
+    </form>
+</div>
+</body>
+</html>

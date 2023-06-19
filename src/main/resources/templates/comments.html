@@ -18,7 +18,7 @@
     <th:block th:if="${not #lists.isEmpty(comments)}">
         <th:block th:each="comment, counter : ${comments}">
             <li>
-                <b th:text="${counter.count + ': ' + comment.userDto.name + ' -'}"></b>
+                <b th:text="${counter.count + ': ' + comment.user.name + ' -'}"></b>
                 <span style="color: gray" th:text="${#strings.toLowerCase(comment.comment)}"></span>
             </li>
         </th:block>

@@ -9,5 +9,5 @@ import static market.util.StringContainer.SPRING;
 @Mapper(componentModel = SPRING, uses = UserMapper.class)
 public interface AddressMapper {
     AddressDto mapFrom(Address address);
-
+//model mapper
 }

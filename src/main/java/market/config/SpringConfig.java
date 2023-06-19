@@ -82,7 +82,7 @@ public class SpringConfig {
 
             Order order1 = saveOrder(orderRepository, user1, BigDecimal.valueOf(300), LocalDateTime.now(),
                     OrderStatus.DELIVERED, LocalDateTime.now());
-            Order order2 = saveOrder(orderRepository, user2, BigDecimal.valueOf(500), LocalDateTime.now(),
+            Order order2 = saveOrder(orderRepository, user2, BigDecimal.valueOf(750), LocalDateTime.now(),
                     OrderStatus.WAITING_PAID, LocalDateTime.now());
 
             OrderProduct orderProduct1 = saveOrderProduct(orderProductRepository, order1, product4, 2);
@@ -95,6 +95,18 @@ public class SpringConfig {
             PromoCodeProduct promoCodeProduct1 = savePromoCodeProduct(promoCodeProductRepository, product1, promoCode1,
                     LocalDateTime.now(), null);
             PromoCodeProduct promoCodeProduct2 = savePromoCodeProduct(promoCodeProductRepository, product2, promoCode1,
+                    LocalDateTime.now(), null);
+            PromoCodeProduct promoCodeProduct3 = savePromoCodeProduct(promoCodeProductRepository, product3, promoCode1,
+                    LocalDateTime.now(), null);
+            PromoCodeProduct promoCodeProduct4 = savePromoCodeProduct(promoCodeProductRepository, product1, promoCode2,
+                    LocalDateTime.now(), null);
+            PromoCodeProduct promoCodeProduct5 = savePromoCodeProduct(promoCodeProductRepository, product2, promoCode2,
+                    LocalDateTime.now(), null);
+            PromoCodeProduct promoCodeProduct6 = savePromoCodeProduct(promoCodeProductRepository, product3, promoCode2,
+                    LocalDateTime.now(), null);
+            PromoCodeProduct promoCodeProduct7 = savePromoCodeProduct(promoCodeProductRepository, product4, promoCode2,
+                    LocalDateTime.now(), null);
+            PromoCodeProduct promoCodeProduct8 = savePromoCodeProduct(promoCodeProductRepository, product5, promoCode2,
                     LocalDateTime.now(), null);
 
             Favourite favourite1 = saveFavourite(favouriteRepository, product2, user1, LocalDateTime.now());
@@ -205,7 +217,7 @@ public class SpringConfig {
         OrderProduct orderProduct = OrderProduct.builder()
                 .order(order)
                 .product(product)
-                .clientCount(count)
+                .userCount(count)
                 .build();
         orderProductRepository.save(orderProduct);
         return orderProduct;

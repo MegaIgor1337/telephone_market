@@ -3,19 +3,13 @@ package project.repository;
 
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
-import market.ApplicationRunner;
 import market.entity.User;
 import market.enums.Gender;
 import market.enums.Role;
 import market.repository.UserRepository;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.transaction.annotation.Transactional;
-import project.TestApplicationRunner;
 import project.annotation.IT;
 
 import java.math.BigDecimal;

@@ -25,7 +25,7 @@ public class OrderProduct implements BaseEntity<Long>{
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
-    @Column(name = "user_quantity")
-    private Integer clientCount;
+    @Column(name = "user_count")
+    private Integer userCount;
 
 }
