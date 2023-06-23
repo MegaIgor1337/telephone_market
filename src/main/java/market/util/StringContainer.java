@@ -110,4 +110,10 @@ public class StringContainer {
     public static final String INCORRECT_FIRST_ORDER = "You already have orders. ";
     public static final String FAVOURITE_PRODUCTS = "favouriteProducts";
     public static final String PAGE_F = "pageF";
+    public static final String DATE = "date";
+    public static final String USER_ORDERS = "userOrders";
+    public static final String ORDER_ID = "orderId";
+    public static final String USER_ORDER = "userOrder";
+    public static final String PAGE_OH = "pageOH";
+    public static final String PAGE_O = "pageO";
 }

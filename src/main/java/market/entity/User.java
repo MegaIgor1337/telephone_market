@@ -35,6 +35,7 @@ public class User implements BaseEntity<Long> {
     @Enumerated(EnumType.STRING)
     private Gender gender;
     private BigDecimal balance;
+    private String image;
     @Builder.Default
     @ToString.Exclude
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)

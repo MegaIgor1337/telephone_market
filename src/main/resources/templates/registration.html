@@ -5,7 +5,7 @@
     <title>Registration</title>
 </head>
 <body>
-<form th:action="@{/registration}" method="post">
+<form th:action="@{/registration}" enctype="multipart/form-data" method="post">
     <label for="name">Name:
         <input type="text" name="name" id="name" th:value="${name}" required>
     </label><br/>
@@ -18,7 +18,9 @@
     <label for="email">Email:
         <input type="email" name="email" id="email" th:value="${email}" required>
     </label><br/>
-
+    <label for="image"> Image
+        <input id="image" type="file" name="image">
+    </label><br>
     <select name="role" id="role">
         <option th:each="role : ${roles}" th:text="${role}" th:value="${role}" ></option>
     </select><br/>

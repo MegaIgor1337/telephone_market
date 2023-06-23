@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -341,5 +342,29 @@ public class UserController {
         return "redirect:/users/{id}/favourite";
     }
 
+    @GetMapping("/{id}/orderHistory")
+    public String viewOrderHistory(@PathVariable(ID) Long id,
+                                   @RequestParam(name = PAGE, defaultValue = ZERO) String page, Model model) {
+        var pageOrders = orderService.findAllOrdersByUserID(id, Integer.valueOf(page));
+        model.addAttribute(USER_ORDERS, pageOrders);
+        return "user/orderHistory";
+    }
 
+    @GetMapping("/{id}/orders/{orderId}")
+    public String viewOrder(@PathVariable(ID) Long id,
+                            @PathVariable(ORDER_ID) Long orderId,
+                            Model model,
+                            @RequestParam(name = PAGE, defaultValue = ZERO) Integer page) {
+        var order = orderService.findOrderById(orderId, page);
+        model.addAttribute(USER_ORDER, order);
+        return "user/productFromOH";
+    }
+
+    @PostMapping("/{id}/avatar/setNew")
+    public String setNewAvatar(@PathVariable(ID) Long id,
+                               Model model, MultipartFile image) {
+        var user = userService.setNewAvatar(id, image);
+        model.addAttribute(USER_DTO, user);
+        return "redirect:/users/{id}/profileMenu";
+    }
 }

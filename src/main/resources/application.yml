@@ -21,3 +21,6 @@ spring:
       show_sql: true
       format_sql: true
       hbm2ddl.auto: create
+app:
+  image:
+    bucket: D:\JAVA\enterpriseCourse\project\project\images

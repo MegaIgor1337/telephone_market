@@ -8,6 +8,18 @@
 <a th:href="@{/users/menu}">
     <button type="button">Back to menu</button>
 </a>
+
+
+<div th:if="${userDto.image}">
+    <img width="40" th:src="@{/users/{userId}/avatar(userId=${userDto.id})}" alt="User image"/>
+</div>
+Change avatar
+<form th:action="@{/users/{userId}/avatar/setNew(userId=${userDto.id})}" enctype="multipart/form-data" method="post">
+    <label for="image"> Image
+        <input id="image" type="file" name="image">
+    </label><br>
+    <button value="change" type="submit">Change</button>
+</form>
 <p>Login:</p>
 <span th:text="${userDto.name}"></span>
 <a th:href="@{/users/{userId}/profileMenu/changeLogin(userId=${userDto.id})}">
@@ -26,14 +38,14 @@
 <p>Balance: </p>
 <span th:text="${userDto.balance} + '$'"></span>
 <a th:href="@{/users/{userId}/profileMenu/putMoney(userId=${userDto.id})}">
-    <button type="button"> Put money </button>
+    <button type="button"> Put money</button>
 </a>
 <br/>
 <a th:href="@{/address/addAddress}">
-    <button type="button"> Add delivery address </button>
+    <button type="button"> Add delivery address</button>
 </a>
 <a th:href="@{/users/menu}">
-    <button type="button"> Main menu </button>
+    <button type="button"> Main menu</button>
 </a>
 <p>Your delivery addresses:</p>
 <table>

@@ -21,6 +21,6 @@ public class OrderDto {
     private BigDecimal cost;
     private LocalDateTime dateOfDelivery;
     private LocalDateTime date;
-    private OrderStatus orderStatus;
+    private OrderStatus status;
     private List<OrderProductDto> products;
 }

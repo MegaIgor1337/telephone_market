@@ -14,8 +14,14 @@ import market.mapper.OrderDtoWithPageMapper;
 import market.mapper.OrderMapper;
 import market.mapper.UserMapper;
 import market.repository.*;
+import market.util.PageUtil;
 import market.validator.LackOfMoneyValidator;
 import market.validator.PromoCodeValidator;
+import org.eclipse.tags.shaded.org.apache.bcel.generic.FADD;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +31,8 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+
+import static market.util.StringContainer.DATE;
 
 @Transactional(readOnly = true)
 @Service
@@ -166,5 +174,19 @@ public class OrderService {
                     .multiply(BigDecimal.valueOf(product.getUserCount())));
         }
         return sum;
+    }
+
+    public Page<OrderDto> findAllOrdersByUserID(Long userId, Integer page) {
+        var orders = orderRepository.findAllByUserId(userId);
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.by(DATE).descending());
+        var pageOrder = PageUtil.createPageFromList(orders, pageable);
+        return pageOrder.map(orderMapper::orderToOrderDto);
+    }
+
+    public OrderDtoWithPage findOrderById(Long orderId, Integer page) {
+        var order = orderRepository.findById(orderId);
+        return orderDtoWithPageMapper.orderDtoToOrderDtoWithPage(orderMapper
+                .orderToOrderDto(order
+                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND))), page, pageSize);
     }
 }

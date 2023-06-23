@@ -28,6 +28,7 @@ public class OrderDtoWithPageMapper {
                 .id(orderDto.getId())
                 .user(orderDto.getUser())
                 .products(pages)
+                .status(orderDto.getStatus())
                 .dateOfDelivery(orderDto.getDateOfDelivery())
                 .date(orderDto.getDate())
                 .cost(orderDto.getCost())

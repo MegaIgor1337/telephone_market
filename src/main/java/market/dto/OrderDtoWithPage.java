@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import market.entity.OrderProduct;
+import market.enums.OrderStatus;
 import org.springframework.data.domain.Page;
 
 import java.math.BigDecimal;
@@ -19,6 +20,7 @@ public class OrderDtoWithPage {
     private Long id;
     private UserDto user;
     private BigDecimal cost;
+    private OrderStatus status;
     private LocalDateTime dateOfDelivery;
     private LocalDateTime date;
     private Page<OrderProductDto> products;

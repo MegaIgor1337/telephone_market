@@ -1,6 +1,8 @@
 package market.service;
 
+import lombok.SneakyThrows;
 import market.dto.*;
+import market.entity.User;
 import market.repository.UserRepository;
 import market.exception.ValidationException;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +11,8 @@ import market.mapper.UserMapper;
 import market.validator.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -21,6 +25,7 @@ import java.util.Optional;
 public class UserService {
 
     private final UserPasswordValidator userPasswordValidator;
+    private final ImageService imageService;
     private final CreateUserValidator createUserValidator;
     private final CreateUserMapper createUserMapper;
     private final UsernameValidator usernameValidator;
@@ -56,9 +61,29 @@ public class UserService {
         if (!validationResult.isValid()) {
             throw new ValidationException(validationResult.getErrors());
         }
-        var userEntity = createUserMapper.createUserDtoToUser(userDto);
-        userEntity.setBalance(BigDecimal.valueOf(0.0));
-        return userMapper.userToUserDto(userRepository.save(userEntity));
+        userDto.setBalance(BigDecimal.ZERO);
+        return  Optional.of(userDto)
+                .map(dto -> {
+                    uploadImage(dto.getImage());
+                    return createUserMapper.map(dto);
+                })
+                .map(userRepository::save)
+                .map(userMapper::userToUserDto)
+                .orElseThrow();
+    }
+
+    @Transactional
+    public UserDto setNewAvatar(Long id, MultipartFile image) {
+        var user = userRepository.findById(id).orElseThrow();
+        var updateUser = createUserMapper.map(user, image);
+        return Optional.of(updateUser)
+                .map(dto -> {
+                    uploadImage(image);
+                    return createUserMapper.map(dto);
+                })
+                .map(userRepository::saveAndFlush)
+                .map(userMapper::userToUserDto)
+                .orElseThrow();
     }
 
     private List<INameUserDto> getAllNames() {
@@ -137,5 +162,19 @@ public class UserService {
                     .saveAndFlush(userDto.get())));
         }
         return Optional.empty();
+    }
+
+    @SneakyThrows
+    private void uploadImage(MultipartFile image) {
+        if(!image.isEmpty()) {
+            imageService.upload(image.getOriginalFilename(), image.getInputStream());
+        }
+    }
+
+    public Optional<byte[]> findAvatar(Long id) {
+        return userRepository.findById(id)
+                .map(User::getImage)
+                .filter(StringUtils::hasText)
+                .flatMap(imageService::get);
     }
 }

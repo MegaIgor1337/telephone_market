@@ -28,31 +28,28 @@ public class AddressController {
     }
 
     @PostMapping("/address/addAddress")
-    public String addAddress(String country, String city,
-                             String street, String house,
-                             String flat, Model model,
+    public String addAddress(CreateAddressDto createAddressDto,  Model model,
                              RedirectAttributes redirectAttributes) {
         UserDto userDto = (UserDto) model.getAttribute(USER_DTO);
-        var createAddressDto = CreateAddressDto.builder()
-                .country(country)
-                .city(city)
-                .street(street)
-                .house(house)
-                .flat(flat)
-                .userId(userDto.getId().toString())
-                .build();
+        createAddressDto.setUserId(String.valueOf(userDto.getId()));
         try {
             addressService.save(createAddressDto);
             return "redirect:/users/menu";
         } catch (ValidationException e) {
             model.addAttribute(ERRORS, e.getErrors());
-            redirectAttributes.addFlashAttribute(CITY, city);
-            redirectAttributes.addFlashAttribute(COUNTRY, country);
-            redirectAttributes.addFlashAttribute(HOUSE, house);
-            redirectAttributes.addFlashAttribute(STREET, street);
-            redirectAttributes.addFlashAttribute(FLAT, flat);
+            redirectAtt(redirectAttributes, createAddressDto.getCity(), createAddressDto.getCountry(),
+                    createAddressDto.getHouse(), createAddressDto.getStreet(), createAddressDto.getFlat());
             return "redirect:/address/addAddress";
         }
+    }
+
+    private void redirectAtt(RedirectAttributes redirectAttributes, String city, String country,
+                             String house, String street, String flat) {
+        redirectAttributes.addFlashAttribute(CITY, city);
+        redirectAttributes.addFlashAttribute(COUNTRY, country);
+        redirectAttributes.addFlashAttribute(HOUSE, house);
+        redirectAttributes.addFlashAttribute(STREET, street);
+        redirectAttributes.addFlashAttribute(FLAT, flat);
     }
 
     @GetMapping("/address/changeAddress")
@@ -62,31 +59,19 @@ public class AddressController {
     }
 
     @PostMapping("/address/changeAddress")
-    public String changeAddress(String country, String city,
-                                String street, String house,
-                                String flat, Model model,
+    public String changeAddress(CreateUpdateAddressDto createAddressDto, Model model,
                                 @SessionAttribute UserDto userDto,
                                 @SessionAttribute String addressId,
                                 RedirectAttributes redirectAttributes) {
-        CreateUpdateAddressDto createAddressDto = CreateUpdateAddressDto.builder()
-                .id(addressId)
-                .country(country)
-                .city(city)
-                .street(street)
-                .house(house)
-                .flat(flat)
-                .userId(userDto.getId().toString())
-                .build();
+        createAddressDto.setId(addressId);
+        createAddressDto.setUserId(String.valueOf(userDto.getId()));
         try {
             addressService.update(createAddressDto);
             return "redirect:/users/menu";
         } catch (ValidationException e) {
             model.addAttribute(ERRORS, e.getErrors());
-            redirectAttributes.addFlashAttribute(CITY, city);
-            redirectAttributes.addFlashAttribute(COUNTRY, country);
-            redirectAttributes.addFlashAttribute(HOUSE, house);
-            redirectAttributes.addFlashAttribute(STREET, street);
-            redirectAttributes.addFlashAttribute(FLAT, flat);
+            redirectAtt(redirectAttributes, createAddressDto.getCity(), createAddressDto.getCountry(),
+                    createAddressDto.getHouse(), createAddressDto.getStreet(), createAddressDto.getFlat());
             return "redirect:/address/changeAddress";
         }
     }

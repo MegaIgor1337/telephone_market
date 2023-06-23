@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<a th:href="@{/users/menu}">
+    <button type="button">Back to menu</button>
+</a>
+<table th:if="${not #lists.isEmpty(userOrders.content)}">
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>Status</th>
+        <th>Date</th>
+        <th>Count of products</th>
+        <th>Date of delivery</th>
+        <th>Price</th>
+        <th></th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="order, loop : ${userOrders}">
+        <td>  <a th:href="@{/users/{userId}/orders/{orderId}(orderId=${order.id}, userId=${order.id})}">
+            <input type="hidden" name="pageOH" th:value="${userOrders.number}"/>
+            <span style="text-align: center;" th:text="${order.id}"></span>
+        </a></td>
+        <td  style="text-align: center;" th:text="${order.status}"></td>
+        <td  style="text-align: center;" th:text="${order.date}"></td>
+        <td  style="text-align: center;" th:text="${order.products.size()}"></td>
+        <td  style="text-align: center;" th:text="${order.dateOfDelivery != null ? order.dateOfDelivery : 'unknown'}"></td>
+        <td  style="text-align: center;" th:text="${order.cost}"></td>
+    </tr>
+    </tbody>
+</table>
+
+<div th:if="${not #lists.isEmpty(userOrders)}">
+    <form th:if="${not #lists.isEmpty(userOrders)}" method="GET"
+          th:action="@{/users/{userId}/orderHistory(userId=${userDto.id})}">
+        <button th:if="${userOrders.hasPrevious}" type="submit" name="page" value="0">First</button>
+        <button th:if="${userOrders.hasPrevious}" type="submit" name="page" th:value="${userOrders.number - 1}">
+            Previous
+        </button>
+        <button th:if="${userOrders.hasNext}" type="submit" name="page" th:value="${userOrders.number + 1}">
+            Next
+        </button>
+        <button th:if="${userOrders.hasNext}" type="submit" name="page" th:value="${userOrders.totalPages - 1}">
+            Last
+        </button>
+    </form>
+</div>
+</body>
+</html>
