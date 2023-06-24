@@ -89,9 +89,7 @@
                     <input type="hidden" name="productId" th:value="${productDto.id}"/>
                     <input type="hidden" name="count" th:value="${count}"/>
                     <input type="hidden" name="pageFB" th:value="${products.number}"/>
-                    <button type="submit" value="submit">
-                        Add to basket
-                    </button>
+                    <button type="submit" value="submit">Add to basket</button>
                 </form>
             </span>
             <span th:if="${productsInBasket.contains(productDto)}">

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Users</title>
+</head>
+<body>
+<form method="get" th:action="@{/admin/menu}">
+    <button type="submit" value="send">Back to menu</button>
+</form>
+
+<div th:if="${errors != null}" style="color: red">
+    <span th:each="error : ${errors}" th:text="${error.message}"></span>
+    <br/>
+</div>
+<form th:action="@{/admin/menu/users}" method="get" >
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" th:value="${name}">
+    <br>
+    <label for="email">Email:</label>
+    <input type="text" id="email" name="email" th:value="${email}">
+    <br>
+    <label for="password">Password:</label>
+    <input type="text" id="password" name="password" th:value="${password}">
+    <br>
+    <label for="passportNo">Passport number:</label>
+    <input type="text" id="passportNo" name="passportNo" th:value="${passportNo}">
+    <br>
+    <label th:each="gender : ${genders}">
+    <input type="radio" id="gender" name="gender" th:value="${gender}" th:text="${gender}">
+    <br/>
+    </label>
+    Users addresses:<br/>
+    <label for="country">Country:</label>
+    <input type="text" id="country" name="country" th:value="${country}">
+    <br>
+    <label for="city">City:</label>
+    <input type="text" id="city" name="city" th:value="${city}">
+    <br>
+    <label for="street">Street:</label>
+    <input type="text" id="street" name="street" th:value="${street}">
+    <br>
+    <label for="house">House:</label>
+    <input type="text" id="house" name="house" th:value="${house}">
+    <br>
+    <label for="flat">Flat:</label>
+    <input type="text" id="flat" name="flat" th:value="${flat}">
+    <br>
+    <button type="submit" value="search">Search</button>
+</form>
+<table th:if="${not #lists.isEmpty(users)}">
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>Avatar</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Password</th>
+        <th>Passport Number</th>
+        <th>Gender</th>
+        <th></th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="user, loop : ${users}">
+        <td th:text="${loop.index + 1}"></td>
+        <td ><div th:if="${user.image}">
+            <img width="40" th:src="@{/users/{userId}/avatar(userId=${user.id})}" alt="User image"/>
+        </div></td>
+        <td th:text="${user.name}"></td>
+        <td th:text="${user.email}"></td>
+        <td th:text="${user.password}"></td>
+        <td th:text="${user.passportNo}"></td>
+        <td th:text="${user.gender}"></td>
+        <td>
+            <form method="get" th:action="@{/admin/menu/users/{userId}/profile(userId=${user.id})}">
+                <input type="hidden" name="name" th:value="${name}"/>
+                <input type="hidden" name="password" th:value="${password}"/>
+                <input type="hidden" name="passportNo" th:value="${passportNo}"/>
+                <input type="hidden" name="email" th:value="${email}"/>
+                <input type="hidden" name="gender" th:value="${gender}"/>
+                <input type="hidden" name="country" th:value="${country}"/>
+                <input type="hidden" name="street" th:value="${street}"/>
+                <input type="hidden" name="city" th:value="${city}"/>
+                <input type="hidden" name="house" th:value="${house}"/>
+                <input type="hidden" name="flat" th:value="${flat}"/>
+                <input type="hidden" name="pageU" th:value="${users.number}"/>
+                <button type="submit" value="View info">View info</button>
+            </form>
+        </td>
+        <td>
+            <form method="post" th:action="@{/admin/menu/users/{userId}/delete(userId=${user.id})}">
+                <input type="hidden" name="name" th:value="${name}"/>
+                <input type="hidden" name="password" th:value="${password}"/>
+                <input type="hidden" name="passportNo" th:value="${passportNo}"/>
+                <input type="hidden" name="email" th:value="${email}"/>
+                <input type="hidden" name="gender" th:value="${gender}"/>
+                <input type="hidden" name="country" th:value="${country}"/>
+                <input type="hidden" name="street" th:value="${street}"/>
+                <input type="hidden" name="city" th:value="${city}"/>
+                <input type="hidden" name="house" th:value="${house}"/>
+                <input type="hidden" name="flat" th:value="${flat}"/>
+                <input type="hidden" name="pageU" th:value="${users.number}"/>
+                <button type="submit" value="submit">Delete</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+
+<div th:if="${not #lists.isEmpty(users)}">
+    <form th:if="${not #lists.isEmpty(users)}" method="GET"
+          th:action="@{/admin/menu/users}">
+        <input type="hidden" name="name" th:value="${name}"/>
+        <input type="hidden" name="password" th:value="${password}"/>
+        <input type="hidden" name="passportNo" th:value="${passportNo}"/>
+        <input type="hidden" name="email" th:value="${email}"/>
+        <input type="hidden" name="gender" th:value="${gender}"/>
+        <input type="hidden" name="country" th:value="${country}"/>
+        <input type="hidden" name="street" th:value="${street}"/>
+        <input type="hidden" name="city" th:value="${city}"/>
+        <input type="hidden" name="house" th:value="${house}"/>
+        <input type="hidden" name="flat" th:value="${flat}"/>
+        <button th:if="${users.hasPrevious}" type="submit" name="page" value="0">First</button>
+        <button th:if="${users.hasPrevious}" type="submit" name="page" th:value="${users.number - 1}">Previous
+        </button>
+        <button th:if="${users.hasNext}" type="submit" name="page" th:value="${users.number + 1}">Next</button>
+        <button th:if="${users.hasNext}" type="submit" name="page" th:value="${users.totalPages - 1}">Last
+        </button>
+    </form>
+
+</div>
+</body>
+</html>

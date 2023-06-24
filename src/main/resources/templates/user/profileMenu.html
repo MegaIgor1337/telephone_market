@@ -13,7 +13,7 @@
 <div th:if="${userDto.image}">
     <img width="40" th:src="@{/users/{userId}/avatar(userId=${userDto.id})}" alt="User image"/>
 </div>
-Change avatar
+Change avatar <br/>
 <form th:action="@{/users/{userId}/avatar/setNew(userId=${userDto.id})}" enctype="multipart/form-data" method="post">
     <label for="image"> Image
         <input id="image" type="file" name="image">
@@ -72,17 +72,30 @@ Change avatar
         <td>
             <form method="get" th:action="@{/address/changeAddress}">
                 <input type="hidden" name="addressId" th:value="${address.id}"/>
+                <input type="hidden" name="pageA" th:value="${addresses.number}">
                 <input type="submit" value="Change"/>
             </form>
         </td>
         <td>
             <form method="post" th:action="@{/address/deleteAddress}">
                 <input type="hidden" name="addressId" th:value="${address.id}"/>
+                <input type="hidden" name="pageA" th:value="${addresses.number}">
                 <button type="submit" value="Delete">Delete</button>
             </form>
         </td>
     </tr>
     </tbody>
 </table>
+<div th:if="${not #lists.isEmpty(addresses)}">
+    <form th:if="${not #lists.isEmpty(addresses)}" method="GET"
+          th:action="@{/users/{userId}/profileMenu(userId=${userDto.id})}">
+        <button th:if="${addresses.hasPrevious}" type="submit" name="page" value="0">First</button>
+        <button th:if="${addresses.hasPrevious}" type="submit" name="page" th:value="${addresses.number - 1}">Previous
+        </button>
+        <button th:if="${addresses.hasNext}" type="submit" name="page" th:value="${addresses.number + 1}">Next</button>
+        <button th:if="${addresses.hasNext}" type="submit" name="page" th:value="${addresses.totalPages - 1}">Last
+        </button>
+    </form>
+</div>
 </body>
 </html>

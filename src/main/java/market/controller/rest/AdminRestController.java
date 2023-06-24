@@ -16,7 +16,7 @@ import java.util.List;
 public class AdminRestController {
     private final CommentService commentService;
 
-    @GetMapping("/menu/moderateComments")
+ /*   @GetMapping("/menu/moderateComments")
     public List<CommentDto> moderateComments() {
         return  commentService.getModerateComments();
     }
@@ -24,5 +24,5 @@ public class AdminRestController {
     @GetMapping("/admin/menu/accessedComments")
     public List<CommentDto> accessedComments() {
         return commentService.getAccessedComments();
-    }
+    }*/
 }

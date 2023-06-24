@@ -6,6 +6,7 @@ import market.dto.CreateUpdateAddressDto;
 import market.dto.UserDto;
 import market.exception.ValidationException;
 import market.service.AddressService;
+import market.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +19,7 @@ import static market.util.StringContainer.*;
 
 @Controller
 @RequiredArgsConstructor
-@SessionAttributes({USER_DTO, ADDRESS_ID})
+@SessionAttributes({USER_DTO, ADDRESS_ID, PAGE_A})
 public class AddressController {
     private final AddressService addressService;
 
@@ -53,7 +54,9 @@ public class AddressController {
     }
 
     @GetMapping("/address/changeAddress")
-    public String changeAddress(Model model, String addressId) {
+    public String changeAddress(Model model, String addressId,
+                                String pageA) {
+        model.addAttribute(PAGE_A, pageA);
         model.addAttribute(USER_DTO, addressId);
         return "/changeAddress";
     }
@@ -77,10 +80,13 @@ public class AddressController {
     }
 
     @PostMapping("/address/deleteAddress")
-    public String deleteAddress(String addressId) {
+    public String deleteAddress(String addressId,
+                                Model model, String pageA) {
+        model.addAttribute(PAGE_A, pageA);
         addressService.delete(Long.valueOf(addressId));
         return "redirect:/users/menu";
     }
+
 
 }
 

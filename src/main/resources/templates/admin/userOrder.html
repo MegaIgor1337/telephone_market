@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <meta charset="UTF-8">
+    <title>Order</title>
+</head>
+<body>
+<a th:href="@{/admin/menu/users/{userId}/profile(userId=${user.id})}">
+    <button type="button">Back</button>
+</a>
+<table th:if="${not #lists.isEmpty(userOrder.products)}">
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>Brand</th>
+        <th>Model</th>
+        <th>Color</th>
+        <th>Country</th>
+        <th>Count</th>
+        <th>Price</th>
+        <th></th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="orderProduct, loop : ${userOrder.products}">
+        <td th:text="${loop.index + 1}"></td>
+        <td th:text="${orderProduct.product.brand.brand}"></td>
+        <td th:text="${orderProduct.product.model.model}"></td>
+        <td th:text="${orderProduct.product.color.color}"></td>
+        <td th:text="${orderProduct.product.country.country}"></td>
+        <td th:text="${orderProduct.userCount}"></td>
+        <td th:text="${orderProduct.userCount * orderProduct.product.cost}"></td>
+    </tr>
+    </tbody>
+</table>
+
+<div th:if="${not #lists.isEmpty(userOrder.products)}">
+    <form th:if="${not #lists.isEmpty(userOrder.products)}" method="GET"
+          th:action="@{/admin/menu/users/{userId}/profile/orders/{orderId}(userId=${user.id}, orderId=${userOrder.id})}">
+        <button th:if="${userOrder.products.hasPrevious}" type="submit" name="pagePr" value="0">First</button>
+        <button th:if="${userOrder.products.hasPrevious}" type="submit" name="page" th:value="${userOrder.products.number - 1}">
+            Previous
+        </button>
+        <button th:if="${userOrder.products.hasNext}" type="submit" name="pagePr" th:value="${userOrder.products.number + 1}">
+            Next
+        </button>
+        <button th:if="${userOrder.products.hasNext}" type="submit" name="pagePr" th:value="${userOrder.products.totalPages - 1}">
+            Last
+        </button>
+    </form>
+</div>
+</body>
+</html>

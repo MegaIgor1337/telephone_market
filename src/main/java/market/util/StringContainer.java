@@ -116,4 +116,8 @@ public class StringContainer {
     public static final String USER_ORDER = "userOrder";
     public static final String PAGE_OH = "pageOH";
     public static final String PAGE_O = "pageO";
+    public static final String USERS = "users";
+    public static final String PAGE_U = "pageU";
+    public static final String PAGE_A = "pageA";
+    public static final String PAGE_PR = "pagePr";
 }

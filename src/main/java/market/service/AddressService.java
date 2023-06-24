@@ -11,6 +11,8 @@ import market.exception.ValidationException;
 import lombok.RequiredArgsConstructor;
 import market.mapper.AddressMapper;
 import market.mapper.CreateAddressMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import market.validator.CreateAddressValidator;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +24,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Transactional
 public class AddressService {
-
+    private final Integer pageSize = 2;
     private final AddressMapper addressMapper;
     private final AddressRepository addressRepository;
     private final CreateUpdateAddressDtoMapper createUpdateAddressDtoMapper;
@@ -53,9 +55,9 @@ public class AddressService {
         }
     }
 
-    public List<AddressDto> getAddresses(Long id) {
-        return addressRepository.findByUserId(id)
-                .stream().map(addressMapper::mapFrom).collect(Collectors.toList());
+    public Page<AddressDto> getAddresses(Long id, Integer page) {
+        return addressRepository.findByUserId(id, PageRequest.of(page, 2))
+                .map(addressMapper::mapFrom);
     }
 
 }

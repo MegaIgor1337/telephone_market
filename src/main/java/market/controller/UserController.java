@@ -70,8 +70,13 @@ public class UserController {
     }
 
     @GetMapping("/{id}/profileMenu")
-    public String personalMenu(@PathVariable(ID) Long id, Model model) {
-        List<AddressDto> addressDtoList = addressService.getAddresses(id);
+    public String personalMenu(@PathVariable(ID) Long id,
+                               @RequestParam(name = PAGE, defaultValue = ZERO) Integer page,
+                               Model model) {
+        String pageA = (String) model.getAttribute(PAGE_A);
+        String pageMain = EMPTY_PARAM.equals(pageA) || pageA == null ? page.toString() : pageA;
+        var addressDtoList = addressService.getAddresses(id, Integer.valueOf(pageMain));
+        model.addAttribute(PAGE_A, EMPTY_PARAM);
         model.addAttribute(ERRORS, Error.of(EMPTY_PARAM, EMPTY_PARAM));
         model.addAttribute(ADDRESSES, addressDtoList);
         return "/user/profileMenu";

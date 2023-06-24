@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Profile</title>
+</head>
+<body>
+<a th:href="@{/admin/menu/users}">
+    <button type="button">Back</button>
+</a>
+<div th:if="${user.image}">
+    <img width="40" th:src="@{/users/{userId}/avatar(userId=${user.id})}" alt="User image"/>
+</div>
+<p>Login:</p>
+<span th:text="${user.name}"></span>
+<p>Email:</p>
+<span th:text="${user.email}"></span>
+<p>Passport number:</p>
+<span th:text="${user.passportNo}"></span>
+<p>Balance: </p>
+<span th:text="${user.balance} + '$'"></span>
+<br/>
+<p>Delivery addresses:</p>
+<table>
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>Country</th>
+        <th>City</th>
+        <th>Street</th>
+        <th>House</th>
+        <th>Flat</th>
+        <th></th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="address, loop : ${addresses}">
+        <td th:text="${loop.index + 1}"></td>
+        <td th:text="${address.country}"></td>
+        <td th:text="${address.city}"></td>
+        <td th:text="${address.street}"></td>
+        <td th:text="${address.house}"></td>
+        <td th:text="${address.flat}"></td>
+    </tr>
+    </tbody>
+</table>
+<div th:if="${not #lists.isEmpty(addresses)}">
+    <form th:if="${not #lists.isEmpty(addresses)}" method="GET"
+          th:action="@{admin/menu/users/{userId}/profile(userId=${user.id})}">
+        <input type="hidden" name="pageO" th:value="${userOrders.number}">
+        <button th:if="${addresses.hasPrevious}" type="submit" name="pageA" value="0">First</button>
+        <button th:if="${addresses.hasPrevious}" type="submit" name="pageA" th:value="${addresses.number - 1}">Previous
+        </button>
+        <button th:if="${addresses.hasNext}" type="submit" name="pageA" th:value="${addresses.number + 1}">Next</button>
+        <button th:if="${addresses.hasNext}" type="submit" name="pageA" th:value="${addresses.totalPages - 1}">Last
+        </button>
+    </form>
+</div>
+<p>Orders:</p>
+<table th:if="${not #lists.isEmpty(userOrders.content)}">
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>Status</th>
+        <th>Date</th>
+        <th>Count of products</th>
+        <th>Date of delivery</th>
+        <th>Price</th>
+        <th></th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="order, loop : ${userOrders}">
+        <td>  <a th:href="@{/admin/menu/users/{userId}/profile/orders/{orderId}(orderId=${order.id}, userId=${order.id})}">
+            <span style="text-align: center;" th:text="${order.id}"></span>
+        </a></td>
+        <td  style="text-align: center;" th:text="${order.status}"></td>
+        <td  style="text-align: center;" th:text="${order.date}"></td>
+        <td  style="text-align: center;" th:text="${order.products.size()}"></td>
+        <td  style="text-align: center;" th:text="${order.dateOfDelivery != null ? order.dateOfDelivery : 'unknown'}"></td>
+        <td  style="text-align: center;" th:text="${order.cost}"></td>
+    </tr>
+    </tbody>
+</table>
+<div th:if="${not #lists.isEmpty(userOrders)}">
+    <form th:if="${not #lists.isEmpty(userOrders)}" method="GET"
+          th:action="@{/admin/menu/users/{userId}/profile(userId=${user.id})}">
+        <input type="hidden" name="pageA" th:value="${addresses.number}">
+        <button th:if="${userOrders.hasPrevious}" type="submit" name="pageO" value="0">First</button>
+        <button th:if="${userOrders.hasPrevious}" type="submit" name="pageO" th:value="${userOrders.number - 1}">
+            Previous
+        </button>
+        <button th:if="${userOrders.hasNext}" type="submit" name="pageO" th:value="${userOrders.number + 1}">
+            Next
+        </button>
+        <button th:if="${userOrders.hasNext}" type="submit" name="pageO" th:value="${userOrders.totalPages - 1}">
+            Last
+        </button>
+    </form>
+</div>
+</body>
+</html>

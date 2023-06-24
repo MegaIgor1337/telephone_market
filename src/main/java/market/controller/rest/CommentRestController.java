@@ -15,8 +15,8 @@ import java.util.List;
 public class CommentRestController {
     private final CommentService commentService;
 
-    @GetMapping("/comments")
+  /*  @GetMapping("/comments")
     public List<CommentDto> getComments(Model model) {
         return commentService.getAccessedComments();
-    }
+    }*/
 }

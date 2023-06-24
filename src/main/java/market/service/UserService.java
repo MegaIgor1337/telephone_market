@@ -1,29 +1,39 @@
 package market.service;
 
+import jakarta.persistence.criteria.Join;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import market.dto.*;
+import market.entity.Address;
 import market.entity.User;
-import market.repository.UserRepository;
+import market.enums.Role;
 import market.exception.ValidationException;
-import lombok.RequiredArgsConstructor;
 import market.mapper.CreateUserMapper;
 import market.mapper.UserMapper;
+import market.repository.UserRepository;
 import market.validator.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
+
+import static market.util.StringContainer.*;
 
 
 @RequiredArgsConstructor
 @Service
 @Transactional(readOnly = true)
 public class UserService {
-
+    private final Integer pageSize = 2;
     private final UserPasswordValidator userPasswordValidator;
     private final ImageService imageService;
     private final CreateUserValidator createUserValidator;
@@ -49,6 +59,10 @@ public class UserService {
         return userDto;
     }
 
+    public UserDto findById(Long id) {
+        return userMapper.userToUserDto(userRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)));
+    }
 
     private List<IValidateUserInfoDto> getValidateInfo() {
         return userRepository.findAllByNameNotNullAndEmailNotNull();
@@ -176,5 +190,78 @@ public class UserService {
                 .map(User::getImage)
                 .filter(StringUtils::hasText)
                 .flatMap(imageService::get);
+    }
+
+    public Page<UserDto> getUsersByPredicates(UserFilter filter, Integer page) {
+        Specification<User> specifications = getSpecifications(filter);
+        var users = userRepository.findAll(specifications, PageRequest.of(page, pageSize));
+        return users.map(userMapper::userToUserDto);
+    }
+
+    public Specification<User> getSpecifications(UserFilter filter) {
+        Specification<User> specification = Specification.where(null);
+        specification = specification
+                .and((root, query, cb) -> cb.equal(root.get(ROLE), Role.USER));
+        if (filter.getName() != null && !filter.getName().isBlank()) {
+            specification = specification
+                    .and((root, query, cb) -> cb.like(root.get(NAME), filter.getName()));
+        }
+        if (filter.getEmail() != null && !filter.getEmail().isBlank()) {
+            specification = specification
+                    .and((root, query, cb) -> cb.like(root.get(EMAIL), filter.getEmail()));
+        }
+        if (filter.getPassportNo() != null && !filter.getPassportNo().isBlank()) {
+            specification = specification
+                    .and((root, query, cb) -> cb.like(root.get(PASSPORT_NO), filter.getPassportNo()));
+        }
+        if (filter.getPassword() != null && !filter.getPassword().isBlank()) {
+            specification = specification
+                    .and((root, query, cb) -> cb.like(root.get(PASSWORD), filter.getPassword()));
+        }
+        if (filter.getGender() != null && !filter.getGender().isBlank()) {
+            specification = specification
+                    .and((root, query, cb) -> cb.equal(root.get(GENDER), filter.getGender()));
+        }
+        if (filter.getCountry() != null && !filter.getCountry().isBlank()) {
+            specification = specification
+                    .and((root, query, cb) -> {
+                        Join<User, Address> addressJoin = root.join(ADDRESSES);
+                        return cb.like(addressJoin.get(COUNTRY), filter.getCountry());
+                    });
+        }
+        if (filter.getCity() != null && !filter.getCity().isBlank()) {
+            specification = specification
+                    .and((root, query, cb) -> {
+                        Join<User, Address> addressJoin = root.join(ADDRESSES);
+                        return cb.like(addressJoin.get(CITY), filter.getCity());
+                    });
+        }
+        if (filter.getStreet() != null && !filter.getStreet().isBlank()) {
+            specification = specification
+                    .and((root, query, cb) -> {
+                        Join<User, Address> addressJoin = root.join(ADDRESSES);
+                        return cb.like(addressJoin.get(STREET), filter.getStreet());
+                    });
+        }
+        if (filter.getHouse() != null && !filter.getHouse().isBlank()) {
+            specification = specification
+                    .and((root, query, cb) -> {
+                        Join<User, Address> addressJoin = root.join(ADDRESSES);
+                        return cb.like(addressJoin.get(HOUSE), filter.getHouse());
+                    });
+        }
+        if (filter.getFlat() != null && !filter.getFlat().isBlank()) {
+            specification = specification
+                    .and((root, query, cb) -> {
+                        Join<User, Address> addressJoin = root.join(ADDRESSES);
+                        return cb.like(addressJoin.get(FLAT), filter.getFlat());
+                    });
+        }
+        return specification;
+    }
+
+    @Transactional
+    public void deleteUser(Long id) {
+        userRepository.deleteAllById(id);
     }
 }
