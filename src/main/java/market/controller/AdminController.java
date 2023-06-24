@@ -2,7 +2,11 @@ package market.controller;
 
 import lombok.RequiredArgsConstructor;
 import market.dto.CommentDto;
+import market.dto.ModerateOrderDto;
 import market.dto.UserFilter;
+import market.enums.OrderStatus;
+import market.enums.Role;
+import market.exception.ValidationException;
 import market.service.AddressService;
 import market.service.CommentService;
 import market.service.OrderService;
@@ -12,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static market.util.StringContainer.*;
@@ -20,14 +25,20 @@ import static market.util.StringContainer.*;
 @RequestMapping("/admin")
 @RequiredArgsConstructor
 @SessionAttributes({SIZE_MODERATE_COMMENTS, ACCESSED_COMMENTS, USER,
-        PAGE_U, MODERATE_COMMENTS})
+        PAGE_U, MODERATE_COMMENTS, MODERATE_ORDERS, MODERATE_ORDER, STATUSES})
 public class AdminController {
     private final CommentService commentService;
     private final UserService userService;
     private final OrderService orderService;
     private final AddressService addressService;
+    @ModelAttribute(STATUSES)
+    public List<OrderStatus> getStatuses() {
+        return Arrays.asList(OrderStatus.values());
+    }
     @GetMapping("/menu")
-    public String adminMenu() {
+    public String adminMenu(Model model) {
+        var sizeModerateOrders = orderService.getSizeModerateOrders();
+        model.addAttribute(SIZE_MODERATE_ORDERS, sizeModerateOrders);
         return "admin/adminMenu";
     }
 
@@ -135,4 +146,32 @@ public class AdminController {
                 filter.getFlat());
     }
 
+    @GetMapping("/menu/moderateOrders")
+    public String moderateOrders(Model model,
+                                 @RequestParam(name = PAGE, defaultValue = ZERO) Integer page) {
+        var orders = orderService.getOrdersByStatus(OrderStatus.MODERATING, page);
+        model.addAttribute(MODERATE_ORDERS, orders);
+        return "/admin/moderateOrders";
+    }
+
+    @GetMapping("/menu/moderateOrders/{id}/moderate")
+    public String moderate(@PathVariable(ID) Long id, Model model,
+                           @RequestParam(name = PAGE_PR, defaultValue = ZERO) Integer pagePr) {
+        var moderateOrder = orderService.findOrderById(id, pagePr);
+        model.addAttribute(MODERATE_ORDER, moderateOrder);
+        return "/admin/moderatingOrders";
+    }
+
+    @PostMapping("/menu/moderateOrders/{id}/moderate")
+    public String moderate(@PathVariable(ID) Long id, Model model,
+                           ModerateOrderDto moderateOrderDto,
+                           RedirectAttributes redirectAttributes) {
+        try {
+            orderService.moderateOrder(id, moderateOrderDto);
+        } catch (ValidationException e) {
+            redirectAttributes.addFlashAttribute(DATE_OF_DELIVERY, moderateOrderDto.getDateOfDelivery());
+            model.addAttribute(ERRORS, e.getErrors());
+        }
+        return "redirect:/admin/menu/moderateOrders";
+    }
 }

@@ -9,6 +9,7 @@ import market.enums.OrderStatus;
 import org.springframework.data.domain.Page;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 
@@ -21,7 +22,7 @@ public class OrderDtoWithPage {
     private UserDto user;
     private BigDecimal cost;
     private OrderStatus status;
-    private LocalDateTime dateOfDelivery;
+    private LocalDate dateOfDelivery;
     private LocalDateTime date;
     private Page<OrderProductDto> products;
 }

@@ -11,6 +11,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Configuration
@@ -81,9 +82,9 @@ public class SpringConfig {
             Product product5 = saveProduct(productRepository, brand5, model5, color1, country3, 70, BigDecimal.valueOf(320));
 
             Order order1 = saveOrder(orderRepository, user1, BigDecimal.valueOf(300), LocalDateTime.now(),
-                    OrderStatus.DELIVERED, LocalDateTime.now());
+                    OrderStatus.DELIVERED, LocalDate.now());
             Order order2 = saveOrder(orderRepository, user2, BigDecimal.valueOf(750), LocalDateTime.now(),
-                    OrderStatus.WAITING_PAID, LocalDateTime.now());
+                    OrderStatus.WAITING_PAID, LocalDate.now());
 
             OrderProduct orderProduct1 = saveOrderProduct(orderProductRepository, order1, product4, 2);
             OrderProduct orderProduct2 = saveOrderProduct(orderProductRepository, order1, product3, 5);
@@ -201,7 +202,7 @@ public class SpringConfig {
     }
 
     private Order saveOrder(OrderRepository orderRepository, User user, BigDecimal cost, LocalDateTime date,
-                            OrderStatus orderStatus, LocalDateTime dateOfDelivery) {
+                            OrderStatus orderStatus, LocalDate dateOfDelivery) {
         Order order = Order.builder()
                 .user(user)
                 .cost(cost)

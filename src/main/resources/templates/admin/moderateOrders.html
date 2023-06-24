@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Orders</title>
+</head>
+<body>
+<form method="get" th:action="@{/admin/menu}">
+    <button type="submit" name="button"> Back to menu </button>
+</form>
+<p>Moderate orders:</p>
+<span th:if="${#lists.isEmpty(moderateOrders.content)}">
+<p>No orders</p>
+</span>
+<table th:if="${not #lists.isEmpty(moderateOrders.content)}">
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>Status</th>
+        <th>Date</th>
+        <th>Count of products</th>
+        <th>Date of delivery</th>
+        <th>Price</th>
+        <th></th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="order, loop : ${moderateOrders}">
+        <td>  <a th:href="@{/admin/menu/moderateOrders/{orderId}/moderate(orderId=${order.id})}">
+            <span style="text-align: center;" th:text="${order.id}"></span>
+        </a></td>
+        <td  style="text-align: center;" th:text="${order.status}"></td>
+        <td  style="text-align: center;" th:text="${order.date}"></td>
+        <td  style="text-align: center;" th:text="${order.products.size()}"></td>
+        <td  style="text-align: center;" th:text="${order.dateOfDelivery != null ? order.dateOfDelivery : 'unknown'}"></td>
+        <td  style="text-align: center;" th:text="${order.cost}"></td>
+    </tr>
+    </tbody>
+</table>
+<div th:if="${not #lists.isEmpty(moderateOrders)}">
+    <form th:if="${not #lists.isEmpty(moderateOrders)}" method="GET"
+          th:action="@{/admin/menu/moderateOrders}">
+        <button th:if="${moderateOrders.hasPrevious}" type="submit" name="page" value="0">First</button>
+        <button th:if="${moderateOrders.hasPrevious}" type="submit" name="page" th:value="${moderateOrders.number - 1}">
+            Previous
+        </button>
+        <button th:if="${moderateOrders.hasNext}" type="submit" name="page" th:value="${moderateOrders.number + 1}">
+            Next
+        </button>
+        <button th:if="${moderateOrders.hasNext}" type="submit" name="page" th:value="${moderateOrders.totalPages - 1}">
+            Last
+        </button>
+    </form>
+</div>
+</body>
+</html>

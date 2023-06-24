@@ -8,6 +8,8 @@ import market.repository.AddressRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 import project.TestApplicationRunner;
@@ -22,9 +24,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class AddressRepositoryTest {
 
     private final AddressRepository addressRepository;
-    @Test
+   @Test
     public void testAddressesFindByUserId() {
-        List<Address> addresses = addressRepository.findByUserId(1L);
-        assertThat(1).isEqualTo(addresses.size());
-    }
+        Page<Address> addresses = addressRepository.findByUserId(1L, PageRequest.of(2, 2));
+        assertThat(addresses).hasSize(1);
+   }
 }

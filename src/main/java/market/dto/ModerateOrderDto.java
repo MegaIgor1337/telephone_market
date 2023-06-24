@@ -1,27 +1,20 @@
 package market.dto;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import market.enums.OrderStatus;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.List;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
-public class OrderDto {
-    private Long id;
-    private UserDto user;
-    private BigDecimal cost;
+public class ModerateOrderDto {
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
     private LocalDate dateOfDelivery;
-    private LocalDateTime date;
     private OrderStatus status;
-    private List<OrderProductDto> products;
 }

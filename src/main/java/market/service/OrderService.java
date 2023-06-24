@@ -1,6 +1,7 @@
 package market.service;
 
 import lombok.RequiredArgsConstructor;
+import market.dto.ModerateOrderDto;
 import market.dto.OrderDto;
 import market.dto.OrderDtoWithPage;
 import market.dto.UserDto;
@@ -16,8 +17,8 @@ import market.mapper.UserMapper;
 import market.repository.*;
 import market.util.PageUtil;
 import market.validator.LackOfMoneyValidator;
+import market.validator.ModerateOrderDtoValidator;
 import market.validator.PromoCodeValidator;
-import org.eclipse.tags.shaded.org.apache.bcel.generic.FADD;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -33,12 +34,14 @@ import java.util.List;
 import java.util.Optional;
 
 import static market.util.StringContainer.DATE;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @Transactional(readOnly = true)
 @Service
 @RequiredArgsConstructor
 public class OrderService {
     private final Integer pageSize = 2;
+    private final ModerateOrderDtoValidator moderateOrderDtoValidator;
     private final OrderMapper orderMapper;
     private final PromoCodeRepository promoCodeRepository;
     private final PromoCodeValidator promoCodeValidator;
@@ -147,10 +150,10 @@ public class OrderService {
         if (!promoCodeResult.isValid()) throw new ValidationException(promoCodeResult.getErrors());
         var orderOptional = orderRepository.findAllByUserIdAndStatus(userId, OrderStatus.WAITING_PAID);
         Order order = orderOptional
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
         var promoCodeObject = promoCodeRepository.findAllByName(promoCode);
         var discount = promoCodeObject
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)).getDiscount();
+                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND)).getDiscount();
         var promoCodeProducts = promoCodeProductRepository.findAllByPromoCode(promoCodeObject.get());
         var discountProducts = promoCodeProducts.stream().map(PromoCodeProduct::getProduct).toList();
         var orderProducts = orderProductRepository.findAllByOrderId(order.getId());
@@ -187,6 +190,30 @@ public class OrderService {
         var order = orderRepository.findById(orderId);
         return orderDtoWithPageMapper.orderDtoToOrderDtoWithPage(orderMapper
                 .orderToOrderDto(order
-                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND))), page, pageSize);
+                        .orElseThrow(() -> new ResponseStatusException(NOT_FOUND))), page, pageSize);
+    }
+
+    public Integer getSizeModerateOrders() {
+        return orderRepository.findAllByStatus(OrderStatus.MODERATING).size();
+    }
+
+    public Page<OrderDto> getOrdersByStatus(OrderStatus orderStatus, Integer page) {
+        return orderRepository.findAllByStatus(orderStatus, PageRequest.of(page, pageSize))
+                .map(orderMapper::orderToOrderDto);
+    }
+
+    @Transactional
+    public void moderateOrder(Long id, ModerateOrderDto moderateOrderDto) {
+        var validationResult = moderateOrderDtoValidator.isValid(moderateOrderDto);
+        if (!validationResult.isValid()) {
+            throw new ValidationException(validationResult.getErrors());
+        }
+        var order = orderRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        order.setStatus(moderateOrderDto.getStatus());
+        if (order.getStatus().equals(OrderStatus.DELIVER_PROCESSING)) {
+            order.setDateOfDelivery(moderateOrderDto.getDateOfDelivery());
+        }
+        orderRepository.saveAndFlush(order);
     }
 }

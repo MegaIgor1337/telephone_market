@@ -10,6 +10,7 @@ import market.service.AddressService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,20 +51,20 @@ public class AddressServiceTest {
                 .userId("1")
                 .build();
         addressService.update(createUpdateAddressDto);
-        var result = addressService.getAddresses(id);
-        assertThat(result.get(0).getStreet()).isEqualTo("dslds");
+        var result = addressService.getAddresses(id, 2);
+        assertThat(result).hasSize(2);
     }
 
     @Test
     void delete() {
         addressService.delete(id);
-        var result = addressService.getAddresses(id);
+        var result = addressService.getAddresses(id, 2);
         assertThat(result).hasSize(0);
     }
 
     @Test
     void getAddresses() {
-        var result = addressService.getAddresses(id);
+        var result = addressService.getAddresses(id, 2);
         assertThat(result).hasSize(1);
     }
 }

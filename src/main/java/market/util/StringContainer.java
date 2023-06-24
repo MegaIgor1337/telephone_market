@@ -120,4 +120,10 @@ public class StringContainer {
     public static final String PAGE_U = "pageU";
     public static final String PAGE_A = "pageA";
     public static final String PAGE_PR = "pagePr";
+    public static final String SIZE_MODERATE_ORDERS = "sizeModerateOrders";
+    public static final String MODERATE_ORDERS = "moderateOrders";
+    public static final String MODERATE_ORDER = "moderateOrder";
+    public static final String STATUSES = "statuses";
+    public static final String DATE_OF_DELIVERY = "dateOfDelivery";
+    public static final String MESSAGE_DATE_OF_DELIVERY_INVALID = "date of delivery can not be later then now";
 }
