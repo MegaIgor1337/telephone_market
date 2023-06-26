@@ -6,6 +6,7 @@ import market.enums.Gender;
 import market.enums.Role;
 import market.exception.ValidationException;
 import market.service.UserService;
+import market.util.ModelHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +17,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
+import static market.util.ModelHelper.addAttributes;
 import static market.util.StringContainer.*;
 
 @Controller
@@ -47,10 +50,10 @@ public class RegistrationController {
                                RedirectAttributes redirectAttributes) {
         try {
             var userDto = userService.create(createUserDto);
-            model.addAttribute(USER_DTO, userDto);
+            addAttributes(model, Map.of(USER_DTO, userDto));
             return "redirect:/address/addAddress";
         } catch (ValidationException exception) {
-            model.addAttribute(ERRORS, exception.getErrors());
+            addAttributes(model, Map.of(ERRORS, exception   .getErrors()));
             redirectAtt(createUserDto, redirectAttributes);
             return "redirect:/registration";
         }

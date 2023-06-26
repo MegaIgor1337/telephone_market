@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Products</title>
+</head>
+<body>
+<a th:href="@{/admin/menu}">
+    <button type="button">Back to menu</button>
+</a>
+<form method="GET" th:action="@{/admin/menu/productsForAdmin}">
+    <label for="brand">Brand:</label>
+    <input type="text" id="brand" name="brand" th:value="${brand}" list="brandDataList">
+    <datalist id="brandDataList">
+        <option th:each="brand : ${brands}" th:value="${brand.brand}"></option>
+    </datalist>
+    <br>
+    <label for="model">Model:</label>
+    <input type="text" id="model" name="model" th:value="${model}" list="modelDataList">
+    <datalist id="modelDataList">
+        <option th:each="model : ${models}" th:value="${model.model}"></option>
+    </datalist>
+    <br>
+    <label for="color">Color:</label>
+    <input type="text" id="color" name="color" th:value="${color}" list="colorDataList">
+    <datalist id="colorDataList">
+        <option th:each="color : ${colors}" th:value="${color.color}"></option>
+    </datalist>
+    <br>
+    <label for="country">Country:</label>
+    <input type="text" id="country" name="country" th:value="${country}" list="countryDataList">
+    <datalist id="countryDataList">
+        <option th:each="country : ${countries}" th:value="${country.country}"></option>
+    </datalist>
+    <br>
+    <label for="minPrice">Min price:</label>
+    <input type="number" id="minPrice" name="minPrice" step="any" th:value="${minPrice}">
+    <br>
+    <label for="maxPrice">Max price:</label>
+    <input type="number" id="maxPrice" name="maxPrice" step="any" th:value="${maxPrice}">
+    <br>
+    <label for="count">Count:</label>
+    <input type="number" id="count" name="count" th:value="${count}">
+    <br>
+    <label for="priceQuery">Price query:</label><br/>
+    <label th:each="priceQuery : ${priceQueries}">
+        <input type="radio" id="priceQuery" name="priceQuery" th:value="${priceQuery}"
+               th:checked="${priceQuery == selectedPriceQuery}" th:text="${priceQuery}">
+        <br/>
+    </label>
+    <input type="submit" value="Search">
+</form>
+<div th:if="${errors != null}" style="color: red">
+    <span th:each="error : ${errors}" th:text="${error.message}"></span>
+    <br/>
+</div>
+<table th:if="${not #lists.isEmpty(products)}">
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>Brand</th>
+        <th>Model</th>
+        <th>Color</th>
+        <th>Country</th>
+        <th>Price</th>
+        <th>Storage count</th>
+        <th></th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="productDto, loop : ${products}">
+        <td th:text="${loop.index + 1}"></td>
+        <td th:text="${productDto.brand.brand}"></td>
+        <td th:text="${productDto.model.model}"></td>
+        <td th:text="${productDto.color.color}"></td>
+        <td th:text="${productDto.country.country}"></td>
+        <td th:text="${productDto.cost}"></td>
+        <td th:text="${productDto.storageCount}"></td>
+        <td>
+            <form method="post" th:action="@{/admin/menu/products/{productId}/addCount(productId=${productDto.id})}">
+                <input type="hidden" name="country" th:value="${country}"/>
+                <input type="hidden" name="color" th:value="${color}"/>
+                <input type="hidden" name="model" th:value="${model}"/>
+                <input type="hidden" name="brand" th:value="${brand}"/>
+                <input type="hidden" name="minPrice" th:value="${minPrice}"/>
+                <input type="hidden" name="maxPrice" th:value="${maxPrice}"/>
+                <input type="hidden" name="count" th:value="${count}"/>
+                <input type="hidden" name="priceQuery" th:value="${selectedPriceQuery}"/>
+                <input type="hidden" name="pagePR" th:value="${products.number}"/>
+                <label>
+                    <input type="number" name="addCount" th:value="${addCount}" required/>
+                </label>
+                <button type="submit" value="submit">Add count</button>
+            </form>
+        </td>
+        <td>
+            <form method="post" th:action="@{/admin/menu/products/{productId}/removeCount(productId=${productDto.id})}">
+                <input type="hidden" name="country" th:value="${country}"/>
+                <input type="hidden" name="color" th:value="${color}"/>
+                <input type="hidden" name="model" th:value="${model}"/>
+                <input type="hidden" name="brand" th:value="${brand}"/>
+                <input type="hidden" name="minPrice" th:value="${minPrice}"/>
+                <input type="hidden" name="maxPrice" th:value="${maxPrice}"/>
+                <input type="hidden" name="count" th:value="${count}"/>
+                <input type="hidden" name="priceQuery" th:value="${selectedPriceQuery}"/>
+                <input type="hidden" name="pagePR" th:value="${products.number}"/>
+                <label>
+                    <input type="number" name="removeCount" th:value="${removeCount}"/>
+                </label>
+                <button type="submit" value="submit">Remove count</button>
+            </form>
+        </td>
+        <td>
+            <form method="post" th:action="@{/admin/menu/products/{productId}/delete(productId=${productDto.id})}">
+                <input type="hidden" name="country" th:value="${country}"/>
+                <input type="hidden" name="color" th:value="${color}"/>
+                <input type="hidden" name="model" th:value="${model}"/>
+                <input type="hidden" name="brand" th:value="${brand}"/>
+                <input type="hidden" name="minPrice" th:value="${minPrice}"/>
+                <input type="hidden" name="maxPrice" th:value="${maxPrice}"/>
+                <input type="hidden" name="count" th:value="${count}"/>
+                <input type="hidden" name="priceQuery" th:value="${selectedPriceQuery}"/>
+                <button type="submit" value="submit">Delete</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<div th:if="${not #lists.isEmpty(products)}">
+    <form th:if="${not #lists.isEmpty(products)}" method="GET"
+          th:action="@{/admin/menu/productsForAdmin}">
+        <input type="hidden" name="country" th:value="${country}"/>
+        <input type="hidden" name="color" th:value="${color}"/>
+        <input type="hidden" name="model" th:value="${model}"/>
+        <input type="hidden" name="brand" th:value="${brand}"/>
+        <input type="hidden" name="minPrice" th:value="${minPrice}"/>
+        <input type="hidden" name="maxPrice" th:value="${maxPrice}"/>
+        <input type="hidden" name="count" th:value="${count}"/>
+        <input type="hidden" name="priceQuery" th:value="${selectedPriceQuery}"/>
+        <button th:if="${products.hasPrevious}" type="submit" name="page" value="0">First</button>
+        <button th:if="${products.hasPrevious}" type="submit" name="page" th:value="${products.number - 1}">Previous
+        </button>
+        <button th:if="${products.hasNext}" type="submit" name="page" th:value="${products.number + 1}">Next</button>
+        <button th:if="${products.hasNext}" type="submit" name="page" th:value="${products.totalPages - 1}">Last
+        </button>
+    </form>
+
+</div>
+</body>
+</html>

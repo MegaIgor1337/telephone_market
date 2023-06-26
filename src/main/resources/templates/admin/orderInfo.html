@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Moderating</title>
+    <title>Order</title>
 </head>
 <body>
-<form method="get" th:action="@{/admin/menu/moderateOrders}">
+<form method="get" th:action="@{/admin/menu/orders}">
     <button type="submit" name="button">Back</button>
 </form>
-<table th:if="${not #lists.isEmpty(moderateOrder.products.content)}">
+<table th:if="${not #lists.isEmpty(order.products.content)}">
     <thead>
     <tr>
         <th>#</th>
@@ -23,7 +23,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:each="orderProduct, loop : ${moderateOrder.products}">
+    <tr th:each="orderProduct, loop : ${order.products}">
         <td th:text="${loop.index + 1}"></td>
         <td th:text="${orderProduct.product.brand.brand}"></td>
         <td th:text="${orderProduct.product.model.model}"></td>
@@ -35,28 +35,28 @@
     </tbody>
 </table>
 
-<div th:if="${not #lists.isEmpty(moderateOrder.products)}">
-    <form th:if="${not #lists.isEmpty(moderateOrder.products)}" method="GET"
-          th:action="@{/admin/menu/moderateOrders/{orderId}/moderate(orderId=${moderateOrder.id})}">
-        <button th:if="${moderateOrder.products.hasPrevious}" type="submit" name="pagePr" value="0">First</button>
-        <button th:if="${moderateOrder.products.hasPrevious}" type="submit" name="pagePr" th:value="${moderateOrder.products.number - 1}">
+<div th:if="${not #lists.isEmpty(order.products)}">
+    <form th:if="${not #lists.isEmpty(order.products)}" method="GET"
+          th:action="@{/admin/menu/orders/{orderId}/viewInfo(orderId=${order.id})}">
+        <button th:if="${order.products.hasPrevious}" type="submit" name="pagePr" value="0">First</button>
+        <button th:if="${order.products.hasPrevious}" type="submit" name="pagePr" th:value="${order.products.number - 1}">
             Previous
         </button>
-        <button th:if="${moderateOrder.products.hasNext}" type="submit" name="pagePr" th:value="${moderateOrder.products.number + 1}">
+        <button th:if="${order.products.hasNext}" type="submit" name="pagePr" th:value="${order.products.number + 1}">
             Next
         </button>
-        <button th:if="${moderateOrder.products.hasNext}" type="submit" name="pagePr" th:value="${moderateOrder.products.totalPages - 1}">
+        <button th:if="${order.products.hasNext}" type="submit" name="pagePr" th:value="${order.products.totalPages - 1}">
             Last
         </button>
     </form>
 </div>
-<form method="post" th:action="@{/admin/menu/moderateOrders/{orderId}/moderate(orderId=${moderateOrder.id})}">
+<form method="post" th:action="@{/admin/menu/orders/{orderId}/viewInfo/changeInfo(orderId=${order.id})}">
     <label for="dateOfDelivery">Date of delivery:
         <input type="date" name="dateOfDelivery" id="dateOfDelivery"/>
     </label><br/>
     <label for="status"></label><select name="status" id="status">Status:
-        <option th:each="status : ${statuses}" th:text="${status}" th:value="${status}" ></option>
-    </select><br/>
+    <option th:each="status : ${statuses}" th:text="${status}" th:value="${order.status}" ></option>
+</select><br/>
     <label for="deliveryAddress"></label><select name="deliveryAddress" id="deliveryAddress">Status:
     <option th:each="deliveryAddress : ${deliveryAddresses}"
             th:text="${deliveryAddress.country + ', ' + deliveryAddress.city + ', ' + deliveryAddress.street + ', '

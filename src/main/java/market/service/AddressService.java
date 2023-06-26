@@ -33,7 +33,7 @@ public class AddressService {
     public AddressDto save(CreateAddressDto createAddressDto) {
         validateAddressParams(createAddressDto);
         var addressEntity = createAddressMapper.createAddressDtoToAddress(createAddressDto);
-        return addressMapper.mapFrom(addressRepository.save(addressEntity));
+        return addressMapper.addressToAddressDto(addressRepository.save(addressEntity));
     }
 
     private void validateAddressParams(ICreateAddressDto createAddressDto) {
@@ -56,8 +56,13 @@ public class AddressService {
     }
 
     public Page<AddressDto> getAddresses(Long id, Integer page) {
-        return addressRepository.findByUserId(id, PageRequest.of(page, 2))
-                .map(addressMapper::mapFrom);
+        return addressRepository.findByUserId(id, PageRequest.of(page, pageSize))
+                .map(addressMapper::addressToAddressDto);
+    }
+
+    public List<AddressDto> getAddressesByUserId(Long userId) {
+        return addressRepository.findByUserId(userId).stream()
+                .map(addressMapper::addressToAddressDto).toList();
     }
 
 }

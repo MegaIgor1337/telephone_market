@@ -3,6 +3,8 @@ package market.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 
 @Data
 @AllArgsConstructor
@@ -21,5 +23,8 @@ public class Address implements BaseEntity<Long> {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @OneToMany(mappedBy = "address", cascade = CascadeType.ALL)
+    private List<Order> orders;
 
 }

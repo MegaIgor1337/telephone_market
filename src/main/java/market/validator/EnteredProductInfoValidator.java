@@ -38,11 +38,10 @@ public class EnteredProductInfoValidator implements Validator<ProductFilter> {
                 .contains(object.getCountry()) && !EMPTY_PARAM.equals(object.getCountry())) {
             validationResult.add(Error.of(Error.getMessage(COUNTRY), COUNTRY_ENTERED_INVALID));
         }
-        if (object.getCount() != null && !EMPTY_PARAM.equals(object.getCount()) && Integer.parseInt(object.getCount()) < 1)
-
-
+        if (object.getCount() != null && !object.getCount().isBlank()
+            && Integer.parseInt(object.getCount()) < 1) {
             validationResult.add(Error.of(Error.getMessage(COUNT), COUNT_ENTERED_INVALID));
-
+        }
         if (object.getMaxPrice() != null) {
             var maxPrice = !EMPTY_PARAM.equals(object.getMaxPrice()) ? new BigDecimal(object.getMaxPrice()) : null;
             if (maxPrice != null && maxPrice.compareTo(BigDecimal.ZERO) < 0) {

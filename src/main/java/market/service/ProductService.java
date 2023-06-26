@@ -8,14 +8,18 @@ import market.enums.OrderStatus;
 import market.exception.ValidationException;
 import market.mapper.ProductMapper;
 import market.repository.ProductRepository;
+import market.validator.EnteredAddCountValidator;
 import market.validator.EnteredProductInfoValidator;
+import market.validator.EnteredRemoveCountValidator;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -29,6 +33,8 @@ import static market.util.StringContainer.*;
 public class ProductService {
     private final Integer pageSize = 2;
     private final ProductRepository productRepository;
+    private final EnteredRemoveCountValidator enteredRemoveCountValidator;
+    private final EnteredAddCountValidator enteredAddCountValidator;
     private final ProductMapper productMapper;
     private final BrandService brandService;
     private final ModelService modelService;
@@ -100,6 +106,9 @@ public class ProductService {
         if (filter.getCount() != null && !filter.getCount().isBlank()) {
             specification = specification
                     .and((root, query, cb) -> cb.greaterThanOrEqualTo(root.get(STORAGE_COUNT), filter.getCount()));
+        } else {
+            specification = specification
+                    .and((root, query, cb) -> cb.greaterThanOrEqualTo(root.get(STORAGE_COUNT), 1));
         }
         if (filter.getMinPrice() != null && !filter.getMinPrice().isBlank()) {
             specification = specification
@@ -112,5 +121,38 @@ public class ProductService {
                             Double.parseDouble(filter.getMaxPrice())));
         }
         return specification;
+    }
+
+    @Transactional
+    public void addCount(Long id, String count) {
+        var validationResult = enteredAddCountValidator.isValid(count);
+        if (!validationResult.isValid()) {
+            throw new ValidationException(validationResult.getErrors());
+        }
+        var product = productRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        var storageCount = product.getStorageCount();
+        product.setStorageCount(storageCount + Integer.parseInt(count));
+        productRepository.saveAndFlush(product);
+    }
+
+    @Transactional
+    public void removeCount(Long id, String count) {
+        var product = productRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        var storageCount = product.getStorageCount();
+        enteredRemoveCountValidator.putProductCount(storageCount);
+        var validationResult = enteredRemoveCountValidator.isValid(count);
+        if (!validationResult.isValid()) {
+            throw new ValidationException(validationResult.getErrors());
+        }
+        product.setStorageCount(storageCount - Integer.parseInt(count));
+        productRepository.saveAndFlush(product);
+    }
+
+    @Transactional
+    public void deleteProduct(Long id) {
+        productRepository.delete(productRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)));
     }
 }

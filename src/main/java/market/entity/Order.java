@@ -27,6 +27,9 @@ public class Order implements BaseEntity<Long>{
     private User user;
     private BigDecimal cost;
     private LocalDateTime date;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "address_id")
+    private Address address;
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
     @Column(name = "date_of_delivery")

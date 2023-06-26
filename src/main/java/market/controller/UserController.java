@@ -6,6 +6,7 @@ import market.enums.OrderStatus;
 import market.exception.LackOfMoneyException;
 import market.exception.ValidationException;
 import market.service.*;
+import market.util.ModelHelper;
 import market.validator.Error;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -16,7 +17,10 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import java.util.Map;
 
+import static market.util.ModelHelper.addAttributes;
+import static market.util.ModelHelper.redirectAttributesProductFilter;
 import static market.util.StringContainer.*;
 
 @Controller
@@ -40,7 +44,7 @@ public class UserController {
 
     @GetMapping("/menu")
     public String userMenu(Model model) {
-        model.addAttribute(ERRORS, Error.of(EMPTY_PARAM, EMPTY_PARAM));
+        addAttributes(model, Map.of(ERRORS, Error.of(EMPTY_PARAM, EMPTY_PARAM)));
         return "/user/menu";
     }
 
@@ -59,7 +63,7 @@ public class UserController {
     @GetMapping("/{id}/personalComments")
     public String personalComments(@PathVariable(ID) Long id, Model model) {
         List<CommentDto> comments = commentService.findCommentsByUserId(id);
-        model.addAttribute(USER_COMMENTS, comments);
+        addAttributes(model, Map.of(USER_COMMENTS, comments));
         return "/userComments";
     }
 
@@ -76,9 +80,9 @@ public class UserController {
         String pageA = (String) model.getAttribute(PAGE_A);
         String pageMain = EMPTY_PARAM.equals(pageA) || pageA == null ? page.toString() : pageA;
         var addressDtoList = addressService.getAddresses(id, Integer.valueOf(pageMain));
-        model.addAttribute(PAGE_A, EMPTY_PARAM);
-        model.addAttribute(ERRORS, Error.of(EMPTY_PARAM, EMPTY_PARAM));
-        model.addAttribute(ADDRESSES, addressDtoList);
+        addAttributes(model, Map.of(PAGE_A, EMPTY_PARAM,
+                ERRORS, Error.of(EMPTY_PARAM, EMPTY_PARAM),
+                ADDRESSES, addressDtoList));
         return "/user/profileMenu";
     }
 
@@ -93,12 +97,12 @@ public class UserController {
                               RedirectAttributes redirectAttributes) {
         try {
             userService.setNewLogin(userDto, newLogin, password);
-            model.addAttribute(USER_DTO, userDto);
+            addAttributes(model, Map.of(USER_DTO, userDto));
             return "redirect:/users/{id}/profileMenu";
         } catch (ValidationException e) {
-            redirectAttributes.addFlashAttribute(NEW_LOGIN, newLogin);
-            redirectAttributes.addFlashAttribute(PASSWORD, password);
-            model.addAttribute(ERRORS, e.getErrors());
+            ModelHelper.redirectAttributes(redirectAttributes, Map.of(NEW_LOGIN, newLogin,
+                    PASSWORD, password));
+            addAttributes(model, Map.of(ERRORS, e.getErrors()));
             return "redirect:/users/{id}/profileMenu/changeLogin";
         }
     }
@@ -114,12 +118,12 @@ public class UserController {
                               String password, RedirectAttributes redirectAttributes) {
         try {
             userService.setNewEmail(userDto, newEmail, password);
-            model.addAttribute(USER_DTO, userDto);
+            addAttributes(model, Map.of(USER_DTO, userDto));
             return "redirect:/users/{id}/profileMenu";
         } catch (ValidationException e) {
-            redirectAttributes.addFlashAttribute(NEW_EMAIL, newEmail);
-            redirectAttributes.addFlashAttribute(PASSWORD, password);
-            model.addAttribute(ERRORS, e.getErrors());
+            ModelHelper.redirectAttributes(redirectAttributes, Map.of(NEW_EMAIL, newEmail,
+                    PASSWORD, password));
+            addAttributes(model, Map.of(ERRORS, e.getErrors()));
             return "redirect:/users/{id}/profileMenu/changeEmail";
         }
 
@@ -136,12 +140,12 @@ public class UserController {
                                    String password, RedirectAttributes redirectAttributes) {
         try {
             userService.setNewPassportNo(userDto, newPassportNo, password);
-            model.addAttribute(USER_DTO, userDto);
+            addAttributes(model, Map.of(USER_DTO, userDto));
             return "redirect:/users/{id}/profileMenu";
         } catch (ValidationException e) {
-            redirectAttributes.addFlashAttribute(NEW_PASSPORT_NO, newPassportNo);
-            redirectAttributes.addFlashAttribute(PASSWORD, password);
-            model.addAttribute(ERRORS, e.getErrors());
+            ModelHelper.redirectAttributes(redirectAttributes, Map.of(NEW_PASSPORT_NO, newPassportNo,
+                    PASSWORD, password));
+            addAttributes(model, Map.of(ERRORS, e.getErrors()));
             return "redirect:/users/{id}/profileMenu/changePassportNo";
         }
     }
@@ -157,12 +161,12 @@ public class UserController {
                                  String oldPassword, RedirectAttributes redirectAttributes) {
         try {
             userService.setNewPassword(userDto, oldPassword, newPassword);
-            model.addAttribute(USER_DTO, userDto);
+            addAttributes(model, Map.of(USER_DTO, userDto));
             return "redirect:/users/{id}/profileMenu";
         } catch (ValidationException e) {
-            model.addAttribute(ERRORS, e.getErrors());
-            redirectAttributes.addFlashAttribute(NEW_PASSWORD, newPassword);
-            redirectAttributes.addFlashAttribute(OLD_PASSWORD, oldPassword);
+            addAttributes(model, Map.of(ERRORS, e.getErrors()));
+            ModelHelper.redirectAttributes(redirectAttributes, Map.of(NEW_PASSWORD, newPassword,
+                    OLD_PASSWORD, oldPassword));
             return "redirect:/users/{id}/profileMenu/changePassword";
         }
     }
@@ -176,11 +180,12 @@ public class UserController {
     public String putMoney(@PathVariable(ID) Long id, String money,
                            Model model, RedirectAttributes redirectAttributes) {
         try {
-            model.addAttribute(USER_DTO, userService.putMoney(id, money).get());
+            addAttributes(model, Map.of(USER_DTO, userService.putMoney(id, money)
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND))));
             return "redirect:/users/{id}/profileMenu";
         } catch (ValidationException e) {
-            model.addAttribute(ERRORS, e.getErrors());
-            redirectAttributes.addFlashAttribute(MONEY, money);
+            addAttributes(model, Map.of(ERRORS, e.getErrors()));
+            ModelHelper.redirectAttributes(redirectAttributes, Map.of(MONEY, money));
             return "redirect:/users/{id}/profileMenu/putMoney";
         }
     }
@@ -191,27 +196,27 @@ public class UserController {
                                @RequestParam(name = PAGE, defaultValue = ZERO) Integer page,
                                Model m, RedirectAttributes redirectAttributes,
                                ProductFilter filter) {
-        m.addAttribute(ERRORS, Error.of(EMPTY_PARAM, EMPTY_PARAM));
-        m.addAttribute(MODELS, modelService.getAllModels());
-        m.addAttribute(COUNTRIES, countryService.getAllCountries());
-        m.addAttribute(BRANDS, brandService.getAllBrands());
-        m.addAttribute(COLORS, colorService.getAllColors());
-        m.addAttribute(FAVOURITES, productService
-                .getProductsByUserIdInFavourites(id));
-        m.addAttribute(PRODUCTS_IN_BASKET, productService
-                .getProductsByUserIdAndOrderStatus(id, OrderStatus.WAITING_PAID));
-        m.addAttribute(PRICE_QUERIES, List.of(CHEAP_FIRST, REACH_FIRST));
+        addAttributes(m, Map.of(ERRORS, Error.of(EMPTY_PARAM, EMPTY_PARAM),
+                MODELS, modelService.getAllModels(),
+                COUNTRIES, countryService.getAllCountries(),
+                BRANDS, brandService.getAllBrands(),
+                COLORS, colorService.getAllColors(),
+                FAVOURITES, productService
+                        .getProductsByUserIdInFavourites(id),
+                PRODUCTS_IN_BASKET, productService
+                        .getProductsByUserIdAndOrderStatus(id, OrderStatus.WAITING_PAID),
+                PRICE_QUERIES, List.of(CHEAP_FIRST, REACH_FIRST)));
         try {
             String pageM = (String) m.getAttribute(PAGE_FB);
             String pageFB = EMPTY_PARAM.equals(pageM) || pageM == null ? page.toString() : pageM;
             var products = productService.getProductsByPredicates(filter, Integer.parseInt(pageFB));
-            m.addAttribute(PRODUCTS, products);
-            m.addAttribute(PAGE_FB, EMPTY_PARAM);
-            redirectAttributes(redirectAttributes, filter);
+            addAttributes(m, Map.of(PRODUCTS, products,
+                    PAGE_FB, EMPTY_PARAM));
+            redirectAttributesProductFilter(redirectAttributes, filter);
             return "redirect:/users/products";
         } catch (ValidationException e) {
-            redirectAttributes(redirectAttributes, filter);
-            m.addAttribute(ERRORS, e.getErrors());
+            addAttributes(m, Map.of(ERRORS, e.getErrors()));
+            redirectAttributesProductFilter(redirectAttributes, filter);
             return "redirect:/users/products";
         }
     }
@@ -224,32 +229,15 @@ public class UserController {
 
 
 
-    private void redirectAttributes(RedirectAttributes redirectAttributes, ProductFilter createUserProductDto) {
-        if (createUserProductDto.getCountry() != null) redirectAttributes.addFlashAttribute(COUNTRY,
-                createUserProductDto.getCountry());
-        if (createUserProductDto.getColor() != null) redirectAttributes.addFlashAttribute(COLOR,
-                createUserProductDto.getColor());
-        if (createUserProductDto.getModel() != null) redirectAttributes.addFlashAttribute(MODEL,
-                createUserProductDto.getModel());
-        if (createUserProductDto.getMinPrice() != null) redirectAttributes.addFlashAttribute(MIN_PRICE,
-                createUserProductDto.getMinPrice());
-        if (createUserProductDto.getMaxPrice() != null) redirectAttributes.addFlashAttribute(MAX_PRICE,
-                createUserProductDto.getMaxPrice());
-        if (createUserProductDto.getCount() != null) redirectAttributes.addFlashAttribute(COUNT,
-                createUserProductDto.getCount());
-        if (createUserProductDto.getBrand() != null) redirectAttributes.addFlashAttribute(BRAND,
-                createUserProductDto.getBrand());
-        if (createUserProductDto.getPriceQuery() != null) redirectAttributes.addFlashAttribute(SELECTED_PRICE_QUERY,
-                createUserProductDto.getPriceQuery());
-    }
+
 
     @PostMapping("/{id}/products/addToFavourite")
     public String addToFavourite(@PathVariable(ID) Long id, Model model,
                                  String productId, String pageFB, ProductFilter productFilter,
                                  RedirectAttributes redirectAttributes) {
         favouriteService.addFavourite(id, Long.valueOf(productId));
-        model.addAttribute(PAGE_FB, pageFB);
-        redirectAttributes(redirectAttributes, productFilter);
+        addAttributes(model, Map.of(PAGE_FB, pageFB));
+        redirectAttributesProductFilter(redirectAttributes, productFilter);
         return "redirect:/users/{id}/products";
     }
 
@@ -258,8 +246,8 @@ public class UserController {
                               Model model, String count, ProductFilter productFilter,
                               RedirectAttributes redirectAttributes) {
         orderService.addProductToBasket(id, productId, count);
-        model.addAttribute(PAGE_FB, pageFB);
-        redirectAttributes(redirectAttributes, productFilter);
+        addAttributes(model, Map.of(PAGE_FB, pageFB));
+        redirectAttributesProductFilter(redirectAttributes, productFilter);
         return "redirect:/users/{id}/products";
     }
 
@@ -268,12 +256,12 @@ public class UserController {
                         @RequestParam(name = PAGE, defaultValue = ZERO) Integer page) {
         String pageM = (String) model.getAttribute(PAGE_OR);
         String pageFB = EMPTY_PARAM.equals(pageM) || pageM == null ? page.toString() : pageM;
-        model.addAttribute(PAGE_OR, EMPTY_PARAM);
+        addAttributes(model, Map.of(PAGE_OR, EMPTY_PARAM));
         var order = orderService.findByUserIdActiveBasket(id, Integer.valueOf(pageFB));
         var presentOrder = order.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         var modelOrder = discountedOrder == null  ? presentOrder : orderService
                 .getOrderDtoWithPage(discountedOrder, Integer.valueOf(pageFB));
-        model.addAttribute(ORDER, modelOrder);
+        addAttributes(model, Map.of(ORDER, modelOrder));
         return "user/order";
     }
 
@@ -281,7 +269,7 @@ public class UserController {
     public String deleteProductFromBasket(@PathVariable(ID) Long id, String productId,
                                 String pageOr, Model model) {
         orderService.deleteProductFromBasket(Long.valueOf(productId), id);
-        model.addAttribute(PAGE_OR, pageOr);
+        addAttributes(model, Map.of(PAGE_OR, pageOr));
         return "redirect:/users/{id}/order";
     }
 
@@ -299,7 +287,7 @@ public class UserController {
             orderService.payOrder(userDto, order);
             return "redirect:/users/{id}/order/paidOrder";
         } catch (LackOfMoneyException e) {
-            model.addAttribute(ERRORS, e.getErrors());
+            addAttributes(model, Map.of(ERRORS, e.getErrors()));
             return "redirect:/users/{id}/profileMenu/putMoney";
         }
     }
@@ -311,8 +299,8 @@ public class UserController {
             discountedOrder = orderService.acceptPromoCode(promoCode, id);
             return "redirect:/users/{id}/order";
         } catch (ValidationException e) {
-            redirectAttributes.addFlashAttribute(PROMO_CODE, promoCode);
-            model.addAttribute(ERRORS, e.getErrors());
+            ModelHelper.redirectAttributes(redirectAttributes, Map.of(PROMO_CODE, promoCode));
+            addAttributes(model, Map.of(ERRORS, e.getErrors()));
             return "redirect:/users/{id}/order";
         }
     }
@@ -322,19 +310,19 @@ public class UserController {
     public String viewFavourite(@PathVariable(ID) Long id, Model model,
                                 @RequestParam(name = PAGE, defaultValue = ZERO) Integer page) {
         String pageM = (String) model.getAttribute(PAGE_F);
-        model.addAttribute(PRODUCTS_IN_BASKET, productService
-                .getProductsByUserIdAndOrderStatus(id, OrderStatus.WAITING_PAID));
         String pageF = EMPTY_PARAM.equals(pageM) || pageM == null ? page.toString() : pageM;
-        model.addAttribute(PAGE_F, EMPTY_PARAM);
         var favourites = favouriteService.getFavouritesByUserId(id, Integer.valueOf(pageF));
-        model.addAttribute(FAVOURITE_PRODUCTS, favourites);
+        addAttributes(model, Map.of(PRODUCTS_IN_BASKET, productService
+                .getProductsByUserIdAndOrderStatus(id, OrderStatus.WAITING_PAID),
+                        PAGE_F, EMPTY_PARAM,
+                        FAVOURITE_PRODUCTS, favourites));
         return "user/favourite";
     }
 
     @PostMapping("/{id}/favourite/deleteFavourite")
     public String deleteFavourite(@PathVariable(ID) Long id, Model model, String pageF,
                                   Long favouriteId) {
-        model.addAttribute(PAGE_F, pageF);
+        addAttributes(model, Map.of(PAGE_F, pageF));
         favouriteService.deleteProductFromFavourite(favouriteId);
         return "redirect:/users/{id}/favourite";
     }
@@ -343,7 +331,7 @@ public class UserController {
     public String addToBasketFromFavourite(@PathVariable(ID) Long id, Model model, String pageF,
                                            String productId) {
         orderService.addProductToBasket(id, productId, null);
-        model.addAttribute(PAGE_F, pageF);
+        addAttributes(model, Map.of(PAGE_F, pageF));
         return "redirect:/users/{id}/favourite";
     }
 
@@ -351,7 +339,7 @@ public class UserController {
     public String viewOrderHistory(@PathVariable(ID) Long id,
                                    @RequestParam(name = PAGE, defaultValue = ZERO) String page, Model model) {
         var pageOrders = orderService.findAllOrdersByUserID(id, Integer.valueOf(page));
-        model.addAttribute(USER_ORDERS, pageOrders);
+        addAttributes(model, Map.of(USER_ORDERS, pageOrders));
         return "user/orderHistory";
     }
 
@@ -361,7 +349,7 @@ public class UserController {
                             Model model,
                             @RequestParam(name = PAGE, defaultValue = ZERO) Integer page) {
         var order = orderService.findOrderById(orderId, page);
-        model.addAttribute(USER_ORDER, order);
+        addAttributes(model, Map.of(USER_ORDER, order));
         return "user/productFromOH";
     }
 
@@ -369,7 +357,7 @@ public class UserController {
     public String setNewAvatar(@PathVariable(ID) Long id,
                                Model model, MultipartFile image) {
         var user = userService.setNewAvatar(id, image);
-        model.addAttribute(USER_DTO, user);
+        addAttributes(model, Map.of(USER_DTO, user));
         return "redirect:/users/{id}/profileMenu";
     }
 }

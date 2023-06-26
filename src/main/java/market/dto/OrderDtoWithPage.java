@@ -25,4 +25,5 @@ public class OrderDtoWithPage {
     private LocalDate dateOfDelivery;
     private LocalDateTime date;
     private Page<OrderProductDto> products;
+    private AddressDto address;
 }

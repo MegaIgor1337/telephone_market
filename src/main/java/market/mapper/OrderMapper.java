@@ -7,7 +7,7 @@ import org.mapstruct.Mapper;
 
 import static market.util.StringContainer.SPRING;
 
-@Mapper(componentModel = SPRING, uses = OrderProductMapper.class)
+@Mapper(componentModel = SPRING, uses = {OrderProductMapper.class, AddressMapper.class})
 public interface OrderMapper {
     OrderDto orderToOrderDto(Order order);
     Order orderDtoToOrder(OrderDto orderDto);

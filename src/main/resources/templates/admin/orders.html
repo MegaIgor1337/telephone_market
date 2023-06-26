@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Orders</title>
+</head>
+<body>
+<form method="get" th:action="@{/admin/menu}">
+    <button type="submit" name="button"> Back to menu </button>
+</form>
+<p>Orders:</p>
+<span th:if="${#lists.isEmpty(orders.content)}">
+<p>No orders</p>
+</span>
+<table th:if="${not #lists.isEmpty(orders.content)}">
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>Status</th>
+        <th>Date</th>
+        <th>Count of products</th>
+        <th>Date of delivery</th>
+        <th>Price</th>
+        <th></th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="order, loop : ${orders}">
+        <td>  <a th:href="@{/admin/menu/orders/{orderId}/viewInfo(orderId=${order.id})}">
+            <span style="text-align: center;" th:text="${order.id}"></span>
+        </a></td>
+        <td  style="text-align: center;" th:text="${order.status}" th:value="${order.status}"></td>
+        <td  style="text-align: center;" th:text="${order.date}" th:value="${order.date}"></td>
+        <td  style="text-align: center;" th:text="${order.products.size()}"></td>
+        <td  style="text-align: center;" th:text="${order.dateOfDelivery != null ? order.dateOfDelivery : 'unknown'}" th:value="${order.dateOfDelivery}"></td>
+        <td  style="text-align: center;" th:text="${order.cost}"></td>
+    </tr>
+    </tbody>
+</table>
+<div th:if="${not #lists.isEmpty(orders)}">
+    <form th:if="${not #lists.isEmpty(orders)}" method="GET"
+          th:action="@{/admin/menu/orders}">
+        <button th:if="${orders.hasPrevious}" type="submit" name="page" value="0">First</button>
+        <button th:if="${orders.hasPrevious}" type="submit" name="page" th:value="${orders.number - 1}">
+            Previous
+        </button>
+        <button th:if="${orders.hasNext}" type="submit" name="page" th:value="${orders.number + 1}">
+            Next
+        </button>
+        <button th:if="${orders.hasNext}" type="submit" name="page" th:value="${orders.totalPages - 1}">
+            Last
+        </button>
+    </form>
+</div>
+</body>
+</html>

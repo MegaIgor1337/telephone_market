@@ -11,5 +11,6 @@ import java.util.List;
 @Repository
 public interface AddressRepository extends JpaRepository<Address, Long>  {
      Page<Address> findByUserId(Long id, Pageable pageable);
+     List<Address> findByUserId(Long id);
 
 }

@@ -13,7 +13,7 @@ public class ModerateOrderDtoValidator implements Validator<ModerateOrderDto> {
     @Override
     public ValidationResult isValid(ModerateOrderDto object) {
         var validationResult = new ValidationResult();
-        if (object.getDateOfDelivery().isBefore(LocalDate.now())) {
+        if (object.getDateOfDelivery() != null && object.getDateOfDelivery().isBefore(LocalDate.now())) {
             validationResult.add(Error.of(Error.getMessage(DATE_OF_DELIVERY), MESSAGE_DATE_OF_DELIVERY_INVALID));
         }
         return validationResult;

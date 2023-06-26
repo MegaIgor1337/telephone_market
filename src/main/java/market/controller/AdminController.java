@@ -3,14 +3,13 @@ package market.controller;
 import lombok.RequiredArgsConstructor;
 import market.dto.CommentDto;
 import market.dto.ModerateOrderDto;
+import market.dto.ProductFilter;
 import market.dto.UserFilter;
 import market.enums.OrderStatus;
-import market.enums.Role;
 import market.exception.ValidationException;
-import market.service.AddressService;
-import market.service.CommentService;
-import market.service.OrderService;
-import market.service.UserService;
+import market.service.*;
+import market.util.ModelHelper;
+import market.validator.Error;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -18,16 +17,24 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
+import static market.util.ModelHelper.*;
 import static market.util.StringContainer.*;
 
 @Controller
 @RequestMapping("/admin")
 @RequiredArgsConstructor
-@SessionAttributes({SIZE_MODERATE_COMMENTS, ACCESSED_COMMENTS, USER,
+@SessionAttributes({SIZE_MODERATE_COMMENTS, ACCESSED_COMMENTS, USER, ERRORS, MODELS,
+        PRODUCTS, COUNTRIES, COLORS, BRANDS, PAGE_PR,
         PAGE_U, MODERATE_COMMENTS, MODERATE_ORDERS, MODERATE_ORDER, STATUSES})
 public class AdminController {
     private final CommentService commentService;
+    private final ProductService productService;
+    private final ColorService colorService;
+    private final CountryService countryService;
+    private final ModelService modelService;
+    private final BrandService brandService;
     private final UserService userService;
     private final OrderService orderService;
     private final AddressService addressService;
@@ -38,14 +45,15 @@ public class AdminController {
     @GetMapping("/menu")
     public String adminMenu(Model model) {
         var sizeModerateOrders = orderService.getSizeModerateOrders();
-        model.addAttribute(SIZE_MODERATE_ORDERS, sizeModerateOrders);
+        addAttributes(model, Map.of(SIZE_MODERATE_ORDERS, sizeModerateOrders,
+                ERRORS, Error.of(EMPTY_PARAM, EMPTY_PARAM)));
         return "admin/adminMenu";
     }
 
     @GetMapping("/menu/moderateComments")
     public String moderateComments(Model model) {
         List<CommentDto> commentsDto = commentService.getModerateComments();
-        model.addAttribute(MODERATE_COMMENTS, commentsDto);
+        addAttributes(model, Map.of(MODERATE_COMMENTS, commentsDto));
         return "admin/moderateComments";
     }
 
@@ -56,14 +64,15 @@ public class AdminController {
         } else {
             commentService.deleteComment(Long.valueOf(commentId));
         }
-        model.addAttribute(SIZE_MODERATE_COMMENTS, commentService.getModerateComments().size());
+        addAttributes(model, Map.of(SIZE_MODERATE_COMMENTS,
+                commentService.getModerateComments().size()));
         return "redirect:/admin/menu/moderateComments";
     }
 
     @GetMapping("/menu/accessedComments")
     public String accessedComments(Model model) {
         List<CommentDto> commentsDto = commentService.getAccessedComments();
-        model.addAttribute(ACCESSED_COMMENTS, commentsDto);
+        addAttributes(model, Map.of(ACCESSED_COMMENTS, commentsDto));
         return "admin/accessedCommentsForAdmin";
     }
 
@@ -80,9 +89,9 @@ public class AdminController {
         String pageU = (String) model.getAttribute(PAGE_U);
         String pageMain = EMPTY_PARAM.equals(pageU) || pageU == null ? page.toString() : pageU;
         var users = userService.getUsersByPredicates(filter, Integer.valueOf(pageMain));
-        model.addAttribute(PAGE_U, EMPTY_PARAM);
-        model.addAttribute(USERS, users);
-        redirectAtt(redirectAttributes, filter);
+        addAttributes(model, Map.of(PAGE_U, EMPTY_PARAM,
+                USERS, users));
+        redirectAttributesUserFilter(redirectAttributes, filter);
         return "/admin/users";
     }
 
@@ -90,9 +99,9 @@ public class AdminController {
     public String deleteUser(@PathVariable(ID) Long id,
                              String pageU, Model model, UserFilter filter,
                              RedirectAttributes redirectAttributes) {
-        model.addAttribute(PAGE_U, pageU);
+        addAttributes(model, Map.of(PAGE_U, pageU));
         userService.deleteUser(id);
-        redirectAtt(redirectAttributes, filter);
+        redirectAttributesUserFilter(redirectAttributes, filter);
         return "redirect:/admin/menu/users";
     }
 
@@ -103,13 +112,13 @@ public class AdminController {
                                   Model model, UserFilter filter, String pageU,
                                   RedirectAttributes redirectAttributes) {
         var userOrders = orderService.findAllOrdersByUserID(id, pageO);
-        model.addAttribute(USER_ORDERS, userOrders);
         var addresses = addressService.getAddresses(id, pageA);
-        model.addAttribute(PAGE_U, pageU);
         var user = userService.findById(id);
-        model.addAttribute(USER, user);
-        model.addAttribute(ADDRESSES, addresses);
-        redirectAtt(redirectAttributes, filter);
+        addAttributes(model, Map.of(USER_ORDERS, userOrders,
+                PAGE_U, pageU,
+                USER, user,
+                ADDRESSES, addresses));
+        redirectAttributesUserFilter(redirectAttributes, filter);
         return "/admin/userProfile";
     }
 
@@ -119,38 +128,17 @@ public class AdminController {
                             @RequestParam(name = PAGE_PR, defaultValue = ZERO) String pagePr,
                             Model model) {
         var order = orderService.findOrderById(orderId, Integer.valueOf(pagePr));
-        model.addAttribute(USER_ORDER, order);
+        addAttributes(model, Map.of(USER_ORDER, order));
         return "/admin/userOrder";
     }
 
-    private void redirectAtt(RedirectAttributes redirectAttributes, UserFilter filter) {
-        if (filter.getName() != null) redirectAttributes.addFlashAttribute(NAME,
-                filter.getName());
-        if (filter.getPassword() != null) redirectAttributes.addFlashAttribute(PASSWORD,
-                filter.getPassword());
-        if (filter.getPassportNo() != null) redirectAttributes.addFlashAttribute(PASSPORT_NO,
-                filter.getPassportNo());
-        if (filter.getEmail() != null) redirectAttributes.addFlashAttribute(EMAIL,
-                filter.getEmail());
-        if (filter.getGender() != null) redirectAttributes.addFlashAttribute(GENDER,
-                filter.getGender());
-        if (filter.getCountry() != null) redirectAttributes.addFlashAttribute(COUNTRY,
-                filter.getCountry());
-        if (filter.getCity() != null) redirectAttributes.addFlashAttribute(CITY,
-                filter.getCity());
-        if (filter.getStreet() != null) redirectAttributes.addFlashAttribute(STREET,
-                filter.getStreet());
-        if (filter.getHouse() != null) redirectAttributes.addFlashAttribute(HOUSE,
-                filter.getHouse());
-        if (filter.getFlat() != null) redirectAttributes.addFlashAttribute(FLAT,
-                filter.getFlat());
-    }
+
 
     @GetMapping("/menu/moderateOrders")
     public String moderateOrders(Model model,
                                  @RequestParam(name = PAGE, defaultValue = ZERO) Integer page) {
         var orders = orderService.getOrdersByStatus(OrderStatus.MODERATING, page);
-        model.addAttribute(MODERATE_ORDERS, orders);
+        addAttributes(model, Map.of(MODERATE_ORDERS, orders));
         return "/admin/moderateOrders";
     }
 
@@ -158,7 +146,9 @@ public class AdminController {
     public String moderate(@PathVariable(ID) Long id, Model model,
                            @RequestParam(name = PAGE_PR, defaultValue = ZERO) Integer pagePr) {
         var moderateOrder = orderService.findOrderById(id, pagePr);
-        model.addAttribute(MODERATE_ORDER, moderateOrder);
+        var addresses = addressService.getAddressesByUserId(moderateOrder.getUser().getId());
+        addAttributes(model, Map.of(MODERATE_ORDER, moderateOrder,
+                DELIVERY_ADDRESSES, addresses));
         return "/admin/moderatingOrders";
     }
 
@@ -169,9 +159,109 @@ public class AdminController {
         try {
             orderService.moderateOrder(id, moderateOrderDto);
         } catch (ValidationException e) {
-            redirectAttributes.addFlashAttribute(DATE_OF_DELIVERY, moderateOrderDto.getDateOfDelivery());
-            model.addAttribute(ERRORS, e.getErrors());
+            addAttributes(model, Map.of(ERRORS, e.getErrors()));
+            ModelHelper.redirectAttributes(redirectAttributes,
+                    Map.of(DELIVERY_ADDRESS, moderateOrderDto.getDeliveryAddress(),
+                    DATE_OF_DELIVERY, moderateOrderDto.getDateOfDelivery()));
         }
         return "redirect:/admin/menu/moderateOrders";
+    }
+
+    @GetMapping("/menu/orders")
+    public String viewAllOrders(Model model,
+                                @RequestParam(name = PAGE, defaultValue = ZERO) Integer page) {
+        var orders = orderService.getAllOrders(page);
+        addAttributes(model, Map.of(ORDERS, orders));
+        return "/admin/orders";
+    }
+
+    @GetMapping("/menu/orders/{id}/viewInfo")
+    public String viewInfoOrder(@PathVariable(ID) Long id, Model model,
+                                @RequestParam(name = PAGE_PR, defaultValue = ZERO) Integer pagePr) {
+        var order = orderService.findOrderById(id, pagePr);
+        var deliveryAddresses = addressService.getAddressesByUserId(order.getUser().getId());
+        addAttributes(model, Map.of(ORDER, order,
+                DELIVERY_ADDRESSES, deliveryAddresses));
+        return "/admin/orderInfo";
+    }
+
+    @GetMapping("/menu/orders/{id}/viewInfo/changeInfo")
+    public String changeInfoOrder(@PathVariable(ID) Long id, Model model,
+                                  ModerateOrderDto moderateOrderDto,
+                                  RedirectAttributes redirectAttributes) {
+        try {
+            orderService.moderateOrder(id, moderateOrderDto);
+        } catch (ValidationException e) {
+            addAttributes(model, Map.of(ERRORS, e.getErrors()));
+            ModelHelper.redirectAttributes(redirectAttributes,
+                    Map.of(DELIVERY_ADDRESS, moderateOrderDto.getDeliveryAddress(),
+                    DATE_OF_DELIVERY, moderateOrderDto.getDateOfDelivery()));
+        }
+        return "redirect:/admin/menu/orders";
+    }
+
+    @GetMapping("/menu/productsForAdmin")
+    public String viewAllProducts(ProductFilter productFilter, Model model,
+                                  RedirectAttributes redirectAttributes,
+                                  @RequestParam(name = PAGE, defaultValue = ZERO) Integer page) {
+        var pageM = ((String) model.getAttribute(PAGE_PR));
+        var pageMain = EMPTY_PARAM.equals(pageM) || pageM == null ? page.toString() : pageM;
+        var products = productService.getProductsByPredicates(productFilter,
+                Integer.valueOf(pageMain));
+        addAttributes(model, Map.of(MODELS, modelService.getAllModels(),
+                COUNTRIES, countryService.getAllCountries(),
+                BRANDS, brandService.getAllBrands(),
+                COLORS, colorService.getAllColors(),
+                PRICE_QUERIES, List.of(CHEAP_FIRST, REACH_FIRST),
+                PAGE_PR, EMPTY_PARAM,
+                PRODUCTS, products));
+        redirectAttributesProductFilter(redirectAttributes, productFilter);
+        return "redirect:/admin/menu/products";
+    }
+
+    @GetMapping("/menu/products")
+    public String products() {
+        return "/admin/products";
+    }
+
+    @PostMapping("/menu/products/{id}/addCount")
+    public String addCount(@PathVariable(ID) Long id,
+                           RedirectAttributes redirectAttributes,
+                           Model model, ProductFilter productFilter,
+                           String addCount, String pagePR) {
+        try {
+            addAttributes(model, Map.of(ERRORS, Error.of(EMPTY_PARAM, EMPTY_PARAM),
+                    PAGE_PR, pagePR));
+            productService.addCount(id, addCount);
+        } catch (ValidationException e) {
+            addAttributes(model, Map.of(ERRORS, e.getErrors()));
+        }
+        redirectAttributesProductFilter(redirectAttributes, productFilter);
+        return "redirect:/admin/menu/productsForAdmin";
+    }
+
+    @PostMapping("/menu/products/{id}/removeCount")
+    public String removeCount(@PathVariable(ID) Long id,
+                              RedirectAttributes redirectAttributes,
+                              Model model, ProductFilter productFilter,
+                              String removeCount, String pagePR) {
+        try {
+            addAttributes(model, Map.of(ERRORS, Error.of(EMPTY_PARAM, EMPTY_PARAM),
+                    PAGE_PR, pagePR));
+            productService.removeCount(id, removeCount);
+        } catch (ValidationException e) {
+            addAttributes(model, Map.of(ERRORS, e.getErrors()));
+        }
+        redirectAttributesProductFilter(redirectAttributes, productFilter);
+        return "redirect:/admin/menu/productsForAdmin";
+    }
+
+    @PostMapping("/menu/products/{id}/delete")
+    public String deleteProduct(@PathVariable(ID) Long id,
+                                ProductFilter productFilter,
+                                RedirectAttributes redirectAttributes) {
+        redirectAttributesProductFilter(redirectAttributes, productFilter);
+        productService.deleteProduct(id);
+        return "redirect:/admin/menu/productsForAdmin";
     }
 }

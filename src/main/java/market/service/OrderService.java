@@ -11,6 +11,7 @@ import market.entity.PromoCodeProduct;
 import market.enums.OrderStatus;
 import market.exception.LackOfMoneyException;
 import market.exception.ValidationException;
+import market.mapper.AddressMapper;
 import market.mapper.OrderDtoWithPageMapper;
 import market.mapper.OrderMapper;
 import market.mapper.UserMapper;
@@ -41,6 +42,8 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 @RequiredArgsConstructor
 public class OrderService {
     private final Integer pageSize = 2;
+    private final AddressRepository addressRepository;
+    private final AddressMapper addressMapper;
     private final ModerateOrderDtoValidator moderateOrderDtoValidator;
     private final OrderMapper orderMapper;
     private final PromoCodeRepository promoCodeRepository;
@@ -211,9 +214,40 @@ public class OrderService {
         var order = orderRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         order.setStatus(moderateOrderDto.getStatus());
+        order.setAddress(addressRepository.findById(moderateOrderDto.getDeliveryAddress())
+                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND)));
         if (order.getStatus().equals(OrderStatus.DELIVER_PROCESSING)) {
             order.setDateOfDelivery(moderateOrderDto.getDateOfDelivery());
         }
+        if (order.getStatus().equals(OrderStatus.CANCEL)) {
+            canceledOrder(order.getId());
+        }
         orderRepository.saveAndFlush(order);
+    }
+
+    protected void canceledOrder(Long orderId) {
+        var order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
+        var user = order.getUser();
+        var userBalance = user.getBalance();
+        user.setBalance(userBalance.add(order.getCost()));
+        var orderProductsFromOrder = order.getProducts();
+        var allOrderProducts = orderProductRepository.findAll();
+        var moderatedProducts = allOrderProducts.stream().map(op -> {
+            var opFromOrder = orderProductsFromOrder.stream()
+                    .filter(o -> o.equals(op)).findFirst();
+            if (opFromOrder.isPresent()) {
+                var storageCount = op.getProduct().getStorageCount();
+                op.getProduct().setStorageCount(storageCount + opFromOrder.get().getUserCount());
+            }
+            return op;
+        }).toList();
+        orderProductRepository.saveAll(moderatedProducts);
+        orderRepository.flush();
+    }
+
+    public Page<OrderDto> getAllOrders(Integer page) {
+        return orderRepository.findAll(PageRequest.of(page, pageSize))
+                .map(orderMapper::orderToOrderDto);
     }
 }

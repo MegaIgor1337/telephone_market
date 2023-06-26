@@ -6,8 +6,9 @@ import org.mapstruct.Mapper;
 
 import static market.util.StringContainer.SPRING;
 
-@Mapper(componentModel = SPRING, uses = UserMapper.class)
+@Mapper(componentModel = SPRING, uses = {UserMapper.class, OrderMapper.class})
 public interface AddressMapper {
-    AddressDto mapFrom(Address address);
+    AddressDto addressToAddressDto(Address address);
+    Address addressDtoToAddress(AddressDto addressDto);
 //model mapper
 }

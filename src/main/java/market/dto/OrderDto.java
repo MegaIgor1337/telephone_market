@@ -24,4 +24,5 @@ public class OrderDto {
     private LocalDateTime date;
     private OrderStatus status;
     private List<OrderProductDto> products;
+    private AddressDto address;
 }

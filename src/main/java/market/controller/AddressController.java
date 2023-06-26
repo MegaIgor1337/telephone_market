@@ -6,7 +6,6 @@ import market.dto.CreateUpdateAddressDto;
 import market.dto.UserDto;
 import market.exception.ValidationException;
 import market.service.AddressService;
-import market.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +14,9 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.Map;
+
+import static market.util.ModelHelper.addAttributes;
 import static market.util.StringContainer.*;
 
 @Controller
@@ -37,7 +39,7 @@ public class AddressController {
             addressService.save(createAddressDto);
             return "redirect:/users/menu";
         } catch (ValidationException e) {
-            model.addAttribute(ERRORS, e.getErrors());
+            addAttributes(model, Map.of(ERRORS, e.getErrors()));
             redirectAtt(redirectAttributes, createAddressDto.getCity(), createAddressDto.getCountry(),
                     createAddressDto.getHouse(), createAddressDto.getStreet(), createAddressDto.getFlat());
             return "redirect:/address/addAddress";
@@ -56,8 +58,8 @@ public class AddressController {
     @GetMapping("/address/changeAddress")
     public String changeAddress(Model model, String addressId,
                                 String pageA) {
-        model.addAttribute(PAGE_A, pageA);
-        model.addAttribute(USER_DTO, addressId);
+        addAttributes(model, Map.of(PAGE_A, pageA,
+                USER_DTO, addressId));
         return "/changeAddress";
     }
 
@@ -72,7 +74,7 @@ public class AddressController {
             addressService.update(createAddressDto);
             return "redirect:/users/menu";
         } catch (ValidationException e) {
-            model.addAttribute(ERRORS, e.getErrors());
+            addAttributes(model, Map.of(ERRORS, e.getErrors()));
             redirectAtt(redirectAttributes, createAddressDto.getCity(), createAddressDto.getCountry(),
                     createAddressDto.getHouse(), createAddressDto.getStreet(), createAddressDto.getFlat());
             return "redirect:/address/changeAddress";
@@ -82,11 +84,9 @@ public class AddressController {
     @PostMapping("/address/deleteAddress")
     public String deleteAddress(String addressId,
                                 Model model, String pageA) {
-        model.addAttribute(PAGE_A, pageA);
+        addAttributes(model, Map.of(PAGE_A, pageA));
         addressService.delete(Long.valueOf(addressId));
         return "redirect:/users/menu";
     }
-
-
 }
 

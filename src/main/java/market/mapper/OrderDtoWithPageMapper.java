@@ -32,6 +32,7 @@ public class OrderDtoWithPageMapper {
                 .dateOfDelivery(orderDto.getDateOfDelivery())
                 .date(orderDto.getDate())
                 .cost(orderDto.getCost())
+                .address(orderDto.getAddress())
                 .build();
     }
 }

@@ -126,4 +126,8 @@ public class StringContainer {
     public static final String STATUSES = "statuses";
     public static final String DATE_OF_DELIVERY = "dateOfDelivery";
     public static final String MESSAGE_DATE_OF_DELIVERY_INVALID = "date of delivery can not be later then now";
+    public static final String DELIVERY_ADDRESSES = "deliveryAddresses";
+    public static final String DELIVERY_ADDRESS = "deliveryAddress";
+    public static final String ORDERS = "orders";
+    public static final String REMOVE_COUNT_INVALID = "Count can not be less than product count. ";
 }
