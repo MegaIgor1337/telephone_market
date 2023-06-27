@@ -29,12 +29,10 @@ public class StringContainer {
     public static final String USER_COMMENTS = "userComments";
     public static final String PRODUCTS_IN_BASKET = "productsInBasket";
     public static final String MESSAGE_IF_SEARCHED_PRODUCTS_EMPTY = "messageIfSearchedProductsEmpty";
-    public static final String MESSAGE_IF_SEARCHED_PRODUCTS_EMPTY_TEXT = "There is no product according to your requests";
     public static final String ADDRESSES = "addresses";
     public static final String ID = "id";
     public static final String PRODUCTS = "products";
     public static final String FAVOURITES = "favourites";
-    public static final String SEARCHED_PRODUCTS = "searchedProducts";
     public static final String CREATE_USER_PRODUCT_DTO = "createUserProductDto";
     public static final String NEW_LOGIN = "newName";
     public static final String NEW_EMAIL = "newEmail";
@@ -101,8 +99,6 @@ public class StringContainer {
     public static final String ORDER = "order";
     public static final String PAGE_OR = "pageOr";
     public static final String LACK_OF_MONEY_INVALID = "Insufficient funds to pay.";
-    public static final String MESSAGE = "message";
-    public static final String AFTER_PAY_MESSAGE = "Your order has been sent for moderating.";
     public static final String PROMO_CODE = "promoCode";
     public static final String INCORRECT_PROMO_CODE = "This promo code does not exist.";
     public static final String DISCOUNTED_ORDER = "discountedOrder";
@@ -114,7 +110,6 @@ public class StringContainer {
     public static final String USER_ORDERS = "userOrders";
     public static final String ORDER_ID = "orderId";
     public static final String USER_ORDER = "userOrder";
-    public static final String PAGE_OH = "pageOH";
     public static final String PAGE_O = "pageO";
     public static final String USERS = "users";
     public static final String PAGE_U = "pageU";
@@ -123,11 +118,16 @@ public class StringContainer {
     public static final String SIZE_MODERATE_ORDERS = "sizeModerateOrders";
     public static final String MODERATE_ORDERS = "moderateOrders";
     public static final String MODERATE_ORDER = "moderateOrder";
-    public static final String STATUSES = "statuses";
+    public static final String ORDER_STATUSES = "orderStatuses";
     public static final String DATE_OF_DELIVERY = "dateOfDelivery";
     public static final String MESSAGE_DATE_OF_DELIVERY_INVALID = "date of delivery can not be later then now";
     public static final String DELIVERY_ADDRESSES = "deliveryAddresses";
     public static final String DELIVERY_ADDRESS = "deliveryAddress";
     public static final String ORDERS = "orders";
     public static final String REMOVE_COUNT_INVALID = "Count can not be less than product count. ";
+    public static final String DISCOUNT = "discount";
+    public static final String PROMO_CODES = "promoCodes";
+    public static final String PROMO_CODE_STATUSES = "promoCodeStatuses";
+    public static final String PAGE_PROMO = "pagePromo";
+    public static final String PRODUCTS_DOR_ADDING_PROMO_CODE = "promoCodeProducts";
 }

@@ -155,4 +155,9 @@ public class ProductService {
         productRepository.delete(productRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)));
     }
+
+    public List<ProductDto> getProductsForAddingPromoCode(Long promoCodeId) {
+        return productRepository.findProductsForAddingPromoCode(promoCodeId)
+                .stream().map(productMapper::productToProductDto).toList();
+    }
 }

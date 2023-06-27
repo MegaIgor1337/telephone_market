@@ -2,6 +2,7 @@ package market.util;
 
 import lombok.experimental.UtilityClass;
 import market.dto.ProductFilter;
+import market.dto.PromoCodeFilter;
 import market.dto.UserFilter;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -61,6 +62,16 @@ public class ModelHelper {
                 createUserProductDto.getBrand());
         if (createUserProductDto.getPriceQuery() != null) redirectAttributes.addFlashAttribute(SELECTED_PRICE_QUERY,
                 createUserProductDto.getPriceQuery());
+    }
+
+    public static void redirectAttributesPromoCodeFilter(RedirectAttributes redirectAttributes,
+                                                         PromoCodeFilter promoCodeFilter) {
+        if (promoCodeFilter.getName() != null)
+            redirectAttributes.addFlashAttribute(promoCodeFilter.getName());
+        if (promoCodeFilter.getDiscount() != null)
+            redirectAttributes.addFlashAttribute(promoCodeFilter.getDiscount());
+        if (promoCodeFilter.getStatus() != null)
+            redirectAttributes.addFlashAttribute(promoCodeFilter.getStatus());
     }
 
     public static void redirectAttributes(RedirectAttributes redirectAttributes,

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Promo Code</title>
+</head>
+<body>
+<form method="get" th:action="@{/admin/menu}">
+  <button type="submit" name="button"> Back to menu </button>
+</form>
+<form method="get" th:action="@{/admin/menu/promoCodesForAdmin}">
+  <label>Name:
+    <input type="text" name="name" th:value="${name}">
+  </label><br/>
+  <label>Discount:
+    <input type="number" step="any" name="discount" th:value="${discount}">
+  </label><br/>Status:<br/>
+    <label th:each="status : ${promoCodeStatuses}">
+        <input type="radio" id="status" name="status" th:value="${status}" th:text="${status}">
+        <br/>
+    </label>
+    <button type="submit" name="submit">Send</button>
+</form>
+<div th:if="${errors != null}" style="color: red">
+    <span th:each="error : ${errors}" th:text="${error.message}"></span>
+    <br/>
+</div>
+<table th:if="${not #lists.isEmpty(promoCodes)}">
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>Name</th>
+        <th>Discount</th>
+        <th>Status</th>
+        <th></th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="promoCode, loop : ${promoCodes}">
+        <td th:text="${loop.index + 1}"></td>
+        <td th:text="${promoCode.name}"></td>
+        <td th:text="${promoCode.discount}"></td>
+        <td th:text="${promoCode.status}"></td>
+        <td>
+            <form method="get" th:action="@{/admin/menu/promoCodes/{promoCodeId}/viewInfo(promoCodeId=${promoCode.id})}">
+                <input type="hidden" name="name" th:value="${name}"/>
+                <input type="hidden" name="discount" th:value="${discount}"/>
+                <input type="hidden" name="status" th:value="${status}"/>
+                <input type="hidden" name="pagePromo" th:value="${promoCodes.number}">
+                <button type="submit" value="submit">View info and change</button>
+            </form>
+        </td>
+        <td>
+            <form method="post" th:action="@{/admin/menu/promoCodes/{promoCodeId}/delete(promoCodeId=${promoCode.id})}">
+                <input type="hidden" name="name" th:value="${name}"/>
+                <input type="hidden" name="discount" th:value="${discount}"/>
+                <input type="hidden" name="status" th:value="${status}"/>
+                <input type="hidden" name="pagePromo" th:value="${promoCodes.number}">
+                <button type="submit" value="submit">Delete</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<div th:if="${not #lists.isEmpty(promoCodes)}">
+    <form th:if="${not #lists.isEmpty(promoCodes)}" method="GET"
+          th:action="@{/admin/menu/promoCodesForAdmin}">
+        <input type="hidden" name="name" th:value="${name}"/>
+        <input type="hidden" name="discount" th:value="${discount}"/>
+        <input type="hidden" name="status" th:value="${status}"/>
+        <button th:if="${promoCodes.hasPrevious}" type="submit" name="page" value="0">First</button>
+        <button th:if="${promoCodes.hasPrevious}" type="submit" name="page" th:value="${promoCodes.number - 1}">Previous
+        </button>
+        <button th:if="${promoCodes.hasNext}" type="submit" name="page" th:value="${promoCodes.number + 1}">Next</button>
+        <button th:if="${promoCodes.hasNext}" type="submit" name="page" th:value="${promoCodes.totalPages - 1}">Last
+        </button>
+    </form>
+
+</div>
+</body>
+</html>

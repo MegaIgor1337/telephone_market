@@ -40,4 +40,7 @@ public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpec
     List<Product> findAlByOrderId(Long orderId);
 
 
+    @Query(value = "SELECT p FROM Product p WHERE NOT EXISTS " +
+                  "(SELECT pp FROM p.promoCodes pp WHERE pp.promoCode.id = :promoCodeId)")
+    List<Product> findProductsForAddingPromoCode(@Param("promoCodeId") Long promoCodeId);
 }

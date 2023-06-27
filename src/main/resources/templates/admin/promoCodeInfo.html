@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Promo code</title>
+</head>
+<body>
+<form method="get" th:action="@{/admin/menu/promoCodes}">
+  <button type="submit" name="button">Back</button>
+</form>
+<table th:if="${not #lists.isEmpty(promoCode.products)}">
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>Brand</th>
+        <th>Model</th>
+        <th>Color</th>
+        <th>Country</th>
+        <th>Price</th>
+        <th>Storage count</th>
+        <th></th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="promoCodeProduct, loop : ${promoCode.products}">
+        <td th:text="${loop.index + 1}"></td>
+        <td th:text="${promoCodeProduct.product.brand.brand}"></td>
+        <td th:text="${promoCodeProduct.product.model.model}"></td>
+        <td th:text="${promoCodeProduct.product.color.color}"></td>
+        <td th:text="${promoCodeProduct.product.country.country}"></td>
+        <td th:text="${promoCodeProduct.product.cost}"></td>
+        <td th:text="${promoCodeProduct.product.storageCount}"></td>
+        <td>
+            <form method="post" th:action="@{/admin/menu/promoCodes/{promoCodeId}/viewInfo/deleteFromProduct(promoCodeId=${promoCode.id})}">
+                <input type="hidden" name="productId" th:value="${promoCodeProduct.product.id}">
+                <button type="submit" name="submit" value="submit">Delete from promo code</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<div th:if="${not #lists.isEmpty(promoCode.products)}">
+    <form th:if="${not #lists.isEmpty(promoCode.products)}" method="GET"
+          th:action="@{/admin/menu/promoCodes/{promoCodeId}/viewInfo(promoCodeId=${promoCode.id})}">
+        <button th:if="${promoCode.products.hasPrevious}" type="submit" name="page" value="0">First</button>
+        <button th:if="${promoCode.products.hasPrevious}" type="submit" name="page" th:value="${promoCode.products.number - 1}">Previous
+        </button>
+        <button th:if="${promoCode.products.hasNext}" type="submit" name="page" th:value="${promoCode.products.number + 1}">Next</button>
+        <button th:if="${promoCode.products.hasNext}" type="submit" name="page" th:value="${promoCode.products.totalPages - 1}">Last
+        </button>
+    </form>
+</div>
+<br/>
+
+<form method="post" th:action="@{/admin/menu/promoCodes/{promoCodeId}/viewInfo/addProduct(promoCodeId=${promoCode.id})}" >
+
+    <label for="product"></label><select name="productId" id="product">
+        <option th:each="product : ${promoCodeProducts}" th:text="${product.brand.brand + ' , ' + product.model.model
+        + ' , ' + product.color.color + ' , ' + product.country.country  + ' , ' + product.cost + ' , ' + product.storageCount}"
+                name="productId" th:value="${product.id}" ></option>
+    </select><br/>
+    <button type="submit" name="submit">Add product to promo code</button>
+</form>
+</body>
+</html>

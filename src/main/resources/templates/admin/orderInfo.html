@@ -55,7 +55,7 @@
         <input type="date" name="dateOfDelivery" id="dateOfDelivery"/>
     </label><br/>
     <label for="status"></label><select name="status" id="status">Status:
-    <option th:each="status : ${statuses}" th:text="${status}" th:value="${order.status}" ></option>
+    <option th:each="status : ${orderStatuses}" th:text="${status}" th:value="${order.status}" ></option>
 </select><br/>
     <label for="deliveryAddress"></label><select name="deliveryAddress" id="deliveryAddress">Status:
     <option th:each="deliveryAddress : ${deliveryAddresses}"

@@ -1,15 +1,15 @@
 package market.controller;
 
 import lombok.RequiredArgsConstructor;
-import market.dto.CommentDto;
-import market.dto.ModerateOrderDto;
-import market.dto.ProductFilter;
-import market.dto.UserFilter;
+import market.dto.*;
+import market.entity.PromoCodeProduct;
 import market.enums.OrderStatus;
+import market.enums.PromoCodeStatus;
 import market.exception.ValidationException;
 import market.service.*;
 import market.util.ModelHelper;
 import market.validator.Error;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -26,10 +26,12 @@ import static market.util.StringContainer.*;
 @RequestMapping("/admin")
 @RequiredArgsConstructor
 @SessionAttributes({SIZE_MODERATE_COMMENTS, ACCESSED_COMMENTS, USER, ERRORS, MODELS,
-        PRODUCTS, COUNTRIES, COLORS, BRANDS, PAGE_PR,
-        PAGE_U, MODERATE_COMMENTS, MODERATE_ORDERS, MODERATE_ORDER, STATUSES})
+        PRODUCTS, COUNTRIES, COLORS, BRANDS, PAGE_PR, PROMO_CODES, ORDER_STATUSES,
+        PRODUCTS_DOR_ADDING_PROMO_CODE,
+        PAGE_U, MODERATE_COMMENTS, MODERATE_ORDERS, MODERATE_ORDER, PROMO_CODE_STATUSES})
 public class AdminController {
     private final CommentService commentService;
+    private final PromoCodeService promoCodeService;
     private final ProductService productService;
     private final ColorService colorService;
     private final CountryService countryService;
@@ -37,9 +39,13 @@ public class AdminController {
     private final BrandService brandService;
     private final UserService userService;
     private final OrderService orderService;
+    private final PromoCodeProductService promoCodeProductService;
     private final AddressService addressService;
-    @ModelAttribute(STATUSES)
-    public List<OrderStatus> getStatuses() {
+
+    @ModelAttribute(PROMO_CODE_STATUSES)
+    public List<PromoCodeStatus> getPromoCodeStatuses() {return Arrays.asList(PromoCodeStatus.values());}
+    @ModelAttribute(ORDER_STATUSES)
+    public List<OrderStatus> getOrderStatuses() {
         return Arrays.asList(OrderStatus.values());
     }
     @GetMapping("/menu")
@@ -205,7 +211,7 @@ public class AdminController {
                                   RedirectAttributes redirectAttributes,
                                   @RequestParam(name = PAGE, defaultValue = ZERO) Integer page) {
         var pageM = ((String) model.getAttribute(PAGE_PR));
-        var pageMain = EMPTY_PARAM.equals(pageM) || pageM == null ? page.toString() : pageM;
+            var pageMain = EMPTY_PARAM.equals(pageM) || pageM == null ? page.toString() : pageM;
         var products = productService.getProductsByPredicates(productFilter,
                 Integer.valueOf(pageMain));
         addAttributes(model, Map.of(MODELS, modelService.getAllModels(),
@@ -264,4 +270,58 @@ public class AdminController {
         productService.deleteProduct(id);
         return "redirect:/admin/menu/productsForAdmin";
     }
+
+    @GetMapping("/menu/promoCodesForAdmin")
+    public String viewPromoCodes(Model model, PromoCodeFilter promoCodeFilter,
+                                 RedirectAttributes redirectAttributes,
+                                 @RequestParam(name = PAGE, defaultValue = ZERO) Integer page) {
+        try {
+            var promoCodes = promoCodeService.getPromoCodes(promoCodeFilter, page);
+            addAttributes(model, Map.of(PROMO_CODES, promoCodes));
+        } catch (ValidationException e) {
+            addAttributes(model, Map.of(ERRORS, e.getErrors()));
+        }
+        redirectAttributesPromoCodeFilter(redirectAttributes, promoCodeFilter);
+        return "redirect:/admin/menu/promoCodes";
+    }
+
+    @GetMapping("/menu/promoCodes")
+    public String promoCodes() {
+        return "/admin/promoCodes";
+    }
+
+    @GetMapping("/menu/promoCodes/{id}/viewInfo")
+    public String promoCodeInfo(@PathVariable(ID) Long id, Model model,
+                                @RequestParam(name = PAGE, defaultValue = ZERO) Integer page,
+                                PromoCodeFilter promoCodeFilter,
+                                RedirectAttributes redirectAttributes) {
+        var promoCode = promoCodeService.getPromoCodeWithPage(id, page);
+        var products = productService.getProductsForAddingPromoCode(id);
+        redirectAttributesPromoCodeFilter(redirectAttributes, promoCodeFilter);
+        addAttributes(model, Map.of(PROMO_CODE, promoCode,
+                PRODUCTS_DOR_ADDING_PROMO_CODE, products));
+        return "/admin/promoCodeInfo";
+    }
+
+    @PostMapping("/menu/promoCodes/{id}/viewInfo/deleteFromProduct")
+    public String deleteProductFromPromoCode(@PathVariable(ID) Long id,
+                                             String productId) {
+        promoCodeService.deleteProductFromPromoCode(productId, id);
+        return "redirect:/admin/menu/promoCodes/{id}/viewInfo";
+    }
+
+    @PostMapping("/menu/promoCodes/{id}/delete")
+    public String deletePromoCode(@PathVariable(ID) Long id) {
+        promoCodeService.deletePromoCode(id);
+        return "redirect:/admin/menu/promoCodesForAdmin";
+    }
+    @PostMapping("/menu/promoCodes/{id}/viewInfo/addProduct")
+    public String addProduct(@PathVariable(ID) Long id,
+                             String productId) {
+        promoCodeProductService.addProductToPromoCode(id, Long.valueOf(productId));
+        return "redirect:/admin/menu/promoCodes/{id}/viewInfo";
+    }
 }
+
+
+
