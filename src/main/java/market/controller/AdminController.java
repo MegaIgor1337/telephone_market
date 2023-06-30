@@ -17,7 +17,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import static market.util.ModelHelper.*;
+import static market.util.ModelHelper.addAttributes;
+import static market.util.ModelHelper.redirectAttributes;
 import static market.util.StringContainer.*;
 
 @Controller
@@ -216,7 +217,7 @@ public class AdminController {
                 PRICE_QUERIES, List.of(CHEAP_FIRST, REACH_FIRST),
                 PAGE_PR, EMPTY_PARAM,
                 PRODUCTS, products));
-        redirectAttributesProductFilter(redirectAttributes, productFilter);
+        redirectAttributes(redirectAttributes, productFilter);
         return "redirect:/admin/menu/products";
     }
 
@@ -237,7 +238,7 @@ public class AdminController {
         } catch (ValidationException e) {
             addAttributes(model, Map.of(ERRORS, e.getErrors()));
         }
-        redirectAttributesProductFilter(redirectAttributes, productFilter);
+        redirectAttributes(redirectAttributes, productFilter);
         return "redirect:/admin/menu/productsForAdmin";
     }
 
@@ -253,7 +254,7 @@ public class AdminController {
         } catch (ValidationException e) {
             addAttributes(model, Map.of(ERRORS, e.getErrors()));
         }
-        redirectAttributesProductFilter(redirectAttributes, productFilter);
+        redirectAttributes(redirectAttributes, productFilter);
         return "redirect:/admin/menu/productsForAdmin";
     }
 
@@ -261,7 +262,7 @@ public class AdminController {
     public String deleteProduct(@PathVariable(ID) Long id,
                                 ProductFilter productFilter,
                                 RedirectAttributes redirectAttributes) {
-        redirectAttributesProductFilter(redirectAttributes, productFilter);
+        redirectAttributes(redirectAttributes, productFilter);
         productService.deleteProduct(id);
         return "redirect:/admin/menu/productsForAdmin";
     }
