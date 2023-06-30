@@ -5,7 +5,7 @@
     <title>Promo code</title>
 </head>
 <body>
-<form method="get" th:action="@{/admin/menu/promoCodes}">
+<form method="get" th:action="@{/admin/menu/promoCodesForAdmin}">
   <button type="submit" name="button">Back</button>
 </form>
 <table th:if="${not #lists.isEmpty(promoCode.products)}">
@@ -52,6 +52,31 @@
         </button>
     </form>
 </div>
+<br/>
+
+<div th:if="${promoCodeChangeErrors != null && promoCodeChangeErrors != ''}" style="color: red">
+    <span th:each="error : ${promoCodeChangeErrors}" th:text="${error.message}"></span>
+    <br/>
+</div>
+
+<form method="post" th:action="@{/admin/menu/promoCodes/{promoCodeId}/viewInfo/changeName(promoCodeId=${promoCode.id})}">
+    <input name="newName" type="text" th:value="${newName}" required>
+    <button type="submit" name="submit">Change name</button>
+</form>
+
+<form method="post" th:action="@{/admin/menu/promoCodes/{promoCodeId}/viewInfo/changeDiscount(promoCodeId=${promoCode.id})}">
+    <input name="newDiscount" type="number" step="any" th:value="${newDiscount}" required>
+    <button type="submit" name="submit">Change discount</button>
+</form>
+
+
+<form method="post" th:action="@{/admin/menu/promoCodes/{promoCodeId}/viewInfo/changeStatus(promoCodeId=${promoCode.id})}">
+    <label th:each="status : ${promoCodeStatuses}">
+        <input type="radio" id="status" name="newStatus" th:value="${status}" th:text="${status}">
+        <br/>
+    </label>
+    <button type="submit" name="submit">Change status</button>
+</form>
 <br/>
 
 <form method="post" th:action="@{/admin/menu/promoCodes/{promoCodeId}/viewInfo/addProduct(promoCodeId=${promoCode.id})}" >

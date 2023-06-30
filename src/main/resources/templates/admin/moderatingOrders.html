@@ -50,22 +50,22 @@
         </button>
     </form>
 </div>
+Deliver address:
+<span th:text="${moderateOrder.address.country + ', ' + moderateOrder.address.city +
+ ', ' + moderateOrder.address.street + ', ' + moderateOrder.address.house + ', ' + moderateOrder.address.flat}" >
+
+</span>
 <form method="post" th:action="@{/admin/menu/moderateOrders/{orderId}/moderate(orderId=${moderateOrder.id})}">
     <label for="dateOfDelivery">Date of delivery:
         <input type="date" name="dateOfDelivery" id="dateOfDelivery"/>
     </label><br/>
     <label for="status"></label><select name="status" id="status">Status:
-        <option th:each="status : ${statuses}" th:text="${status}" th:value="${status}" ></option>
+        <option th:each="status : ${orderStatuses}" th:text="${status}" th:value="${status}" ></option>
     </select><br/>
-    <label for="deliveryAddress"></label><select name="deliveryAddress" id="deliveryAddress">Status:
-    <option th:each="deliveryAddress : ${deliveryAddresses}"
-            th:text="${deliveryAddress.country + ', ' + deliveryAddress.city + ', ' + deliveryAddress.street + ', '
-             + deliveryAddress.house + ', ' + deliveryAddress.flat}"
-            th:value="${deliveryAddress.id}" ></option>
-</select><br/>
+
     <button type="submit" name="send">Send</button>
 </form>
-<div th:if="${errors != null}" style="color: red">
+<div th:if="${errors != null  && errors != ''}" style="color: red">
     <span th:each="error : ${errors}" th:text="${error.message}"></span>
     <br/>
 </div>

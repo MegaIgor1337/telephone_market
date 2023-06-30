@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add promo code</title>
+</head>
+<body>
+<form method="get" th:action="@{/admin/menu}">
+    <button type="submit" name="button"> Back to menu</button>
+</form>
+<div th:if="${errors != null  && errors != ''}" style="color: red">
+    <span th:each="error : ${errors}" th:text="${error.message}"></span>
+    <br/>
+</div>
+<form method="post" th:object="${createPromoCodeDto}" th:action="@{/admin/menu/addPromoCodeInfo}">
+    <label>Name:
+        <input type="text" name="name" th:value="${name}" required/>
+    </label><br/>
+    <label>Discount
+        <input type="number" step="any" name="discount" th:value="${discount}" required>
+    </label><br/>
+    <div th:each="product : ${products}">
+        <label th:for="${product}">
+            <input type="checkbox" th:id="${product}" th:name="productsId" th:value="${product.id}"
+                   th:checked="${products.contains(product)}" />
+            <span th:text="${product.brand.brand + ', ' + product.model.model + ', ' +
+            product.color.color + ', ' + product.country.country + ', cost: ' + product.cost + ', count: '
+             + product.storageCount}"></span>
+        </label>
+    </div>
+    <button type="submit" name="submit">Add</button>
+</form>
+</body>
+</html>

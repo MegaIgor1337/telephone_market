@@ -2,6 +2,7 @@ package market.validator;
 
 import market.entity.Order;
 import market.entity.PromoCode;
+import market.enums.PromoCodeStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -21,7 +22,8 @@ public class PromoCodeValidator implements Validator<String> {
         if (orders.size() > 1 && FIRST_ORDER_PROMO_CODE.equals(object)) {
             validationResult.add(Error.of(Error.getMessage(PROMO_CODE), INCORRECT_FIRST_ORDER));
         }
-        if (!promoCodes.stream().map(PromoCode::getName).toList().contains(object)) {
+        if (!promoCodes.stream().filter(p -> p.getStatus().equals(PromoCodeStatus.ACTIVE))
+                .map(PromoCode::getName).toList().contains(object)) {
             validationResult.add(Error.of(Error.getMessage(PROMO_CODE), INCORRECT_PROMO_CODE));
         }
         return validationResult;

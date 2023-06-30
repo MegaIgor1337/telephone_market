@@ -134,16 +134,19 @@ public class OrderService {
     }
 
     @Transactional
-    public void payOrder(UserDto userDto, OrderDtoWithPage orderDto) {
+    public void payOrder(UserDto userDto, Long addressId, OrderDtoWithPage orderDto) {
         lackOfMoneyValidator.putOrderCost(orderDto.getCost());
         var moneyResult = lackOfMoneyValidator.isValid(userDto);
         if (!moneyResult.isValid()) throw new LackOfMoneyException(moneyResult.getErrors());
+        var address = addressRepository.findById(addressId)
+                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
         var userBalance = userDto.getBalance();
         userDto.setBalance(userBalance.subtract(orderDto.getCost()));
         var order = orderRepository.findAllByUserIdAndStatus(userDto.getId(), OrderStatus.WAITING_PAID);
         order.ifPresent(o -> o.setStatus(OrderStatus.MODERATING));
+        order.ifPresent(o -> o.setAddress(address));
         order.ifPresent(orderRepository::saveAndFlush);
-        userRepository.saveAndFlush(userMapper.userDtotoUser(userDto));
+         userRepository.saveAndFlush(userMapper.userDtotoUser(userDto));
     }
 
     public OrderDto acceptPromoCode(String promoCode, Long userId) {
@@ -214,8 +217,6 @@ public class OrderService {
         var order = orderRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         order.setStatus(moderateOrderDto.getStatus());
-        order.setAddress(addressRepository.findById(moderateOrderDto.getDeliveryAddress())
-                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND)));
         if (order.getStatus().equals(OrderStatus.DELIVER_PROCESSING)) {
             order.setDateOfDelivery(moderateOrderDto.getDateOfDelivery());
         }

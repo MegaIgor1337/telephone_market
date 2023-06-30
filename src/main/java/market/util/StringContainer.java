@@ -130,4 +130,13 @@ public class StringContainer {
     public static final String PROMO_CODE_STATUSES = "promoCodeStatuses";
     public static final String PAGE_PROMO = "pagePromo";
     public static final String PRODUCTS_DOR_ADDING_PROMO_CODE = "promoCodeProducts";
+    public static final String PROMO_CODE_NAME_INVALID = "This promo code already exists";
+    public static final String PROMO_CODE_CHANGE_ERRORS = "promoCodeChangeErrors";
+    public static final String NEW_NAME = "newName";
+    public static final String NEW_DISCOUNT = "newDiscount";
+    public static final String DISCOUNT_LESS_ZERO = "Discount can not be less 0. ";
+    public static final String DISCOUNT_MORE_HUNDRED = "Discount can not be more than 100. ";
+    public static final String PRODUCTS_EMPTY = "Promo must have products. ";
+    public static final String PROMO_CODE_NAME_EMPTY = "Name can not be null. ";
+    public static final String PROMO_CODE_DISCOUNT_EMPTY = "Discount can not be null. ";
 }

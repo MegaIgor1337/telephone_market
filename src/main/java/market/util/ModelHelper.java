@@ -1,6 +1,7 @@
 package market.util;
 
 import lombok.experimental.UtilityClass;
+import market.dto.CreatePromoCodeDto;
 import market.dto.ProductFilter;
 import market.dto.PromoCodeFilter;
 import market.dto.UserFilter;
@@ -22,7 +23,7 @@ public class ModelHelper {
         }
     }
 
-    public static void redirectAttributesUserFilter(RedirectAttributes redirectAttributes, UserFilter filter) {
+    public static void redirectAttributes(RedirectAttributes redirectAttributes, UserFilter filter) {
         if (filter.getName() != null) redirectAttributes.addFlashAttribute(NAME,
                 filter.getName());
         if (filter.getPassword() != null) redirectAttributes.addFlashAttribute(PASSWORD,
@@ -45,7 +46,7 @@ public class ModelHelper {
                 filter.getFlat());
     }
 
-    public static void redirectAttributesProductFilter(RedirectAttributes redirectAttributes, ProductFilter createUserProductDto) {
+    public static void redirectAttributes(RedirectAttributes redirectAttributes, ProductFilter createUserProductDto) {
         if (createUserProductDto.getCountry() != null) redirectAttributes.addFlashAttribute(COUNTRY,
                 createUserProductDto.getCountry());
         if (createUserProductDto.getColor() != null) redirectAttributes.addFlashAttribute(COLOR,
@@ -64,8 +65,8 @@ public class ModelHelper {
                 createUserProductDto.getPriceQuery());
     }
 
-    public static void redirectAttributesPromoCodeFilter(RedirectAttributes redirectAttributes,
-                                                         PromoCodeFilter promoCodeFilter) {
+    public static void redirectAttributes(RedirectAttributes redirectAttributes,
+                                          PromoCodeFilter promoCodeFilter) {
         if (promoCodeFilter.getName() != null)
             redirectAttributes.addFlashAttribute(promoCodeFilter.getName());
         if (promoCodeFilter.getDiscount() != null)
@@ -81,5 +82,15 @@ public class ModelHelper {
             Object value = entry.getValue();
             redirectAttributes.addFlashAttribute(key, value);
         }
+    }
+
+    public static void redirectAttributes(RedirectAttributes redirectAttributes,
+                                          CreatePromoCodeDto createPromoCodeDto) {
+        if (createPromoCodeDto.getName() != null)
+            redirectAttributes.addFlashAttribute(createPromoCodeDto.getName());
+        if (createPromoCodeDto.getDiscount() != null)
+            redirectAttributes.addFlashAttribute(createPromoCodeDto.getDiscount());
+        if (createPromoCodeDto.getProductsId() != null)
+            redirectAttributes.addFlashAttribute(createPromoCodeDto.getProductsId());
     }
 }

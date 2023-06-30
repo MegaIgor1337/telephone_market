@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 import static market.util.ModelHelper.addAttributes;
-import static market.util.ModelHelper.redirectAttributesProductFilter;
+import static market.util.ModelHelper.redirectAttributes;
 import static market.util.StringContainer.*;
 
 @Controller
@@ -212,11 +212,11 @@ public class UserController {
             var products = productService.getProductsByPredicates(filter, Integer.parseInt(pageFB));
             addAttributes(m, Map.of(PRODUCTS, products,
                     PAGE_FB, EMPTY_PARAM));
-            redirectAttributesProductFilter(redirectAttributes, filter);
+            redirectAttributes(redirectAttributes, filter);
             return "redirect:/users/products";
         } catch (ValidationException e) {
             addAttributes(m, Map.of(ERRORS, e.getErrors()));
-            redirectAttributesProductFilter(redirectAttributes, filter);
+            redirectAttributes(redirectAttributes, filter);
             return "redirect:/users/products";
         }
     }
@@ -237,7 +237,7 @@ public class UserController {
                                  RedirectAttributes redirectAttributes) {
         favouriteService.addFavourite(id, Long.valueOf(productId));
         addAttributes(model, Map.of(PAGE_FB, pageFB));
-        redirectAttributesProductFilter(redirectAttributes, productFilter);
+        redirectAttributes(redirectAttributes, productFilter);
         return "redirect:/users/{id}/products";
     }
 
@@ -247,7 +247,7 @@ public class UserController {
                               RedirectAttributes redirectAttributes) {
         orderService.addProductToBasket(id, productId, count);
         addAttributes(model, Map.of(PAGE_FB, pageFB));
-        redirectAttributesProductFilter(redirectAttributes, productFilter);
+        redirectAttributes(redirectAttributes, productFilter);
         return "redirect:/users/{id}/products";
     }
 
@@ -261,7 +261,9 @@ public class UserController {
         var presentOrder = order.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         var modelOrder = discountedOrder == null  ? presentOrder : orderService
                 .getOrderDtoWithPage(discountedOrder, Integer.valueOf(pageFB));
-        addAttributes(model, Map.of(ORDER, modelOrder));
+        var deliveryAddresses = addressService.getAddressesByUserId(id);
+        addAttributes(model, Map.of(ORDER, modelOrder,
+                DELIVERY_ADDRESSES, deliveryAddresses));
         return "user/order";
     }
 
@@ -280,11 +282,12 @@ public class UserController {
 
     @PostMapping("/{id}/order/pay")
     public String payOrder(@PathVariable(ID) Long id, Model model,
+                           Long deliveryAddress,
+                           @ModelAttribute UserDto userDto,
                            @SessionAttribute OrderDtoWithPage order) {
         try {
             discountedOrder = null;
-            var userDto = (UserDto) model.getAttribute(USER_DTO);
-            orderService.payOrder(userDto, order);
+            orderService.payOrder(userDto, deliveryAddress,  order);
             return "redirect:/users/{id}/order/paidOrder";
         } catch (LackOfMoneyException e) {
             addAttributes(model, Map.of(ERRORS, e.getErrors()));

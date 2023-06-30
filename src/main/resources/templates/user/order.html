@@ -30,6 +30,12 @@
     </span>
 <form th:if="${not #lists.isEmpty(order.products.content)}" method="POST"
       th:action="@{/users/{userId}/order/pay(userId=${userDto.id})}">
+    <label for="deliveryAddress"></label><select name="deliveryAddress" id="deliveryAddress">Status:
+    <option th:each="deliveryAddress : ${deliveryAddresses}"
+            th:text="${deliveryAddress.country + ', ' + deliveryAddress.city + ', ' + deliveryAddress.street + ', '
+             + deliveryAddress.house + ', ' + deliveryAddress.flat}"
+            th:value="${deliveryAddress.id}" ></option>
+</select><br/>
     <label for="submit">
         <input type="submit" value="pay" id="submit">
     </label>

@@ -24,6 +24,7 @@ public class Address implements BaseEntity<Long> {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @ToString.Exclude
     @OneToMany(mappedBy = "address", cascade = CascadeType.ALL)
     private List<Order> orders;
 

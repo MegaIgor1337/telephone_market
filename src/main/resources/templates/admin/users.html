@@ -9,7 +9,7 @@
     <button type="submit" value="send">Back to menu</button>
 </form>
 
-<div th:if="${errors != null}" style="color: red">
+<div th:if="${errors != null  && errors != ''}" style="color: red">
     <span th:each="error : ${errors}" th:text="${error.message}"></span>
     <br/>
 </div>

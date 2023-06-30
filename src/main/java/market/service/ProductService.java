@@ -160,4 +160,9 @@ public class ProductService {
         return productRepository.findProductsForAddingPromoCode(promoCodeId)
                 .stream().map(productMapper::productToProductDto).toList();
     }
+
+    public List<ProductDto> getProducts() {
+        return productRepository.findAll().stream()
+                .map(productMapper::productToProductDto).toList();
+    }
 }

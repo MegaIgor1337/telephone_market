@@ -17,5 +17,4 @@ public class ModerateOrderDto {
     @DateTimeFormat(pattern = "dd-MM-yyyy")
     private LocalDate dateOfDelivery;
     private OrderStatus status;
-    private Long deliveryAddress;
 }

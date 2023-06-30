@@ -2,14 +2,12 @@ package market.controller;
 
 import lombok.RequiredArgsConstructor;
 import market.dto.*;
-import market.entity.PromoCodeProduct;
 import market.enums.OrderStatus;
 import market.enums.PromoCodeStatus;
 import market.exception.ValidationException;
 import market.service.*;
 import market.util.ModelHelper;
 import market.validator.Error;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +25,7 @@ import static market.util.StringContainer.*;
 @RequiredArgsConstructor
 @SessionAttributes({SIZE_MODERATE_COMMENTS, ACCESSED_COMMENTS, USER, ERRORS, MODELS,
         PRODUCTS, COUNTRIES, COLORS, BRANDS, PAGE_PR, PROMO_CODES, ORDER_STATUSES,
-        PRODUCTS_DOR_ADDING_PROMO_CODE,
+        PRODUCTS_DOR_ADDING_PROMO_CODE, PROMO_CODE_CHANGE_ERRORS,
         PAGE_U, MODERATE_COMMENTS, MODERATE_ORDERS, MODERATE_ORDER, PROMO_CODE_STATUSES})
 public class AdminController {
     private final CommentService commentService;
@@ -97,7 +95,7 @@ public class AdminController {
         var users = userService.getUsersByPredicates(filter, Integer.valueOf(pageMain));
         addAttributes(model, Map.of(PAGE_U, EMPTY_PARAM,
                 USERS, users));
-        redirectAttributesUserFilter(redirectAttributes, filter);
+        ModelHelper.redirectAttributes(redirectAttributes, filter);
         return "/admin/users";
     }
 
@@ -107,7 +105,7 @@ public class AdminController {
                              RedirectAttributes redirectAttributes) {
         addAttributes(model, Map.of(PAGE_U, pageU));
         userService.deleteUser(id);
-        redirectAttributesUserFilter(redirectAttributes, filter);
+        ModelHelper.redirectAttributes(redirectAttributes, filter);
         return "redirect:/admin/menu/users";
     }
 
@@ -124,7 +122,7 @@ public class AdminController {
                 PAGE_U, pageU,
                 USER, user,
                 ADDRESSES, addresses));
-        redirectAttributesUserFilter(redirectAttributes, filter);
+        ModelHelper.redirectAttributes(redirectAttributes, filter);
         return "/admin/userProfile";
     }
 
@@ -151,10 +149,9 @@ public class AdminController {
     @GetMapping("/menu/moderateOrders/{id}/moderate")
     public String moderate(@PathVariable(ID) Long id, Model model,
                            @RequestParam(name = PAGE_PR, defaultValue = ZERO) Integer pagePr) {
+
         var moderateOrder = orderService.findOrderById(id, pagePr);
-        var addresses = addressService.getAddressesByUserId(moderateOrder.getUser().getId());
-        addAttributes(model, Map.of(MODERATE_ORDER, moderateOrder,
-                DELIVERY_ADDRESSES, addresses));
+        addAttributes(model, Map.of(MODERATE_ORDER, moderateOrder));
         return "/admin/moderatingOrders";
     }
 
@@ -167,8 +164,7 @@ public class AdminController {
         } catch (ValidationException e) {
             addAttributes(model, Map.of(ERRORS, e.getErrors()));
             ModelHelper.redirectAttributes(redirectAttributes,
-                    Map.of(DELIVERY_ADDRESS, moderateOrderDto.getDeliveryAddress(),
-                    DATE_OF_DELIVERY, moderateOrderDto.getDateOfDelivery()));
+                    Map.of(DATE_OF_DELIVERY, moderateOrderDto.getDateOfDelivery()));
         }
         return "redirect:/admin/menu/moderateOrders";
     }
@@ -199,9 +195,8 @@ public class AdminController {
             orderService.moderateOrder(id, moderateOrderDto);
         } catch (ValidationException e) {
             addAttributes(model, Map.of(ERRORS, e.getErrors()));
-            ModelHelper.redirectAttributes(redirectAttributes,
-                    Map.of(DELIVERY_ADDRESS, moderateOrderDto.getDeliveryAddress(),
-                    DATE_OF_DELIVERY, moderateOrderDto.getDateOfDelivery()));
+            redirectAttributes(redirectAttributes,
+                    Map.of(DATE_OF_DELIVERY, moderateOrderDto.getDateOfDelivery()));
         }
         return "redirect:/admin/menu/orders";
     }
@@ -281,7 +276,7 @@ public class AdminController {
         } catch (ValidationException e) {
             addAttributes(model, Map.of(ERRORS, e.getErrors()));
         }
-        redirectAttributesPromoCodeFilter(redirectAttributes, promoCodeFilter);
+        ModelHelper.redirectAttributes(redirectAttributes, promoCodeFilter);
         return "redirect:/admin/menu/promoCodes";
     }
 
@@ -297,7 +292,7 @@ public class AdminController {
                                 RedirectAttributes redirectAttributes) {
         var promoCode = promoCodeService.getPromoCodeWithPage(id, page);
         var products = productService.getProductsForAddingPromoCode(id);
-        redirectAttributesPromoCodeFilter(redirectAttributes, promoCodeFilter);
+        ModelHelper.redirectAttributes(redirectAttributes, promoCodeFilter);
         addAttributes(model, Map.of(PROMO_CODE, promoCode,
                 PRODUCTS_DOR_ADDING_PROMO_CODE, products));
         return "/admin/promoCodeInfo";
@@ -320,6 +315,70 @@ public class AdminController {
                              String productId) {
         promoCodeProductService.addProductToPromoCode(id, Long.valueOf(productId));
         return "redirect:/admin/menu/promoCodes/{id}/viewInfo";
+    }
+
+    @PostMapping("/menu/promoCodes/{id}/viewInfo/changeName")
+    public String changeNamePromoCode(@PathVariable(ID) Long id, Model model,
+                                      String newName, RedirectAttributes redirectAttributes) {
+        try {
+            promoCodeService.changeName(id, newName);
+        } catch (ValidationException  e) {
+            addAttributes(model, Map.of(PROMO_CODE_CHANGE_ERRORS, e.getErrors()));
+            redirectAttributes(redirectAttributes, Map.of(NEW_NAME, newName));
+            return "redirect:/admin/menu/promoCodes/{id}/viewInfo";
+        }
+        addAttributes(model, Map.of(PROMO_CODE_CHANGE_ERRORS, EMPTY_PARAM));
+        return "redirect:/admin/menu/promoCodes/{id}/viewInfo";
+    }
+
+    @PostMapping("/menu/promoCodes/{id}/viewInfo/changeDiscount")
+    public String changeDiscount(@PathVariable(ID) Long id, Model model,
+                                 RedirectAttributes redirectAttributes,
+                                 String newDiscount) {
+        try {
+            promoCodeService.changeDiscount(id, newDiscount);
+        } catch (ValidationException e) {
+            addAttributes(model, Map.of(PROMO_CODE_CHANGE_ERRORS, e.getErrors()));
+            redirectAttributes(redirectAttributes, Map.of(NEW_DISCOUNT, newDiscount));
+            return "redirect:/admin/menu/promoCodes/{id}/viewInfo";
+        }
+        addAttributes(model, Map.of(PROMO_CODE_CHANGE_ERRORS, EMPTY_PARAM));
+        return "redirect:/admin/menu/promoCodes/{id}/viewInfo";
+    }
+
+    @PostMapping("/menu/promoCodes/{id}/viewInfo/changeStatus")
+    public String changeStatus(@PathVariable(ID) Long id,
+                               String newStatus) {
+        promoCodeService.changeStatus(id, newStatus);
+        return "redirect:/admin/menu/promoCodes/{id}/viewInfo";
+    }
+
+    @GetMapping("/menu/addPromoCodeInfo")
+    public String addPromoCode(Model model,
+                               CreatePromoCodeDto createPromoCodeDto,
+                               RedirectAttributes redirectAttributes) {
+        var products = productService.getProducts();
+        addAttributes(model, Map.of(PRODUCTS, products));
+        ModelHelper.redirectAttributes(redirectAttributes, createPromoCodeDto);
+        return "redirect:/admin/menu/addPromoCode";
+    }
+
+    @GetMapping("/menu/addPromoCode")
+    public String addPromoCode() {
+        return "/admin/addPromoCode";
+    }
+
+    @PostMapping("/menu/addPromoCodeInfo")
+    public String addPromoCode(CreatePromoCodeDto createPromoCodeDto,
+                               Model model,
+                               RedirectAttributes redirectAttributes) {
+        try {
+            promoCodeService.addPromoCode(createPromoCodeDto);
+        } catch (ValidationException e) {
+            addAttributes(model, Map.of(ERRORS, e.getErrors()));
+            ModelHelper.redirectAttributes(redirectAttributes, createPromoCodeDto);
+        }
+        return "redirect:/admin/menu";
     }
 }
 

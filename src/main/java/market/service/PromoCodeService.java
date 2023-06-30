@@ -2,19 +2,29 @@ package market.service;
 
 import jakarta.persistence.Table;
 import lombok.RequiredArgsConstructor;
+import market.dto.CreatePromoCodeDto;
 import market.dto.PromoCodeDto;
 import market.dto.PromoCodeDtoWithPage;
 import market.dto.PromoCodeFilter;
 import market.entity.PromoCode;
+import market.enums.PromoCodeStatus;
 import market.exception.ValidationException;
+import market.mapper.CreatePromoCodeMapper;
+import market.mapper.ProductMapper;
 import market.mapper.PromoCodeDtoWithPageMapper;
 import market.mapper.PromoCodeMapper;
+import market.repository.ProductRepository;
 import market.repository.PromoCodeProductRepository;
 import market.repository.PromoCodeRepository;
+import market.validator.AddedPromoCodeValidator;
+import market.validator.ChangeDiscountPromoCodeValidator;
+import market.validator.ChangeNamePromoCodeValidator;
 import market.validator.EnteredPromoCodeValidator;
+import org.apache.el.stream.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
@@ -24,10 +34,17 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class PromoCodeService {
+    private final CreatePromoCodeMapper createPromoCodeMapper;
+    private final AddedPromoCodeValidator addedPromoCodeValidator;
+    private final ChangeNamePromoCodeValidator changeNamePromoCodeValidator;
     private final PromoCodeMapper promoCodeMapper;
+    private final ProductRepository productRepository;
+    private final ChangeDiscountPromoCodeValidator changeDiscountPromoCodeValidator;
     private final Integer pageSize = 2;
     private final PromoCodeRepository promoCodeRepository;
+    private final ProductMapper productMapper;
     private final PromoCodeProductRepository promoCodeProductRepository;
     private final PromoCodeDtoWithPageMapper promoCodeDtoWithPageMapper;
     private final EnteredPromoCodeValidator enteredPromoCodeValidator;
@@ -77,5 +94,55 @@ public class PromoCodeService {
     @Transactional
     public void deletePromoCode(Long id) {
         promoCodeRepository.deleteAllById(id);
+    }
+
+    @Transactional
+    public void changeName(Long id, String newName) {
+        changeNamePromoCodeValidator
+                .putPromoCodeAndPromoCodeId(promoCodeRepository.findAll(), id);
+        var validationResult = changeNamePromoCodeValidator.isValid(newName);
+        if (!validationResult.isValid()) {
+            throw new ValidationException(validationResult.getErrors());
+        }
+        var promoCode = promoCodeRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
+        promoCode.setName(newName);
+        promoCodeRepository.saveAndFlush(promoCode);
+    }
+
+    @Transactional
+    public void changeDiscount(Long id, String newDiscount) {
+        var validationResult = changeDiscountPromoCodeValidator
+                .isValid(Double.valueOf(newDiscount));
+        if (!validationResult.isValid()) {
+            throw new ValidationException(validationResult.getErrors());
+        }
+        var promoCode = promoCodeRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
+        promoCode.setDiscount(Double.valueOf(newDiscount));
+        promoCodeRepository.saveAndFlush(promoCode);
+    }
+
+    @Transactional
+    public void changeStatus(Long id, String newStatus) {
+        var promoCode = promoCodeRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
+        promoCode.setStatus(PromoCodeStatus.valueOf(newStatus));
+    }
+
+    @Transactional
+    public void addPromoCode(CreatePromoCodeDto createPromoCodeDto) {
+        addedPromoCodeValidator.putPromoCodes(promoCodeRepository.findAll());
+        var validationResult = addedPromoCodeValidator.isValid(createPromoCodeDto);
+        if (!validationResult.isValid()) {
+            throw new ValidationException(validationResult.getErrors());
+        }
+        var promoCode = createPromoCodeMapper.createPromoCodeDtoToPromoCode(createPromoCodeDto);
+        promoCode = promoCodeRepository.saveAndFlush(promoCode);
+        var promoCodeProducts = createPromoCodeMapper
+                .createPromoCodeProduct(promoCode, createPromoCodeDto.getProductsId()
+                        .stream().map(productRepository::findById)
+                        .map(p -> p.orElseThrow(() -> new ResponseStatusException(NOT_FOUND))).toList());
+        promoCodeProducts.stream().forEach(promoCodeProductRepository::saveAndFlush);
     }
 }
