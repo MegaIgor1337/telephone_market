@@ -1,10 +1,7 @@
 package market.util;
 
 import lombok.experimental.UtilityClass;
-import market.dto.CreatePromoCodeDto;
-import market.dto.ProductFilter;
-import market.dto.PromoCodeFilter;
-import market.dto.UserFilter;
+import market.dto.*;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -68,11 +65,11 @@ public class ModelHelper {
     public static void redirectAttributes(RedirectAttributes redirectAttributes,
                                           PromoCodeFilter promoCodeFilter) {
         if (promoCodeFilter.getName() != null)
-            redirectAttributes.addFlashAttribute(promoCodeFilter.getName());
+            redirectAttributes.addFlashAttribute(NAME, promoCodeFilter.getName());
         if (promoCodeFilter.getDiscount() != null)
-            redirectAttributes.addFlashAttribute(promoCodeFilter.getDiscount());
+            redirectAttributes.addFlashAttribute(DISCOUNT, promoCodeFilter.getDiscount());
         if (promoCodeFilter.getStatus() != null)
-            redirectAttributes.addFlashAttribute(promoCodeFilter.getStatus());
+            redirectAttributes.addFlashAttribute(STATUS, promoCodeFilter.getStatus());
     }
 
     public static void redirectAttributes(RedirectAttributes redirectAttributes,
@@ -87,10 +84,26 @@ public class ModelHelper {
     public static void redirectAttributes(RedirectAttributes redirectAttributes,
                                           CreatePromoCodeDto createPromoCodeDto) {
         if (createPromoCodeDto.getName() != null)
-            redirectAttributes.addFlashAttribute(createPromoCodeDto.getName());
+            redirectAttributes.addFlashAttribute(NAME, createPromoCodeDto.getName());
         if (createPromoCodeDto.getDiscount() != null)
-            redirectAttributes.addFlashAttribute(createPromoCodeDto.getDiscount());
+            redirectAttributes.addFlashAttribute(DISCOUNT, createPromoCodeDto.getDiscount());
         if (createPromoCodeDto.getProductsId() != null)
-            redirectAttributes.addFlashAttribute(createPromoCodeDto.getProductsId());
+            redirectAttributes.addFlashAttribute(PRODUCT_ID, createPromoCodeDto.getProductsId());
+    }
+
+    public static void redirectAttributes(RedirectAttributes redirectAttributes,
+                                          CreateProductDto createProductDto) {
+        if (createProductDto.getColor() != null)
+            redirectAttributes.addFlashAttribute(COLOR, createProductDto.getColor());
+        if (createProductDto.getBrand() != null)
+            redirectAttributes.addFlashAttribute(BRAND, createProductDto.getBrand());
+        if (createProductDto.getModel() != null)
+            redirectAttributes.addFlashAttribute(MODEL, createProductDto.getModel());
+        if (createProductDto.getCountry() != null)
+            redirectAttributes.addFlashAttribute(COUNTRY, createProductDto.getCountry());
+        if (createProductDto.getCost() != null)
+            redirectAttributes.addFlashAttribute(COST, createProductDto.getCost());
+        if (createProductDto.getCountry() != null)
+            redirectAttributes.addFlashAttribute(COUNT, createProductDto.getCount());
     }
 }

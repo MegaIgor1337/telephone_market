@@ -1,13 +1,15 @@
 package market.service;
 
 import lombok.RequiredArgsConstructor;
+import market.dto.CreateProductDto;
 import market.dto.ProductFilter;
 import market.dto.ProductDto;
-import market.entity.Product;
+import market.entity.*;
 import market.enums.OrderStatus;
 import market.exception.ValidationException;
 import market.mapper.ProductMapper;
-import market.repository.ProductRepository;
+import market.repository.*;
+import market.validator.CreateProductValidator;
 import market.validator.EnteredAddCountValidator;
 import market.validator.EnteredProductInfoValidator;
 import market.validator.EnteredRemoveCountValidator;
@@ -21,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import static market.util.StringContainer.*;
@@ -33,8 +36,13 @@ import static market.util.StringContainer.*;
 public class ProductService {
     private final Integer pageSize = 2;
     private final ProductRepository productRepository;
+    private final CreateProductValidator createProductValidator;
     private final EnteredRemoveCountValidator enteredRemoveCountValidator;
     private final EnteredAddCountValidator enteredAddCountValidator;
+    private final ColorRepository colorRepository;
+    private final BrandRepository brandRepository;
+    private final CountryRepository countryRepository;
+    private final ModelRepository modelRepository;
     private final ProductMapper productMapper;
     private final BrandService brandService;
     private final ModelService modelService;
@@ -164,5 +172,42 @@ public class ProductService {
     public List<ProductDto> getProducts() {
         return productRepository.findAll().stream()
                 .map(productMapper::productToProductDto).toList();
+    }
+
+    @Transactional
+    public void addNewProduct(CreateProductDto createProductDto) {
+        createProductValidator.putColors(colorRepository.findAll());
+        createProductValidator.putModels(modelRepository.findAll());
+        createProductValidator.putCountries(countryRepository.findAll());
+        createProductValidator.putBrands(brandRepository.findAll());
+        var validationResult = createProductValidator.isValid(createProductDto);
+        if (!validationResult.isValid()) {
+            throw new ValidationException(validationResult.getErrors());
+        }
+        var product = createProduct(createProductDto);
+        productRepository.saveAndFlush(product);
+    }
+
+    private Product createProduct(CreateProductDto createProductDto){
+        var colorOptional = colorRepository.findByColorIgnoreCase(createProductDto.getColor());
+        var color = colorOptional.orElseGet(() -> colorRepository.saveAndFlush(Color.builder()
+                .color(createProductDto.getColor()).build()));
+        var countryOptional = countryRepository.findByCountryIgnoreCase(createProductDto.getCountry());
+        var country = countryOptional.orElseGet(() -> countryRepository.saveAndFlush(Country.builder()
+                .country(createProductDto.getCountry()).build()));
+        var brandOptional = brandRepository.findByBrandIgnoreCase(createProductDto.getBrand());
+        var brand = brandOptional.orElseGet(() -> brandRepository.saveAndFlush(Brand.builder()
+                .brand(createProductDto.getBrand()).build()));
+        var modelOptional = modelRepository.findByModelIgnoreCase(createProductDto.getModel());
+        var model = modelOptional.orElseGet(() -> modelRepository.saveAndFlush(Model.builder()
+                .model(createProductDto.getModel()).build()));
+        return Product.builder()
+                .country(country)
+                .brand(brand)
+                .model(model)
+                .color(color)
+                .storageCount(createProductDto.getCount())
+                .cost(BigDecimal.valueOf(createProductDto.getCost()))
+                .build();
     }
 }

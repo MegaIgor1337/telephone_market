@@ -122,13 +122,11 @@ public class StringContainer {
     public static final String DATE_OF_DELIVERY = "dateOfDelivery";
     public static final String MESSAGE_DATE_OF_DELIVERY_INVALID = "date of delivery can not be later then now";
     public static final String DELIVERY_ADDRESSES = "deliveryAddresses";
-    public static final String DELIVERY_ADDRESS = "deliveryAddress";
     public static final String ORDERS = "orders";
     public static final String REMOVE_COUNT_INVALID = "Count can not be less than product count. ";
     public static final String DISCOUNT = "discount";
     public static final String PROMO_CODES = "promoCodes";
     public static final String PROMO_CODE_STATUSES = "promoCodeStatuses";
-    public static final String PAGE_PROMO = "pagePromo";
     public static final String PRODUCTS_DOR_ADDING_PROMO_CODE = "promoCodeProducts";
     public static final String PROMO_CODE_NAME_INVALID = "This promo code already exists";
     public static final String PROMO_CODE_CHANGE_ERRORS = "promoCodeChangeErrors";
@@ -139,4 +137,8 @@ public class StringContainer {
     public static final String PRODUCTS_EMPTY = "Promo must have products. ";
     public static final String PROMO_CODE_NAME_EMPTY = "Name can not be null. ";
     public static final String PROMO_CODE_DISCOUNT_EMPTY = "Discount can not be null. ";
+    public static final String PRODUCT_ID = "productId";
+    public static final String PRODUCT_ALREADY_EXISTS = "This product already exists. ";
+    public static final String COST_INVALID = "Cost can not be less 0. ";
+    public static final String PRODUCT = "product";
 }

@@ -381,6 +381,30 @@ public class AdminController {
         }
         return "redirect:/admin/menu";
     }
+
+    @GetMapping("/menu/addNewProduct")
+    public String addNewProduct(Model model) {
+        addAttributes(model, Map.of(MODELS, modelService.getAllModels(),
+                COUNTRIES, countryService.getAllCountries(),
+                BRANDS, brandService.getAllBrands(),
+                COLORS, colorService.getAllColors()));
+        return "/admin/addNewProduct";
+    }
+
+    @PostMapping("/menu/addNewProduct")
+    public String addNewProduct(CreateProductDto createProductDto,
+                                Model model,
+                                RedirectAttributes redirectAttributes) {
+        try {
+            productService.addNewProduct(createProductDto);
+        } catch (ValidationException e) {
+            addAttributes(model, Map.of(ERRORS, e.getErrors()));
+            redirectAttributes(redirectAttributes, createProductDto);
+            return "redirect:/admin/menu/addNewProduct";
+        }
+        return "redirect:/admin/menu";
+    }
+
 }
 
 

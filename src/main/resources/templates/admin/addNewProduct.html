@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add product</title>
+</head>
+<body>
+<a th:href="@{/admin/menu}">
+    <button type="button">Back to menu</button>
+</a><br/>
+<form th:action="@{/admin/menu/addNewProduct}" method="post">
+    <label for="brand">Brand:</label>
+    <input type="text" id="brand" name="brand" th:value="${brand}" list="brandDataList">
+    <datalist id="brandDataList">
+        <option th:each="brand : ${brands}" th:value="${brand.brand}"></option>
+    </datalist>
+    <br>
+    <label for="model">Model:</label>
+    <input type="text" id="model" name="model" th:value="${model}" list="modelDataList">
+    <datalist id="modelDataList">
+        <option th:each="model : ${models}" th:value="${model.model}"></option>
+    </datalist>
+    <br>
+    <label for="color">Color:</label>
+    <input type="text" id="color" name="color" th:value="${color}" list="colorDataList">
+    <datalist id="colorDataList">
+        <option th:each="color : ${colors}" th:value="${color.color}"></option>
+    </datalist>
+    <br>
+    <label for="country">Country:</label>
+    <input type="text" id="country" name="country" th:value="${country}" list="countryDataList">
+    <datalist id="countryDataList">
+        <option th:each="country : ${countries}" th:value="${country.country}"></option>
+    </datalist><br/>
+    <label for="cost">Cost:
+        <input type="number" name="cost" id="cost" step="any" th:value="${cost}" required>
+    </label><br/>
+    <label for="count">Count:
+        <input type="number" name="count" id="count" th:value="${count}" required>
+    </label><br/>
+    <button type="submit" name="add">Add</button>
+</form>
+<div th:if="${errors != null  && errors != ''}" style="color: red">
+    <span th:each="error : ${errors}" th:text="${error.message}"></span>
+    <br/>
+</div>
+</body>
+</html>
