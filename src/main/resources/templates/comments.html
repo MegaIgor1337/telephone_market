@@ -7,7 +7,7 @@
 <a th:href="@{/users/{userId}/personalComments(userId=${userDto.id})}">
     <button type="button"> View your comments </button>
 </a>
-<a th:href="@{/users/menu}">
+<a th:href="@{/users}">
     <button type="button">Back to menu</button>
 </a>
 <a th:href="@{/users/{userId}/addComment(userId=${userDto.id})}">
@@ -18,7 +18,7 @@
     <th:block th:if="${not #lists.isEmpty(comments)}">
         <th:block th:each="comment, counter : ${comments}">
             <li>
-                <b th:text="${counter.count + ': ' + comment.user.name + ' -'}"></b>
+                <b th:text="${counter.count + ': ' + comment.user.username + ' -'}"></b>
                 <span style="color: gray" th:text="${#strings.toLowerCase(comment.comment)}"></span>
             </li>
         </th:block>

@@ -16,6 +16,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -23,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,9 +37,8 @@ import static market.util.StringContainer.*;
 @RequiredArgsConstructor
 @Service
 @Transactional(readOnly = true)
-public class UserService {
+public class UserService implements UserDetailsService {
     private final Integer pageSize = 2;
-    private final UserPasswordValidator userPasswordValidator;
     private final ImageService imageService;
     private final CreateUserValidator createUserValidator;
     private final CreateUserMapper createUserMapper;
@@ -48,7 +52,7 @@ public class UserService {
     public Optional<UserDto> login(String login, String password) {
         Optional<UserDto> userDto = userRepository.findAll()
                 .stream()
-                .filter(it -> it.getName()
+                .filter(it -> it.getUsername()
                                       .equals(login)
                                                    && it.getPassword().equals(password))
                 .map(userMapper::userToUserDto).findFirst();
@@ -65,7 +69,7 @@ public class UserService {
     }
 
     private List<IValidateUserInfoDto> getValidateInfo() {
-        return userRepository.findAllByNameNotNullAndEmailNotNull();
+        return userRepository.findAllByUsernameNotNullAndEmailNotNull();
     }
 
     @Transactional
@@ -101,7 +105,7 @@ public class UserService {
     }
 
     private List<INameUserDto> getAllNames() {
-        return userRepository.findAllByNameNotNull();
+        return userRepository.findAllByUsernameNotNull();
     }
 
     private List<IEmailUserDto> getAllEmails() {
@@ -109,38 +113,20 @@ public class UserService {
     }
 
     @Transactional
-    public void setNewLogin(UserDto userDto, String newLogin, String password) {
-        validateOldPassword(userDto, password);
+    public void setNewLogin(UserDto userDto, String newLogin) {
         usernameValidator.putUsersNames(getAllNames());
         var validationResultName = usernameValidator.isValid(newLogin);
         if (!validationResultName.isValid()) {
             throw new ValidationException(validationResultName.getErrors());
         }
-        userDto.setName(newLogin);
+        userDto.setUsername(newLogin);
         userRepository.saveAndFlush(userMapper.userDtotoUser(userDto));
     }
 
-    @Transactional
-    public void setNewPassword(UserDto userDto, String oldPassword, String newPassword) {
-        validateOldPassword(userDto, oldPassword);
-        var validationResultNewPassword = userPasswordValidator.isValid(newPassword);
-        if (!validationResultNewPassword.isValid()) {
-            throw new ValidationException(validationResultNewPassword.getErrors());
-        }
-        userDto.setPassword(newPassword);
-        userRepository.save(userMapper.userDtotoUser(userDto));
-    }
 
-    private void validateOldPassword(UserDto userDto, String password) {
-        var validationResultPassword = userPasswordValidator.isValid(userDto, password);
-        if (!validationResultPassword.isValid()) {
-            throw new ValidationException(validationResultPassword.getErrors());
-        }
-    }
 
     @Transactional
-    public void setNewPassportNo(UserDto userDto, String newPassportNo, String password) {
-        validateOldPassword(userDto, password);
+    public void setNewPassportNo(UserDto userDto, String newPassportNo) {
         var validationResultPassportNo = userPassportNoValidator.isValid(newPassportNo);
         if (!validationResultPassportNo.isValid()) {
             throw new ValidationException(validationResultPassportNo.getErrors());
@@ -150,8 +136,7 @@ public class UserService {
     }
 
     @Transactional
-    public void setNewEmail(UserDto userDto, String newEmail, String password) {
-        validateOldPassword(userDto, password);
+    public void setNewEmail(UserDto userDto, String newEmail) {
         userEmailValidator.putEmails(getAllEmails());
         var validationResultEmail = userEmailValidator.isValid(newEmail);
         if (!validationResultEmail.isValid()) {
@@ -202,9 +187,9 @@ public class UserService {
         Specification<User> specification = Specification.where(null);
         specification = specification
                 .and((root, query, cb) -> cb.equal(root.get(ROLE), Role.USER));
-        if (filter.getName() != null && !filter.getName().isBlank()) {
+        if (filter.getUsername() != null && !filter.getUsername().isBlank()) {
             specification = specification
-                    .and((root, query, cb) -> cb.like(root.get(NAME), filter.getName()));
+                    .and((root, query, cb) -> cb.like(root.get(USER_NAME), filter.getUsername()));
         }
         if (filter.getEmail() != null && !filter.getEmail().isBlank()) {
             specification = specification
@@ -263,5 +248,21 @@ public class UserService {
     @Transactional
     public void deleteUser(Long id) {
         userRepository.deleteAllById(id);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userRepository.findByUsername(username)
+                .map(user -> new org.springframework.security.core.userdetails.User(
+                        user.getUsername(),
+                        user.getPassword(),
+                        Collections.singleton(user.getRole())
+                ))
+                .orElseThrow(() -> new UsernameNotFoundException(USER_NOT_FOUND + username));
+    }
+
+    public UserDto getUserByName(String username) {
+        return userRepository.findByUsername(username).map(userMapper::userToUserDto)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 }

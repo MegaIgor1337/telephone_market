@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import market.dto.CreateUserDto;
 import market.dto.IValidateUserInfoDto;
 import market.enums.Gender;
-import market.enums.Role;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -21,12 +20,12 @@ public class CreateUserValidator implements Validator<CreateUserDto> {
     public ValidationResult isValid(CreateUserDto object) {
         var validationResult = new ValidationResult();
         Pattern patternForPassword = Pattern.compile(REGEX_FOR_PASSWORD);
-        Matcher matcherForPassword = patternForPassword.matcher(object.getPassword());
+        Matcher matcherForPassword = patternForPassword.matcher(object.getRawPassword());
         Pattern patternForPassportNo = Pattern.compile(REGEX_FOR_PASSPORT);
         Matcher matcherForPassportNo = patternForPassportNo.matcher(object.getPassportNo());
         Pattern patternForEmail = Pattern.compile(REGEX_FOR_EMAIL);
         Matcher matcherForEmail = patternForEmail.matcher(object.getEmail());
-        if (validateUserInfoList.stream().map(IValidateUserInfoDto::getName).toList().contains(object.getName())) {
+        if (validateUserInfoList.stream().map(IValidateUserInfoDto::getUsername).toList().contains(object.getUsername())) {
             validationResult.add(Error.of(Error.getMessage(NAME), LOGIN_IS_USED));
         }
         if (validateUserInfoList.stream().map(IValidateUserInfoDto::getEmail).toList().contains(object.getEmail())) {
@@ -43,10 +42,6 @@ public class CreateUserValidator implements Validator<CreateUserDto> {
         }
         if (!matcherForEmail.find()) {
             validationResult.add(Error.of(Error.getMessage(EMAIL), EMAIL_IS_WRONG));
-        }
-
-        if (Role.find(object.getRole()).isEmpty()) {
-            validationResult.add(Error.of(Error.getMessage(ROLE), ROLE_IS_INVALID));
         }
         return validationResult;
     }

@@ -12,7 +12,7 @@
     <th:block th:if="${not #lists.isEmpty(moderateComments)}">
         <th:block th:each="comment, counter : ${moderateComments}">
             <li>
-                <b th:text="${counter.count + ': ' + comment.user.name + ' -'}"></b>
+                <b th:text="${counter.count + ': ' + comment.user.username + ' -'}"></b>
                 <span style="color: gray" th:text="${#strings.toLowerCase(comment.comment)}"></span>
             </li>
             <form method="post" th:action="@{/admin/menu/moderateComments}">

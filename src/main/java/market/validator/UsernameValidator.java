@@ -14,7 +14,7 @@ public class UsernameValidator implements Validator<String> {
     @Override
     public ValidationResult isValid(String object) {
         var validationResult = new ValidationResult();
-        if (usersNames.stream().map(INameUserDto::getName).toList().contains(object)) {
+        if (usersNames.stream().map(INameUserDto::getUsername).toList().contains(object)) {
             validationResult.add(Error.of(Error.getMessage(NAME), LOGIN_IS_USED));
         }
         if (object == null) {

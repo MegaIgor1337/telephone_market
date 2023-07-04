@@ -21,8 +21,8 @@ public class ModelHelper {
     }
 
     public static void redirectAttributes(RedirectAttributes redirectAttributes, UserFilter filter) {
-        if (filter.getName() != null) redirectAttributes.addFlashAttribute(NAME,
-                filter.getName());
+        if (filter.getUsername() != null) redirectAttributes.addFlashAttribute(NAME,
+                filter.getUsername());
         if (filter.getPassword() != null) redirectAttributes.addFlashAttribute(PASSWORD,
                 filter.getPassword());
         if (filter.getPassportNo() != null) redirectAttributes.addFlashAttribute(PASSPORT_NO,
@@ -105,5 +105,14 @@ public class ModelHelper {
             redirectAttributes.addFlashAttribute(COST, createProductDto.getCost());
         if (createProductDto.getCountry() != null)
             redirectAttributes.addFlashAttribute(COUNT, createProductDto.getCount());
+    }
+
+    public static void redirectAttributes( RedirectAttributes redirectAttributes,
+                                           CreateUserDto createUserDto) {
+        redirectAttributes.addFlashAttribute(USER_NAME, createUserDto.getUsername());
+        redirectAttributes.addFlashAttribute(PASSWORD, createUserDto.getRawPassword());
+        redirectAttributes.addFlashAttribute(PASSPORT_NO, createUserDto.getPassportNo());
+        redirectAttributes.addFlashAttribute(EMAIL, createUserDto.getEmail());
+        redirectAttributes.addFlashAttribute(GENDER, createUserDto.getGender());
     }
 }

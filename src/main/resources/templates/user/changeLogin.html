@@ -9,11 +9,8 @@
     <button type="button">Back to menu</button>
 </a>
 <form th:action="@{/users/{userId}/profileMenu/changeLogin(userId=${userDto.id})}" method="post">
-    <label for="password">Password:
-        <input type="password" name="password" id="password" th:value="${password}" required>
-    </label><br>
     <label>New Login:
-        <input type="text" name="newLogin" id="newLogin" th:value="${newLogin}" required>
+        <input type="text" name="newLogin" id="newLogin" th:value="${newName}" required>
     </label>
     <label for="submit">
         <input type="submit" value="send" id="submit">

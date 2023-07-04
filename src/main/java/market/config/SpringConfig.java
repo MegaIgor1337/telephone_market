@@ -34,13 +34,13 @@ public class SpringConfig {
             @Autowired PromoCodeRepository promoCodeRepository,
             @Autowired PromoCodeProductRepository promoCodeProductRepository) {
         return args -> {
-            User user1 = saveUser(userRepository, "Igor", "FjfjfsjdlJJJJ32",
+            User user1 = saveUser(userRepository, "Igor", "{noop}FjfjfsjdlJJJJ32",
                     "JJ321444", "tasfs@mail.ru", Role.USER, Gender.MALE, BigDecimal.valueOf(0));
-            User user2 = saveUser(userRepository, "Maksim321", "1234567", "FF432444",
+            User user2 = saveUser(userRepository, "Maksim321", "{noop}1234567", "FF432444",
                     "Jksjds@mail.ru", Role.USER, Gender.MALE, BigDecimal.valueOf(0));
-            User user3 = saveUser(userRepository, "Gennadiy22", "boring", "LL324455",
+            User user3 = saveUser(userRepository, "Gennadiy22", "{noop}boring", "LL324455",
                     "fkdkf@mail.ru", Role.ADMIN, Gender.MALE, BigDecimal.valueOf(0));
-            User user4 = saveUser(userRepository, "Georgiy", "borirstweng", "LL324355",
+            User user4 = saveUser(userRepository, "Georgiy", "{noop}borirstweng", "LL324355",
                     "fkddfgfdh@mail.ru", Role.ADMIN, Gender.MALE, BigDecimal.valueOf(0));
 
 
@@ -118,7 +118,7 @@ public class SpringConfig {
     private User saveUser(UserRepository userRepository, String name, String password, String passportNo,
                           String email, Role role, Gender gender, BigDecimal balance) {
         User user = User.builder()
-                .name(name)
+                .username(name)
                 .password(password)
                 .passportNo(passportNo)
                 .email(email)

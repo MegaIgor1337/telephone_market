@@ -9,8 +9,7 @@ import static market.util.StringContainer.USER_DTO;
 @Controller
 public class LogoutController {
     @GetMapping("/logout")
-    public String logout(Model model) {
-        model.addAttribute(USER_DTO, null);
+    public String logout() {
         return "redirect:/login";
     }
 }

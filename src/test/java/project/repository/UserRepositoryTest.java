@@ -33,7 +33,7 @@ public class UserRepositoryTest {
     @Test
     public void testSave() {
         User user = User.builder()
-                .name("Inna")
+                .username("Inna")
                 .password("Fjllwe2")
                 .email("jgdkjgd@mail.ru")
                 .role(Role.USER)
@@ -49,7 +49,7 @@ public class UserRepositoryTest {
     @Test
     public void testFindAll() {
         List<User> results = userRepository.findAll();
-        List<String> fullNames = results.stream().map(User::getName).collect(toList());
+        List<String> fullNames = results.stream().map(User::getUsername).collect(toList());
         assertThat(fullNames).containsExactlyInAnyOrder("Igor",
                 "Maksim321",
                 "Gennadiy22",
@@ -81,7 +81,7 @@ public class UserRepositoryTest {
         User user = userRepository.findById(1L).isPresent()
                 ? userRepository.findById(1L).get() : null;
         assert user != null;
-        assertThat(user.getName()).isEqualTo("Igor");
+        assertThat(user.getUsername()).isEqualTo("Igor");
     }
 
     @Test

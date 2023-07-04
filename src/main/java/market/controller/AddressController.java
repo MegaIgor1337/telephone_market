@@ -37,7 +37,7 @@ public class AddressController {
         createAddressDto.setUserId(String.valueOf(userDto.getId()));
         try {
             addressService.save(createAddressDto);
-            return "redirect:/users/menu";
+            return "redirect:/users";
         } catch (ValidationException e) {
             addAttributes(model, Map.of(ERRORS, e.getErrors()));
             redirectAtt(redirectAttributes, createAddressDto.getCity(), createAddressDto.getCountry(),
@@ -72,7 +72,7 @@ public class AddressController {
         createAddressDto.setUserId(String.valueOf(userDto.getId()));
         try {
             addressService.update(createAddressDto);
-            return "redirect:/users/menu";
+            return "redirect:/users";
         } catch (ValidationException e) {
             addAttributes(model, Map.of(ERRORS, e.getErrors()));
             redirectAtt(redirectAttributes, createAddressDto.getCity(), createAddressDto.getCountry(),
@@ -86,7 +86,7 @@ public class AddressController {
                                 Model model, String pageA) {
         addAttributes(model, Map.of(PAGE_A, pageA));
         addressService.delete(Long.valueOf(addressId));
-        return "redirect:/users/menu";
+        return "redirect:/users";
     }
 }
 

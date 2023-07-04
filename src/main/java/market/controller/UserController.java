@@ -3,12 +3,15 @@ package market.controller;
 import lombok.RequiredArgsConstructor;
 import market.dto.*;
 import market.enums.OrderStatus;
+import market.enums.Role;
 import market.exception.LackOfMoneyException;
 import market.exception.ValidationException;
 import market.service.*;
 import market.util.ModelHelper;
 import market.validator.Error;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -42,9 +45,12 @@ public class UserController {
     private final BrandService brandService;
     private OrderDto discountedOrder;
 
-    @GetMapping("/menu")
-    public String userMenu(Model model) {
-        addAttributes(model, Map.of(ERRORS, Error.of(EMPTY_PARAM, EMPTY_PARAM)));
+    @GetMapping
+    public String userMenu(Model model,
+                           @AuthenticationPrincipal UserDetails userDetails) {    //получить инфу о юзере который работает
+        var user = userService.getUserByName(userDetails.getUsername());
+        addAttributes(model, Map.of(USER_DTO, user,
+                ERRORS, Error.of(EMPTY_PARAM, EMPTY_PARAM)));
         return "/user/menu";
     }
 
@@ -57,7 +63,7 @@ public class UserController {
     public String addComment(@PathVariable(ID) Long id,
                              String comment) {
         commentService.save(comment, id);
-        return "redirect:/users/menu";
+        return "redirect:/users";
     }
 
     @GetMapping("/{id}/personalComments")
@@ -93,15 +99,14 @@ public class UserController {
 
     @PostMapping("/{id}/profileMenu/changeLogin")
     public String changeLogin(@PathVariable(ID) Long id, Model model,
-                              String password, String newLogin, @SessionAttribute UserDto userDto,
+                              String newLogin, @SessionAttribute UserDto userDto,
                               RedirectAttributes redirectAttributes) {
         try {
-            userService.setNewLogin(userDto, newLogin, password);
+            userService.setNewLogin(userDto, newLogin);
             addAttributes(model, Map.of(USER_DTO, userDto));
             return "redirect:/users/{id}/profileMenu";
         } catch (ValidationException e) {
-            ModelHelper.redirectAttributes(redirectAttributes, Map.of(NEW_LOGIN, newLogin,
-                    PASSWORD, password));
+            ModelHelper.redirectAttributes(redirectAttributes, Map.of(NEW_LOGIN, newLogin));
             addAttributes(model, Map.of(ERRORS, e.getErrors()));
             return "redirect:/users/{id}/profileMenu/changeLogin";
         }
@@ -115,14 +120,13 @@ public class UserController {
     @PostMapping("/{id}/profileMenu/changeEmail")
     public String changeEmail(@PathVariable(ID) Long id, Model model,
                               @SessionAttribute UserDto userDto, String newEmail,
-                              String password, RedirectAttributes redirectAttributes) {
+                              RedirectAttributes redirectAttributes) {
         try {
-            userService.setNewEmail(userDto, newEmail, password);
+            userService.setNewEmail(userDto, newEmail);
             addAttributes(model, Map.of(USER_DTO, userDto));
             return "redirect:/users/{id}/profileMenu";
         } catch (ValidationException e) {
-            ModelHelper.redirectAttributes(redirectAttributes, Map.of(NEW_EMAIL, newEmail,
-                    PASSWORD, password));
+            ModelHelper.redirectAttributes(redirectAttributes, Map.of(NEW_EMAIL, newEmail));
             addAttributes(model, Map.of(ERRORS, e.getErrors()));
             return "redirect:/users/{id}/profileMenu/changeEmail";
         }
@@ -137,39 +141,19 @@ public class UserController {
     @PostMapping("/{id}/profileMenu/changePassportNo")
     public String changePassportNo(@PathVariable(ID) Long id, Model model,
                                    @SessionAttribute UserDto userDto, String newPassportNo,
-                                   String password, RedirectAttributes redirectAttributes) {
+                                   RedirectAttributes redirectAttributes) {
         try {
-            userService.setNewPassportNo(userDto, newPassportNo, password);
+            userService.setNewPassportNo(userDto, newPassportNo);
             addAttributes(model, Map.of(USER_DTO, userDto));
             return "redirect:/users/{id}/profileMenu";
         } catch (ValidationException e) {
-            ModelHelper.redirectAttributes(redirectAttributes, Map.of(NEW_PASSPORT_NO, newPassportNo,
-                    PASSWORD, password));
+            ModelHelper.redirectAttributes(redirectAttributes, Map.of(NEW_PASSPORT_NO, newPassportNo));
             addAttributes(model, Map.of(ERRORS, e.getErrors()));
             return "redirect:/users/{id}/profileMenu/changePassportNo";
         }
     }
 
-    @GetMapping("/{id}/profileMenu/changePassword")
-    public String changePassword(@PathVariable(ID) Long id) {
-        return "user/changePassword";
-    }
 
-    @PostMapping("/{id}/profileMenu/changePassword")
-    public String changePassword(@PathVariable(ID) Long id, Model model,
-                                 @SessionAttribute UserDto userDto, String newPassword,
-                                 String oldPassword, RedirectAttributes redirectAttributes) {
-        try {
-            userService.setNewPassword(userDto, oldPassword, newPassword);
-            addAttributes(model, Map.of(USER_DTO, userDto));
-            return "redirect:/users/{id}/profileMenu";
-        } catch (ValidationException e) {
-            addAttributes(model, Map.of(ERRORS, e.getErrors()));
-            ModelHelper.redirectAttributes(redirectAttributes, Map.of(NEW_PASSWORD, newPassword,
-                    OLD_PASSWORD, oldPassword));
-            return "redirect:/users/{id}/profileMenu/changePassword";
-        }
-    }
 
     @GetMapping("/{id}/profileMenu/putMoney")
     public String putMoney(@PathVariable(ID) Long id) {

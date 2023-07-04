@@ -5,6 +5,9 @@
     <title>Change address</title>
 </head>
 <body>
+<a th:href="@{/users}">
+    <button type="button">Back to menu</button>
+</a>
 <form th:action="@{/address/changeAddress}" method="post">
     <p>Change address for delivery</p>
     <label for="country">Country:

@@ -8,6 +8,10 @@ import market.exception.ValidationException;
 import market.service.*;
 import market.util.ModelHelper;
 import market.validator.Error;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.annotation.CurrentSecurityContext;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -48,11 +52,16 @@ public class AdminController {
         return Arrays.asList(OrderStatus.values());
     }
     @GetMapping("/menu")
-    public String adminMenu(Model model) {
+    public String adminMenu(Model model,
+                            @AuthenticationPrincipal UserDetails userDetails) { // получить инфу о юзере который работает
+        var user = userService.getUserByName(userDetails.getUsername());
+        var sizeModerateComments = commentService.getModerateComments().size();
         var sizeModerateOrders = orderService.getSizeModerateOrders();
         addAttributes(model, Map.of(SIZE_MODERATE_ORDERS, sizeModerateOrders,
+                SIZE_MODERATE_COMMENTS, sizeModerateComments,
+                USER_DTO, user,
                 ERRORS, Error.of(EMPTY_PARAM, EMPTY_PARAM)));
-        return "admin/adminMenu";
+        return "/admin/adminMenu";
     }
 
     @GetMapping("/menu/moderateComments")
@@ -119,8 +128,9 @@ public class AdminController {
         var userOrders = orderService.findAllOrdersByUserID(id, pageO);
         var addresses = addressService.getAddresses(id, pageA);
         var user = userService.findById(id);
+        if (pageU != null)
+            model.addAttribute(PAGE_U, pageU);
         addAttributes(model, Map.of(USER_ORDERS, userOrders,
-                PAGE_U, pageU,
                 USER, user,
                 ADDRESSES, addresses));
         ModelHelper.redirectAttributes(redirectAttributes, filter);

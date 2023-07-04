@@ -1,22 +1,25 @@
 package market.mapper;
 
+import lombok.RequiredArgsConstructor;
 import market.dto.CreateUserDto;
 import market.dto.UpdateImageUserDto;
 import market.entity.User;
 import market.enums.Gender;
 import market.enums.Role;
-import org.mapstruct.Mapper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;
 import java.util.function.Predicate;
 
-import static market.util.StringContainer.SPRING;
-
 
 @Component
+@RequiredArgsConstructor
 public class CreateUserMapper  {
+    private final PasswordEncoder passwordEncoder;
+
 
     public User map(CreateUserDto object) {
         User user = new User();
@@ -26,7 +29,7 @@ public class CreateUserMapper  {
 
     public UpdateImageUserDto map(User user, MultipartFile image) {
         return new UpdateImageUserDto(
-                user.getName(),
+                user.getUsername(),
                 user.getPassword(),
                 user.getPassportNo(),
                 user.getEmail(),
@@ -41,13 +44,18 @@ public class CreateUserMapper  {
         if (object instanceof UpdateImageUserDto) {
             user.setId(((UpdateImageUserDto) object).getId());
         }
-        user.setName(object.getName());
-        user.setPassword(object.getPassword());
+        user.setUsername(object.getUsername());
+        user.setPassword(object.getRawPassword());
         user.setEmail(object.getEmail());
         user.setPassportNo(object.getPassportNo());
-        user.setRole(Role.valueOf(object.getRole()));
+        user.setRole(Role.USER);
         user.setBalance(object.getBalance());
         user.setGender(Gender.valueOf(object.getGender()));
+
+        Optional.ofNullable(object.getRawPassword())
+                .filter(StringUtils::hasText)
+                .map(passwordEncoder::encode)
+                .ifPresent(user::setPassword);
 
         Optional.ofNullable(object.getImage())
                 .filter(Predicate.not(MultipartFile::isEmpty))

@@ -1,18 +1,11 @@
 package project.service;
 
 import lombok.RequiredArgsConstructor;
-import market.ApplicationRunner;
 import market.dto.CreateUserDto;
 import market.mapper.UserMapper;
 import market.repository.UserRepository;
 import market.service.UserService;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.transaction.annotation.Transactional;
-import project.TestApplicationRunner;
 import project.annotation.IT;
 
 import java.math.BigDecimal;
@@ -36,10 +29,9 @@ public class UserServiceTest {
     @Test
     void testCreate() {
         var createUserDto = CreateUserDto.builder()
-                .name("kkk")
-                .role("USER")
+                .username("kkk")
                 .email("fdfdfd@mail.ru")
-                .password("jkfkdfjkdfjkdfjkfjJJJJ2")
+                .rawPassword("jkfkdfjkdfjkdfjkfjJJJJ2")
                 .passportNo("FF542145")
                 .gender("MALE")
                 .build();
@@ -51,8 +43,8 @@ public class UserServiceTest {
     void testSetNewName() {
         var user = userRepository.findById(id).orElse(null);
         userService.setNewLogin(userMapper.userToUserDto(user),
-                "Andrey", "FjfjfsjdlJJJJ32");
-        assertThat(user.getName()).isEqualTo("Andrey");
+                "Andrey");
+        assertThat(user.getUsername()).isEqualTo("Andrey");
     }
 
     @Test
@@ -75,7 +67,7 @@ public class UserServiceTest {
     void setNewPassportNo() {
         var user = userRepository.findById(id).orElse(null);
         userService.setNewPassportNo(userMapper.userToUserDto(user),
-                "KK432411", "FjfjfsjdlJJJJ32");
+                "KK432411");
         assertThat(user.getPassportNo()).isEqualTo("KK432411");
     }
 

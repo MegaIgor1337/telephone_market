@@ -20,10 +20,7 @@
     </label><br/>
     <label for="image"> Image
         <input id="image" type="file" name="image">
-    </label><br>
-    <select name="role" id="role">
-        <option th:each="role : ${roles}" th:text="${role}" th:value="${role}" ></option>
-    </select><br/>
+    </label><br/>
     <label for="gender">Gender:</label><br/>
     <label th:each="gender : ${genders}">
         <input type="radio" id="gender" name="gender" th:value="${gender}" th:text="${gender}">

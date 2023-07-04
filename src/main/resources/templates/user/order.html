@@ -5,7 +5,7 @@
     <title>Order</title>
 </head>
 <body>
-<a th:href="@{/users/menu}">
+<a th:href="@{/users}">
     <button type="button">Back to menu</button>
 </a>
 <form th:if="${not #lists.isEmpty(order.products.content)}" method="POST"

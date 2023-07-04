@@ -75,7 +75,6 @@ public class StringContainer {
                                                      " and EITHER a special character OR a number. ";
     public static final String REGEX_FOR_PASSWORD = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9@#$%]).{8,}$";
     public static final String GENDER_IS_INVALID = "Gender is invalid. ";
-    public static final String ROLE_IS_INVALID = "Role is invalid. ";
     public static final String BRAND_ENTERED_INVALID = "There is no entered brand. ";
     public static final String MODEL_ENTERED_INVALID = "There is no entered model. ";
     public static final String COLOR_ENTERED_INVALID = "There is no entered color. ";
@@ -141,4 +140,6 @@ public class StringContainer {
     public static final String PRODUCT_ALREADY_EXISTS = "This product already exists. ";
     public static final String COST_INVALID = "Cost can not be less 0. ";
     public static final String PRODUCT = "product";
+    public static final String USER_NOT_FOUND = "User not found: ";
+    public static final String USER_NAME = "username";
 }

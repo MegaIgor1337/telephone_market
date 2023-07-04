@@ -23,7 +23,7 @@ public class User implements BaseEntity<Long> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotNull
-    private String name;
+    private String username;
     @NotNull
     private String password;
     @Column(name = "passport_no")

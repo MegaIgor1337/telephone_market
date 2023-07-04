@@ -9,10 +9,7 @@ import market.service.UserService;
 import market.util.ModelHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Arrays;
@@ -20,10 +17,12 @@ import java.util.List;
 import java.util.Map;
 
 import static market.util.ModelHelper.addAttributes;
+import static market.util.ModelHelper.redirectAttributes;
 import static market.util.StringContainer.*;
 
 @Controller
 @RequiredArgsConstructor
+@RequestMapping("/registration")
 @SessionAttributes({USER_DTO, ERRORS})
 public class RegistrationController {
     private final UserService userService;
@@ -40,12 +39,12 @@ public class RegistrationController {
 
 
 
-    @GetMapping("/registration")
+    @GetMapping
     public String registration() {
         return "/registration";
     }
 
-    @PostMapping("/registration")
+    @PostMapping
     public String registration(Model model, CreateUserDto createUserDto,
                                RedirectAttributes redirectAttributes) {
         try {
@@ -54,17 +53,9 @@ public class RegistrationController {
             return "redirect:/address/addAddress";
         } catch (ValidationException exception) {
             addAttributes(model, Map.of(ERRORS, exception   .getErrors()));
-            redirectAtt(createUserDto, redirectAttributes);
+            redirectAttributes(redirectAttributes, createUserDto);
             return "redirect:/registration";
         }
     }
 
-    private void redirectAtt(CreateUserDto createUserDto, RedirectAttributes redirectAttributes) {
-        redirectAttributes.addFlashAttribute(NAME, createUserDto.getName());
-        redirectAttributes.addFlashAttribute(PASSWORD, createUserDto.getPassword());
-        redirectAttributes.addFlashAttribute(PASSPORT_NO, createUserDto.getPassportNo());
-        redirectAttributes.addFlashAttribute(EMAIL, createUserDto.getEmail());
-        redirectAttributes.addFlashAttribute(ROLE, createUserDto.getRole());
-        redirectAttributes.addFlashAttribute(GENDER, createUserDto.getGender());
-    }
 }

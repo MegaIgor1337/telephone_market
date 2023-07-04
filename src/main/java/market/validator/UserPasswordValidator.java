@@ -1,6 +1,7 @@
 package market.validator;
 
 import market.dto.UserDto;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.regex.Matcher;

@@ -10,11 +10,10 @@ import java.math.BigDecimal;
 @Builder
 @AllArgsConstructor
 public class CreateUserDto {
-    private String name;
-    private String password;
+    private String username;
+    private String rawPassword;
     private String passportNo;
     private String email;
-    private String role;
     private String gender;
     private MultipartFile image;
     private BigDecimal balance;

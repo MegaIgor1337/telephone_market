@@ -5,7 +5,7 @@
     <title>Title</title>
 </head>
 <body>
-<a th:href="@{/users/menu}">
+<a th:href="@{/users}">
     <button type="button">Back to menu</button>
 </a>
 <form method="GET" th:action="@{/users/{userId}/products(userId=${userDto.id})}">

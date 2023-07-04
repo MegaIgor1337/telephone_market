@@ -5,11 +5,9 @@
     <title>Profile</title>
 </head>
 <body>
-<a th:href="@{/users/menu}">
+<a th:href="@{/users}">
     <button type="button">Back to menu</button>
 </a>
-
-
 <div th:if="${userDto.image}">
     <img width="40" th:src="@{/users/{userId}/avatar(userId=${userDto.id})}" alt="User image"/>
 </div>
@@ -21,7 +19,7 @@ Change avatar <br/>
     <button value="change" type="submit">Change</button>
 </form>
 <p>Login:</p>
-<span th:text="${userDto.name}"></span>
+<span th:text="${userDto.username}"></span>
 <a th:href="@{/users/{userId}/profileMenu/changeLogin(userId=${userDto.id})}">
     <button type="button"> Change name</button>
 </a>
@@ -43,9 +41,6 @@ Change avatar <br/>
 <br/>
 <a th:href="@{/address/addAddress}">
     <button type="button"> Add delivery address</button>
-</a>
-<a th:href="@{/users/menu}">
-    <button type="button"> Main menu</button>
 </a>
 <p>Your delivery addresses:</p>
 <table>
