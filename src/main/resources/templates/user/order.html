@@ -8,6 +8,7 @@
 <a th:href="@{/users}">
     <button type="button">Back to menu</button>
 </a>
+<span th:if="${not #lists.isEmpty(deliveryAddresses)}">
 <form th:if="${not #lists.isEmpty(order.products.content)}" method="POST"
       th:action="@{/users/{userId}/order/promoCode(userId=${userDto.id})}">
     <label for="promoCode">Promo code:
@@ -94,5 +95,13 @@
         </button>
     </form>
 </div>
+    </span>
+<span th:unless="${not #lists.isEmpty(deliveryAddresses)}">
+    <br/>
+    You do not have delivery address.
+    <a th:href="@{/users/{userId}/profileMenu(userId=${userDto.id})}">
+        <button type="button" value="add">Add</button>
+    </a>
+</span>
 </body>
 </html>

@@ -115,4 +115,14 @@ public class ModelHelper {
         redirectAttributes.addFlashAttribute(EMAIL, createUserDto.getEmail());
         redirectAttributes.addFlashAttribute(GENDER, createUserDto.getGender());
     }
+
+    public static void redirectAttributes(RedirectAttributes redirectAttributes,
+                                          OrderFilterDto orderFilterDto) {
+        if (orderFilterDto.getUsername() != null)
+            redirectAttributes.addFlashAttribute(USER_NAME, orderFilterDto.getUsername());
+        if (orderFilterDto.getNumber() != null)
+            redirectAttributes.addFlashAttribute(NUMBER, orderFilterDto.getNumber());
+        if (orderFilterDto.getStatus() != null)
+            redirectAttributes.addFlashAttribute(STATUS, orderFilterDto.getStatus());
+    }
 }

@@ -6,7 +6,20 @@
 </head>
 <body>
 <form method="get" th:action="@{/admin/menu}">
-    <button type="submit" name="button"> Back to menu </button>
+    <button type="submit" name="button"> Back to menu</button>
+</form>
+<form th:action="@{/admin/menu/orders}" method="get">
+    <label>Username:
+        <input type="text" name="username" th:value="${username}"/>
+    </label><br/>
+    <label>Number of order:
+        <input type="number" name="number" th:value="${number}"/>
+    </label><br/>Status:
+    <label for="status"></label><select name="status" id="status">Status:
+    <option></option>
+    <option th:each="status : ${orderStatuses}" th:text="${status}" th:value="${status}"></option>
+</select><br/>
+    <button type="submit" name="submit">Search</button>
 </form>
 <p>Orders:</p>
 <span th:if="${#lists.isEmpty(orders.content)}">
@@ -27,14 +40,15 @@
     </thead>
     <tbody>
     <tr th:each="order, loop : ${orders}">
-        <td>  <a th:href="@{/admin/menu/orders/{orderId}/viewInfo(orderId=${order.id})}">
+        <td><a th:href="@{/admin/menu/orders/{orderId}/viewInfo(orderId=${order.id})}">
             <span style="text-align: center;" th:text="${order.id}"></span>
         </a></td>
-        <td  style="text-align: center;" th:text="${order.status}" th:value="${order.status}"></td>
-        <td  style="text-align: center;" th:text="${order.date}" th:value="${order.date}"></td>
-        <td  style="text-align: center;" th:text="${order.products.size()}"></td>
-        <td  style="text-align: center;" th:text="${order.dateOfDelivery != null ? order.dateOfDelivery : 'unknown'}" th:value="${order.dateOfDelivery}"></td>
-        <td  style="text-align: center;" th:text="${order.cost}"></td>
+        <td style="text-align: center;" th:text="${order.status}" th:value="${order.status}"></td>
+        <td style="text-align: center;" th:text="${order.date}" th:value="${order.date}"></td>
+        <td style="text-align: center;" th:text="${order.products.size()}"></td>
+        <td style="text-align: center;" th:text="${order.dateOfDelivery != null ? order.dateOfDelivery : 'unknown'}"
+            th:value="${order.dateOfDelivery}"></td>
+        <td style="text-align: center;" th:text="${order.cost}"></td>
     </tr>
     </tbody>
 </table>

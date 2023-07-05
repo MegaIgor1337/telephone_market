@@ -52,7 +52,7 @@ public class RegistrationController {
             addAttributes(model, Map.of(USER_DTO, userDto));
             return "redirect:/address/addAddress";
         } catch (ValidationException exception) {
-            addAttributes(model, Map.of(ERRORS, exception   .getErrors()));
+            addAttributes(model, Map.of(ERRORS, exception.getErrors()));
             redirectAttributes(redirectAttributes, createUserDto);
             return "redirect:/registration";
         }

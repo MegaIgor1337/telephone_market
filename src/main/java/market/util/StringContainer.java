@@ -142,4 +142,5 @@ public class StringContainer {
     public static final String PRODUCT = "product";
     public static final String USER_NOT_FOUND = "User not found: ";
     public static final String USER_NAME = "username";
+    public static final String NUMBER = "number";
 }

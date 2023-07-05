@@ -7,10 +7,10 @@
 <body>
 <form th:action="@{/registration}" enctype="multipart/form-data" method="post">
     <label for="name">Name:
-        <input type="text" name="name" id="name" th:value="${name}" required>
+        <input type="text" name="username" id="name" th:value="${username}" required>
     </label><br/>
     <label for="password">Password:
-        <input type="password" name="password" id="password" th:value="${password}" required>
+        <input type="password" name="rawPassword" id="password" th:value="${password}" required>
     </label><br/>
     <label for="passportNo">Passport number:
         <input type="text" name="passportNo" id="passportNo" th:value="${passportNo}" required>

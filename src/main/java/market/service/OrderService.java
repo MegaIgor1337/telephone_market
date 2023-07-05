@@ -1,14 +1,13 @@
 package market.service;
 
 import lombok.RequiredArgsConstructor;
-import market.dto.ModerateOrderDto;
-import market.dto.OrderDto;
-import market.dto.OrderDtoWithPage;
-import market.dto.UserDto;
+import market.dto.*;
 import market.entity.Order;
 import market.entity.OrderProduct;
 import market.entity.PromoCodeProduct;
+import market.entity.User;
 import market.enums.OrderStatus;
+import market.enums.Role;
 import market.exception.LackOfMoneyException;
 import market.exception.ValidationException;
 import market.mapper.AddressMapper;
@@ -24,6 +23,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,7 +34,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import static market.util.StringContainer.DATE;
+import static market.util.StringContainer.*;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @Transactional(readOnly = true)
@@ -143,8 +143,10 @@ public class OrderService {
         var userBalance = userDto.getBalance();
         userDto.setBalance(userBalance.subtract(orderDto.getCost()));
         var order = orderRepository.findAllByUserIdAndStatus(userDto.getId(), OrderStatus.WAITING_PAID);
-        order.ifPresent(o -> o.setStatus(OrderStatus.MODERATING));
-        order.ifPresent(o -> o.setAddress(address));
+        order.ifPresent(o -> {o.setStatus(OrderStatus.MODERATING);
+            o.setAddress(address);
+            o.setCost(orderDto.getCost());
+        });
         order.ifPresent(orderRepository::saveAndFlush);
          userRepository.saveAndFlush(userMapper.userDtotoUser(userDto));
     }
@@ -247,8 +249,27 @@ public class OrderService {
         orderRepository.flush();
     }
 
-    public Page<OrderDto> getAllOrders(Integer page) {
-        return orderRepository.findAll(PageRequest.of(page, pageSize))
+    public Page<OrderDto> getAllOrders(Integer page, OrderFilterDto orderFilterDto) {
+        var specifications = getSpecifications(orderFilterDto);
+        return orderRepository.findAll(specifications, PageRequest.of(page, pageSize))
                 .map(orderMapper::orderToOrderDto);
+    }
+
+    private Specification<Order> getSpecifications(OrderFilterDto orderFilterDto) {
+        Specification<Order> specification = Specification.where(null);
+        if (orderFilterDto.getUsername() != null && !orderFilterDto.getUsername().isBlank()) {
+            specification = specification
+                    .and(((root, query, cb) -> cb
+                            .equal(root.get(USER).get(USER_NAME), orderFilterDto.getUsername())));
+        }
+        if (orderFilterDto.getNumber() != null) {
+            specification = specification
+                    .and((root, query, cb) -> cb.equal(root.get(ID), orderFilterDto.getNumber()));
+        }
+        if (orderFilterDto.getStatus() != null) {
+            specification = specification
+                    .and(((root, query, cb) -> cb.equal(root.get(STATUS), orderFilterDto.getStatus())));
+        }
+        return specification;
     }
 }

@@ -30,7 +30,7 @@ import static market.util.StringContainer.*;
 @RequiredArgsConstructor
 @SessionAttributes({SIZE_MODERATE_COMMENTS, ACCESSED_COMMENTS, USER, ERRORS, MODELS,
         PRODUCTS, COUNTRIES, COLORS, BRANDS, PAGE_PR, PROMO_CODES, ORDER_STATUSES,
-        PRODUCTS_DOR_ADDING_PROMO_CODE, PROMO_CODE_CHANGE_ERRORS,
+        PRODUCTS_DOR_ADDING_PROMO_CODE, PROMO_CODE_CHANGE_ERRORS, ORDERS,
         PAGE_U, MODERATE_COMMENTS, MODERATE_ORDERS, MODERATE_ORDER, PROMO_CODE_STATUSES})
 public class AdminController {
     private final CommentService commentService;
@@ -181,10 +181,17 @@ public class AdminController {
     }
 
     @GetMapping("/menu/orders")
-    public String viewAllOrders(Model model,
+    public String viewAllOrders(Model model, OrderFilterDto orderFilterDto,
+                                RedirectAttributes redirectAttributes,
                                 @RequestParam(name = PAGE, defaultValue = ZERO) Integer page) {
-        var orders = orderService.getAllOrders(page);
+        var orders = orderService.getAllOrders(page, orderFilterDto);
         addAttributes(model, Map.of(ORDERS, orders));
+        redirectAttributes(redirectAttributes, orderFilterDto);
+        return "redirect:/admin/menu/viewOrders";
+    }
+
+    @GetMapping("/menu/viewOrders")
+    public String viewOrders() {
         return "/admin/orders";
     }
 
@@ -198,7 +205,7 @@ public class AdminController {
         return "/admin/orderInfo";
     }
 
-    @GetMapping("/menu/orders/{id}/viewInfo/changeInfo")
+    @PostMapping("/menu/orders/{id}/viewInfo/changeInfo")
     public String changeInfoOrder(@PathVariable(ID) Long id, Model model,
                                   ModerateOrderDto moderateOrderDto,
                                   RedirectAttributes redirectAttributes) {
