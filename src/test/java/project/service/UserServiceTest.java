@@ -47,19 +47,12 @@ public class UserServiceTest {
         assertThat(user.getUsername()).isEqualTo("Andrey");
     }
 
-    @Test
-    void setNewPassword() {
-        var user = userRepository.findById(id).orElse(null);
-        userService.setNewPassword(userMapper.userToUserDto(user),
-                "FjfjfsjdlJJJJ32","1323123123JKJKJkjkj4");
-        assertThat(user.getPassword()).isEqualTo("1323123123JKJKJkjkj4");
-    }
 
     @Test
     void setNewEmail() {
         var user = userRepository.findById(id).orElse(null);
         userService.setNewEmail(userMapper.userToUserDto(user),
-                "fdlfdfkdlf@mail.ru", "FjfjfsjdlJJJJ32");
+                "fdlfdfkdlf@mail.ru");
         assertThat(user.getEmail()).isEqualTo("fdlfdfkdlf@mail.ru");
     }
 

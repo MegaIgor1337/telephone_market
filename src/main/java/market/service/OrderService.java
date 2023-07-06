@@ -5,9 +5,7 @@ import market.dto.*;
 import market.entity.Order;
 import market.entity.OrderProduct;
 import market.entity.PromoCodeProduct;
-import market.entity.User;
 import market.enums.OrderStatus;
-import market.enums.Role;
 import market.exception.LackOfMoneyException;
 import market.exception.ValidationException;
 import market.mapper.AddressMapper;
@@ -194,7 +192,7 @@ public class OrderService {
         return pageOrder.map(orderMapper::orderToOrderDto);
     }
 
-    public OrderDtoWithPage findOrderById(Long orderId, Integer page) {
+    public OrderDtoWithPage findById(Long orderId, Integer page) {
         var order = orderRepository.findById(orderId);
         return orderDtoWithPageMapper.orderDtoToOrderDtoWithPage(orderMapper
                 .orderToOrderDto(order

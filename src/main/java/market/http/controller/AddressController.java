@@ -1,4 +1,4 @@
-package market.controller;
+package market.http.controller;
 
 import lombok.RequiredArgsConstructor;
 import market.dto.CreateAddressDto;

@@ -5,20 +5,22 @@
     <title>Login</title>
 </head>
 <body>
+<div th:insert="~{fragment :: locale}"></div>
+<br/>
 <form th:action="@{/login}" method="post">
-    <label for="username">Login:
+    <label for="username"><span th:text="#{login.username}">Username:</span>
         <input type="text" name="username" id="username" th:value="${username}" required>
     </label><br>
-    <label for="password">Password:
+    <label for="password"><span th:text="#{login.password}">Password:</span>
         <input type="password" name="password" id="password" th:value="${password}" required>
     </label><br>
-    <button type="submit">Login</button>
+    <button type="submit"><span th:text="#{login.login}">Login</span></button>
     <a th:href="@{/registration}">
-        <button type="button">Registration</button>
+        <button type="button"><span th:text="#{login.registration}">Registration</span></button>
     </a>
 
     <div style="color: red" th:if="${param.error}">
-        Invalid username and password.
+        <span th:text="#{login.error}">Invalid username and password.</span>
     </div>
 </form>
 </body>

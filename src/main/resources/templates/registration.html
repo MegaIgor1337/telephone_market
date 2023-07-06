@@ -5,30 +5,32 @@
     <title>Registration</title>
 </head>
 <body>
+<div th:insert="~{fragment :: locale}"></div>
+<br/>
 <form th:action="@{/registration}" enctype="multipart/form-data" method="post">
-    <label for="name">Name:
+    <label for="name"><span th:text="#{login.username}">Username:</span>
         <input type="text" name="username" id="name" th:value="${username}" required>
     </label><br/>
-    <label for="password">Password:
+    <label for="password"><span th:text="#{login.password}">Username:</span>
         <input type="password" name="rawPassword" id="password" th:value="${password}" required>
     </label><br/>
-    <label for="passportNo">Passport number:
+    <label for="passportNo"><span th:text="#{registration.passportNo}">Passport number:</span>
         <input type="text" name="passportNo" id="passportNo" th:value="${passportNo}" required>
     </label><br/>
-    <label for="email">Email:
+    <label for="email"><span th:text="#{registration.email}">Email:</span>
         <input type="email" name="email" id="email" th:value="${email}" required>
     </label><br/>
-    <label for="image"> Image
+    <label for="image"> <span th:text="#{registration.image}">Image:</span>
         <input id="image" type="file" name="image">
     </label><br/>
-    <label for="gender">Gender:</label><br/>
+    <label for="gender"><span th:text="#{registration.gender}">Gender:</span></label><br/>
     <label th:each="gender : ${genders}">
-        <input type="radio" id="gender" name="gender" th:value="${gender}" th:text="${gender}">
+        <input type="radio" id="gender" name="gender" th:value="${gender}" required th:text="${gender}">
         <br/>
     </label>
-    <input type="submit" value="Send">
+    <input type="submit" th:value="#{registration.send}">
     <a th:href="@{'/login'}">
-        <button type="button">Back to login</button>
+        <button type="button"><span th:text="#{registration.backToLogin}">Back to login</span></button>
     </a>
 </form>
 <div th:if="${errors != null}" style="color: red">

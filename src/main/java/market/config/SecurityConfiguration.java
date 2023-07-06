@@ -17,7 +17,8 @@ import java.util.Set;
 @Configuration
 @EnableMethodSecurity
 @EnableWebSecurity
-public class SecurityConfiguration {
+public class SecurityConfiguration   {
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -49,6 +50,7 @@ public class SecurityConfiguration {
         return http.build();
 
     }
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {

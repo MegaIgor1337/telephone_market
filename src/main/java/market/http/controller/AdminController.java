@@ -1,4 +1,4 @@
-package market.controller;
+package market.http.controller;
 
 import lombok.RequiredArgsConstructor;
 import market.dto.*;
@@ -9,8 +9,6 @@ import market.service.*;
 import market.util.ModelHelper;
 import market.validator.Error;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.annotation.CurrentSecurityContext;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -142,7 +140,7 @@ public class AdminController {
                             @PathVariable(ORDER_ID) Long orderId,
                             @RequestParam(name = PAGE_PR, defaultValue = ZERO) String pagePr,
                             Model model) {
-        var order = orderService.findOrderById(orderId, Integer.valueOf(pagePr));
+        var order = orderService.findById(orderId, Integer.valueOf(pagePr));
         addAttributes(model, Map.of(USER_ORDER, order));
         return "/admin/userOrder";
     }
@@ -161,7 +159,7 @@ public class AdminController {
     public String moderate(@PathVariable(ID) Long id, Model model,
                            @RequestParam(name = PAGE_PR, defaultValue = ZERO) Integer pagePr) {
 
-        var moderateOrder = orderService.findOrderById(id, pagePr);
+        var moderateOrder = orderService.findById(id, pagePr);
         addAttributes(model, Map.of(MODERATE_ORDER, moderateOrder));
         return "/admin/moderatingOrders";
     }
@@ -198,7 +196,7 @@ public class AdminController {
     @GetMapping("/menu/orders/{id}/viewInfo")
     public String viewInfoOrder(@PathVariable(ID) Long id, Model model,
                                 @RequestParam(name = PAGE_PR, defaultValue = ZERO) Integer pagePr) {
-        var order = orderService.findOrderById(id, pagePr);
+        var order = orderService.findById(id, pagePr);
         var deliveryAddresses = addressService.getAddressesByUserId(order.getUser().getId());
         addAttributes(model, Map.of(ORDER, order,
                 DELIVERY_ADDRESSES, deliveryAddresses));
