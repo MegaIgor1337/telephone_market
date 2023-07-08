@@ -6,20 +6,20 @@
 </head>
 <body>
 <form method="get" th:action="@{/admin/menu}">
-  <button type="submit" name="button"> Back to menu </button>
+  <button type="submit" name="button"> <span th:text="#{menu.back}"></span> </button>
 </form>
 <form method="get" th:action="@{/admin/menu/promoCodesForAdmin}">
-  <label>Name:
+  <label><span th:text="#{login.username}"></span>
     <input type="text" name="name" th:value="${name}">
   </label><br/>
-  <label>Discount:
+  <label><span th:text="#{promoCode.discount}"></span>
     <input type="number" step="any" name="discount" th:value="${discount}">
-  </label><br/>Status:<br/>
+  </label><br/><span th:text="#{order.status}"></span><br/>
     <label th:each="status : ${promoCodeStatuses}">
         <input type="radio" id="status" name="status" th:value="${status}" th:text="${status}">
         <br/>
     </label>
-    <button type="submit" name="submit">Send</button>
+    <button type="submit" name="submit"><span th:text="#{registration.send}"></span></button>
 </form>
 <div th:if="${errors != null  && errors != ''}" style="color: red">
     <span th:each="error : ${errors}" th:text="${error.message}"></span>
@@ -29,9 +29,9 @@
     <thead>
     <tr>
         <th>#</th>
-        <th>Name</th>
-        <th>Discount</th>
-        <th>Status</th>
+        <th><span th:text="#{login.username}"></span></th>
+        <th><span th:text="#{promoCode.discount}"></span></th>
+        <th><span th:text="#{order.status}"></span></th>
         <th></th>
         <th></th>
     </tr>
@@ -48,7 +48,7 @@
                 <input type="hidden" name="discount" th:value="${discount}"/>
                 <input type="hidden" name="status" th:value="${status}"/>
                 <input type="hidden" name="pagePromo" th:value="${promoCodes.number}">
-                <button type="submit" value="submit">View info and change</button>
+                <button type="submit" value="submit"><span th:text="#{promoCode.viewInfoAndChange}"></span></button>
             </form>
         </td>
         <td>
@@ -57,7 +57,7 @@
                 <input type="hidden" name="discount" th:value="${discount}"/>
                 <input type="hidden" name="status" th:value="${status}"/>
                 <input type="hidden" name="pagePromo" th:value="${promoCodes.number}">
-                <button type="submit" value="submit">Delete</button>
+                <button type="submit" value="submit"><span th:text="#{delete.delete}"></span></button>
             </form>
         </td>
     </tr>
@@ -70,11 +70,11 @@
         <input type="hidden" name="name" th:value="${name}"/>
         <input type="hidden" name="discount" th:value="${discount}"/>
         <input type="hidden" name="status" th:value="${status}"/>
-        <button th:if="${promoCodes.hasPrevious}" type="submit" name="page" value="0">First</button>
-        <button th:if="${promoCodes.hasPrevious}" type="submit" name="page" th:value="${promoCodes.number - 1}">Previous
+        <button th:if="${promoCodes.hasPrevious}" type="submit" name="page" value="0"><span th:text="#{page.first}">First</span></button>
+        <button th:if="${promoCodes.hasPrevious}" type="submit" name="page" th:value="${promoCodes.number - 1}"><span th:text="#{page.previous}">Previous</span>
         </button>
-        <button th:if="${promoCodes.hasNext}" type="submit" name="page" th:value="${promoCodes.number + 1}">Next</button>
-        <button th:if="${promoCodes.hasNext}" type="submit" name="page" th:value="${promoCodes.totalPages - 1}">Last
+        <button th:if="${promoCodes.hasNext}" type="submit" name="page" th:value="${promoCodes.number + 1}"><span th:text="#{page.next}">Next</span></button>
+        <button th:if="${promoCodes.hasNext}" type="submit" name="page" th:value="${promoCodes.totalPages - 1}"><span th:text="#{page.last}">Last</span>
         </button>
     </form>
 

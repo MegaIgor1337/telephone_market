@@ -6,52 +6,52 @@
 </head>
 <body>
 <a th:href="@{/users}">
-    <button type="button">Back to menu</button>
-</a>
+    <button type="button"><span th:text="#{menu.backToMenu}">Menu:</span></button>
+</a><br/>
 <div th:if="${userDto.image}">
     <img width="40" th:src="@{/users/{userId}/avatar(userId=${userDto.id})}" alt="User image"/>
 </div>
-Change avatar <br/>
+<span th:text="#{user.changeAvatar}">Change avatar:</span><br/>
 <form th:action="@{/users/{userId}/avatar/setNew(userId=${userDto.id})}" enctype="multipart/form-data" method="post">
-    <label for="image"> Image
+    <label for="image"> <span th:text="#{user.image}">Image</span>
         <input id="image" type="file" name="image">
     </label><br>
-    <button value="change" type="submit">Change</button>
+    <button value="change" type="submit"><span th:text="#{user.change}">Change</span></button>
 </form>
-<p>Login:</p>
+<p><span th:text="#{login.username}">Login</span></p>
 <span th:text="${userDto.username}"></span>
 <a th:href="@{/users/{userId}/profileMenu/changeLogin(userId=${userDto.id})}">
-    <button type="button"> Change name</button>
+    <button type="button"> <span th:text="#{user.changeName}">Change name</span></button>
 </a>
-<p>Email:</p>
+<p><span th:text="#{user.email}">Email:</span></p>
 <span th:text="${userDto.email}"></span>
 <a th:href="@{/users/{userId}/profileMenu/changeEmail(userId=${userDto.id})}">
-    <button type="button"> Change email</button>
+    <button type="button"> <span th:text="#{user.changeEmail}">Change email</span></button>
 </a>
-<p>Passport number:</p>
+<p><span th:text="#{user.passportNumber}">Passport number:</span></p>
 <span th:text="${userDto.passportNo}"></span>
 <a th:href="@{/users/{userId}/profileMenu/changePassportNo(userId=${userDto.id})}">
-    <button type="button"> Change passport number</button>
+    <button type="button"> <span th:text="#{user.changePassportNumber}">change passportNo:</span></button>
 </a>
-<p>Balance: </p>
+<p><span th:text="#{user.balance}">Balance:</span> </p>
 <span th:text="${userDto.balance} + '$'"></span>
 <a th:href="@{/users/{userId}/profileMenu/putMoney(userId=${userDto.id})}">
-    <button type="button"> Put money</button>
+    <button type="button"><span th:text="#{user.putMoney}">Put money</span></button>
 </a>
 <br/>
 <a th:href="@{/address/addAddress}">
-    <button type="button"> Add delivery address</button>
+    <button type="button"><span th:text="#{address.addAddress}">add address</span></button>
 </a>
-<p>Your delivery addresses:</p>
+<p><span th:text="#{address.yourDeliveryAddresses}">Your delivery addresses:</span></p>
 <table>
     <thead>
     <tr>
         <th>#</th>
-        <th>Country</th>
-        <th>City</th>
-        <th>Street</th>
-        <th>House</th>
-        <th>Flat</th>
+        <th><span th:text="#{address.country}"></span></th>
+        <th><span th:text="#{address.city}"></span></th>
+        <th><span th:text="#{address.street}"></span></th>
+        <th><span th:text="#{address.house}"></span></th>
+        <th><span th:text="#{address.flat}"></span></th>
         <th></th>
         <th></th>
     </tr>
@@ -68,14 +68,14 @@ Change avatar <br/>
             <form method="get" th:action="@{/address/changeAddress}">
                 <input type="hidden" name="addressId" th:value="${address.id}"/>
                 <input type="hidden" name="pageA" th:value="${addresses.number}">
-                <input type="submit" value="Change"/>
+                <input type="submit" th:value="#{user.change}"/>
             </form>
         </td>
         <td>
             <form method="post" th:action="@{/address/deleteAddress}">
                 <input type="hidden" name="addressId" th:value="${address.id}"/>
                 <input type="hidden" name="pageA" th:value="${addresses.number}">
-                <button type="submit" value="Delete">Delete</button>
+                <button type="submit" value="Delete"><span th:text="#{delete.delete}">Delete:</span></button>
             </form>
         </td>
     </tr>
@@ -84,11 +84,11 @@ Change avatar <br/>
 <div th:if="${not #lists.isEmpty(addresses)}">
     <form th:if="${not #lists.isEmpty(addresses)}" method="GET"
           th:action="@{/users/{userId}/profileMenu(userId=${userDto.id})}">
-        <button th:if="${addresses.hasPrevious}" type="submit" name="page" value="0">First</button>
-        <button th:if="${addresses.hasPrevious}" type="submit" name="page" th:value="${addresses.number - 1}">Previous
+        <button th:if="${addresses.hasPrevious}" type="submit" name="page" value="0"><span th:text="#{page.first}">First</span></button>
+        <button th:if="${addresses.hasPrevious}" type="submit" name="page" th:value="${addresses.number - 1}"><span th:text="#{page.previous}">Previous</span>
         </button>
-        <button th:if="${addresses.hasNext}" type="submit" name="page" th:value="${addresses.number + 1}">Next</button>
-        <button th:if="${addresses.hasNext}" type="submit" name="page" th:value="${addresses.totalPages - 1}">Last
+        <button th:if="${addresses.hasNext}" type="submit" name="page" th:value="${addresses.number + 1}"><span th:text="#{page.next}">Next</span></button>
+        <button th:if="${addresses.hasNext}" type="submit" name="page" th:value="${addresses.totalPages - 1}"><span th:text="#{page.last}">Last</span>
         </button>
     </form>
 </div>

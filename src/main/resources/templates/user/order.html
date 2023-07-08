@@ -6,16 +6,16 @@
 </head>
 <body>
 <a th:href="@{/users}">
-    <button type="button">Back to menu</button>
+    <button type="button"><span th:text="#{menu.backToMenu}"></span></button>
 </a>
 <span th:if="${not #lists.isEmpty(deliveryAddresses)}">
 <form th:if="${not #lists.isEmpty(order.products.content)}" method="POST"
       th:action="@{/users/{userId}/order/promoCode(userId=${userDto.id})}">
-    <label for="promoCode">Promo code:
+    <label for="promoCode"><span th:text="#{promoCode.promoCode}">Promo code</span>
         <input type="text" name="promoCode" id="promoCode" th:value="${promoCode}">
     </label>
     <label for="send">
-        <input type="submit" value="send" id="send">
+        <input type="submit" th:value="#{registration.send}" id="send">
     </label>
 </form>
 <div th:if="${errors != null}" style="color: red">
@@ -24,38 +24,36 @@
 </div>
 
 <span th:if="${not #lists.isEmpty(order.products.content)}">
-    Price:
-        <span th:text="${order.cost}">
-            Cost
-        </span>
+    <span th:text="#{products.price}">Price</span>
+        <span th:text="${order.cost}"></span>
     </span>
 <form th:if="${not #lists.isEmpty(order.products.content)}" method="POST"
       th:action="@{/users/{userId}/order/pay(userId=${userDto.id})}">
-    <label for="deliveryAddress"></label><select name="deliveryAddress" id="deliveryAddress">Status:
+    <label for="deliveryAddress"></label><select name="deliveryAddress" id="deliveryAddress"><span th:text="#{address.deliveryAddress}"></span>
     <option th:each="deliveryAddress : ${deliveryAddresses}"
             th:text="${deliveryAddress.country + ', ' + deliveryAddress.city + ', ' + deliveryAddress.street + ', '
              + deliveryAddress.house + ', ' + deliveryAddress.flat}"
             th:value="${deliveryAddress.id}" ></option>
 </select><br/>
     <label for="submit">
-        <input type="submit" value="pay" id="submit">
+        <input type="submit" th:value="#{order.pay}" id="submit">
     </label>
 </form>
 <span th:if="${#lists.isEmpty(order.products.content)}">
     <p>
-        You do not have products in basket.
+        <span th:text="#{address.NoProducts}">First</span>
     </p>
 </span>
 <table th:if="${not #lists.isEmpty(order.products.content)}">
     <thead>
     <tr>
         <th>#</th>
-        <th>Brand</th>
-        <th>Model</th>
-        <th>Color</th>
-        <th>Country</th>
-        <th>Count</th>
-        <th>Price</th>
+        <th><span th:text="#{products.brand}">Brand</span></th>
+        <th><span th:text="#{products.model}">Model</span></th>
+        <th><span th:text="#{products.color}">Color</span></th>
+        <th><span th:text="#{products.country}">Country</span></th>
+        <th><span th:text="#{products.count}">Count</span></th>
+        <th><span th:text="#{products.price}">Price</span></th>
         <th></th>
         <th></th>
     </tr>
@@ -73,7 +71,7 @@
             <form method="post" th:action="@{/users/{userId}/order/delete(userId=${userDto.id})}">
                 <input type="hidden" name="productId" th:value="${orderProduct.product.id}"/>
                 <input type="hidden" name="pageOr" th:value="${order.products.number}"/>
-                <input type="submit" value="Delete from basket"/>
+                <button type="submit" value="Delete from basket"><span th:text="#{order.deleteFromBasket}">Brand</span></button>
             </form>
         </td>
     </tr>
@@ -83,24 +81,24 @@
 <div th:if="${not #lists.isEmpty(order.products)}">
     <form th:if="${not #lists.isEmpty(order.products)}" method="GET"
           th:action="@{/users/{userId}/order(userId=${userDto.id})}">
-        <button th:if="${order.products.hasPrevious}" type="submit" name="page" value="0">First</button>
+        <button th:if="${order.products.hasPrevious}" type="submit" name="page" value="0"><span th:text="#{page.first}">First</span></button>
         <button th:if="${order.products.hasPrevious}" type="submit" name="page" th:value="${order.products.number - 1}">
-            Previous
+            <span th:text="#{page.previous}">Previous</span>
         </button>
         <button th:if="${order.products.hasNext}" type="submit" name="page" th:value="${order.products.number + 1}">
-            Next
+            <span th:text="#{page.next}">Next</span>
         </button>
         <button th:if="${order.products.hasNext}" type="submit" name="page" th:value="${order.products.totalPages - 1}">
-            Last
+            <span th:text="#{page.last}">Last</span>
         </button>
     </form>
 </div>
     </span>
 <span th:unless="${not #lists.isEmpty(deliveryAddresses)}">
     <br/>
-    You do not have delivery address.
+    <span th:text="#{address.NoAddress}">You do not have delivery address.</span>
     <a th:href="@{/users/{userId}/profileMenu(userId=${userDto.id})}">
-        <button type="button" value="add">Add</button>
+        <button type="button" value="add"><span th:text="#{order.add}">Add</span></button>
     </a>
 </span>
 </body>

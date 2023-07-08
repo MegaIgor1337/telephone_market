@@ -6,7 +6,7 @@
 </head>
 <body>
 <form method="get" th:action="@{/admin/menu}">
-    <button type="submit" value="send">Back to menu</button>
+    <button type="submit" value="send"><span th:text="#{menu.backToMenu}"></span></button>
 </form>
 
 <div th:if="${errors != null  && errors != ''}" style="color: red">
@@ -14,50 +14,50 @@
     <br/>
 </div>
 <form th:action="@{/admin/menu/users}" method="get" >
-    <label for="name">Name:</label>
+    <label for="name"><span th:text="#{login.username}"></span></label>
     <input type="text" id="name" name="username" th:value="${name}">
     <br>
-    <label for="email">Email:</label>
+    <label for="email"><span th:text="#{user.email}"></span></label>
     <input type="text" id="email" name="email" th:value="${email}">
     <br>
-    <label for="password">Password:</label>
+    <label for="password"><span th:text="#{login.password}"></span></label>
     <input type="text" id="password" name="password" th:value="${password}">
     <br>
-    <label for="passportNo">Passport number:</label>
+    <label for="passportNo"><span th:text="#{user.passportNumber}"></span></label>
     <input type="text" id="passportNo" name="passportNo" th:value="${passportNo}">
     <br>
     <label th:each="gender : ${genders}">
     <input type="radio" id="gender" name="gender" th:value="${gender}" th:text="${gender}">
     <br/>
     </label>
-    Users addresses:<br/>
-    <label for="country">Country:</label>
+    <span th:text="#{address.usersAddresses}"></span><br/>
+    <label for="country"><span th:text="#{address.country}"></span></label>
     <input type="text" id="country" name="country" th:value="${country}">
     <br>
-    <label for="city">City:</label>
+    <label for="city"><span th:text="#{address.city}"></span></label>
     <input type="text" id="city" name="city" th:value="${city}">
     <br>
-    <label for="street">Street:</label>
+    <label for="street"><span th:text="#{address.street}"></span></label>
     <input type="text" id="street" name="street" th:value="${street}">
     <br>
-    <label for="house">House:</label>
+    <label for="house"><span th:text="#{address.house}"></span></label>
     <input type="text" id="house" name="house" th:value="${house}">
     <br>
-    <label for="flat">Flat:</label>
+    <label for="flat"><span th:text="#{address.flat}"></span></label>
     <input type="text" id="flat" name="flat" th:value="${flat}">
     <br>
-    <button type="submit" value="search">Search</button>
+    <button type="submit" value="search"><span th:text="#{search.search}"></span></button>
 </form>
 <table th:if="${not #lists.isEmpty(users)}">
     <thead>
     <tr>
         <th>#</th>
-        <th>Avatar</th>
-        <th>Name</th>
-        <th>Email</th>
-        <th>Password</th>
-        <th>Passport Number</th>
-        <th>Gender</th>
+        <th><span th:text="#{user.image}"></span></th>
+        <th><span th:text="#{login.username}"></span></th>
+        <th><span th:text="#{user.email}"></span></th>
+        <th><span th:text="#{login.password}"></span></th>
+        <th><span th:text="#{user.passportNumber}"></span></th>
+        <th><span th:text="#{registration.gender}"></span></th>
         <th></th>
         <th></th>
     </tr>
@@ -86,7 +86,7 @@
                 <input type="hidden" name="house" th:value="${house}"/>
                 <input type="hidden" name="flat" th:value="${flat}"/>
                 <input type="hidden" name="pageU" th:value="${users.number}"/>
-                <button type="submit" value="View info">View info</button>
+                <button type="submit" value="View info"><span th:text="#{user.viewInfo}"></span></button>
             </form>
         </td>
         <td>
@@ -102,7 +102,7 @@
                 <input type="hidden" name="house" th:value="${house}"/>
                 <input type="hidden" name="flat" th:value="${flat}"/>
                 <input type="hidden" name="pageU" th:value="${users.number}"/>
-                <button type="submit" value="submit">Delete</button>
+                <button type="submit" value="submit"><span th:text="#{delete.delete}"></span></button>
             </form>
         </td>
     </tr>
@@ -123,11 +123,11 @@
         <input type="hidden" name="city" th:value="${city}"/>
         <input type="hidden" name="house" th:value="${house}"/>
         <input type="hidden" name="flat" th:value="${flat}"/>
-        <button th:if="${users.hasPrevious}" type="submit" name="page" value="0">First</button>
-        <button th:if="${users.hasPrevious}" type="submit" name="page" th:value="${users.number - 1}">Previous
+        <button th:if="${users.hasPrevious}" type="submit" name="page" value="0"><span th:text="#{page.first}">First</span></button>
+        <button th:if="${users.hasPrevious}" type="submit" name="page" th:value="${users.number - 1}"><span th:text="#{page.previous}">Previous</span>
         </button>
-        <button th:if="${users.hasNext}" type="submit" name="page" th:value="${users.number + 1}">Next</button>
-        <button th:if="${users.hasNext}" type="submit" name="page" th:value="${users.totalPages - 1}">Last
+        <button th:if="${users.hasNext}" type="submit" name="page" th:value="${users.number + 1}"><span th:text="#{page.next}">Next</span></button>
+        <button th:if="${users.hasNext}" type="submit" name="page" th:value="${users.totalPages - 1}"><span th:text="#{page.last}">Last</span>
         </button>
     </form>
 

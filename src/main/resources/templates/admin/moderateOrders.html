@@ -6,21 +6,21 @@
 </head>
 <body>
 <form method="get" th:action="@{/admin/menu}">
-    <button type="submit" name="button"> Back to menu </button>
+    <button type="submit" name="button"> <span th:text="#{menu.backToMenu}"></span></button>
 </form>
-<p>Moderate orders:</p>
+<p><span th:text="#{order.moderateOrders}"></span></p>
 <span th:if="${#lists.isEmpty(moderateOrders.content)}">
-<p>No orders</p>
+<p><span th:text="#{order.noOrders}"></span></p>
 </span>
 <table th:if="${not #lists.isEmpty(moderateOrders.content)}">
     <thead>
     <tr>
         <th>#</th>
-        <th>Status</th>
-        <th>Date</th>
-        <th>Count of products</th>
-        <th>Date of delivery</th>
-        <th>Price</th>
+        <th><span th:text="#{order.status}"></span></th>
+        <th><span th:text="#{order.date}"></span></th>
+        <th><span th:text="#{order.countOfProducts}"></span></th>
+        <th><span th:text="#{order.dateOfDelivery}"></span></th>
+        <th><span th:text="#{products.price}"></span></th>
         <th></th>
         <th></th>
     </tr>
@@ -41,15 +41,15 @@
 <div th:if="${not #lists.isEmpty(moderateOrders)}">
     <form th:if="${not #lists.isEmpty(moderateOrders)}" method="GET"
           th:action="@{/admin/menu/moderateOrders}">
-        <button th:if="${moderateOrders.hasPrevious}" type="submit" name="page" value="0">First</button>
+        <button th:if="${moderateOrders.hasPrevious}" type="submit" name="page" value="0"><span th:text="#{page.first}"></span></button>
         <button th:if="${moderateOrders.hasPrevious}" type="submit" name="page" th:value="${moderateOrders.number - 1}">
-            Previous
+            <span th:text="#{page.previous}"></span>
         </button>
         <button th:if="${moderateOrders.hasNext}" type="submit" name="page" th:value="${moderateOrders.number + 1}">
-            Next
+            <span th:text="#{page.next}"></span>
         </button>
         <button th:if="${moderateOrders.hasNext}" type="submit" name="page" th:value="${moderateOrders.totalPages - 1}">
-            Last
+            <span th:text="#{page.last}"></span>
         </button>
     </form>
 </div>

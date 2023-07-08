@@ -6,48 +6,42 @@
 </head>
 <body>
 <a th:href="@{/admin/menu}">
-    <button type="button">Back to menu</button>
+    <button type="button"><span th:text="#{menu.backToMenu}"></span></button>
 </a>
 <form method="GET" th:action="@{/admin/menu/productsForAdmin}">
-    <label for="brand">Brand:</label>
+    <label for="brand"><span th:text="#{products.brand}"></span></label>
     <input type="text" id="brand" name="brand" th:value="${brand}" list="brandDataList">
     <datalist id="brandDataList">
         <option th:each="brand : ${brands}" th:value="${brand.brand}"></option>
     </datalist>
     <br>
-    <label for="model">Model:</label>
+    <label for="model"><span th:text="#{products.model}"></span></label>
     <input type="text" id="model" name="model" th:value="${model}" list="modelDataList">
     <datalist id="modelDataList">
         <option th:each="model : ${models}" th:value="${model.model}"></option>
     </datalist>
     <br>
-    <label for="color">Color:</label>
+    <label for="color"><span th:text="#{products.color}"></span></label>
     <input type="text" id="color" name="color" th:value="${color}" list="colorDataList">
     <datalist id="colorDataList">
         <option th:each="color : ${colors}" th:value="${color.color}"></option>
     </datalist>
     <br>
-    <label for="country">Country:</label>
+    <label for="country"><span th:text="#{products.country}"></span></label>
     <input type="text" id="country" name="country" th:value="${country}" list="countryDataList">
     <datalist id="countryDataList">
         <option th:each="country : ${countries}" th:value="${country.country}"></option>
     </datalist>
     <br>
-    <label for="minPrice">Min price:</label>
+    <label for="minPrice"><span th:text="#{products.minPrice}"></span></label>
     <input type="number" id="minPrice" name="minPrice" step="any" th:value="${minPrice}">
     <br>
-    <label for="maxPrice">Max price:</label>
+    <label for="maxPrice"><span th:text="#{products.maxPrice}"></span></label>
     <input type="number" id="maxPrice" name="maxPrice" step="any" th:value="${maxPrice}">
     <br>
-    <label for="count">Count:</label>
+    <label for="count"><span th:text="#{products.count}"></span></label>
     <input type="number" id="count" name="count" th:value="${count}">
     <br>
-    <label for="priceQuery">Price query:</label><br/>
-    <label th:each="priceQuery : ${priceQueries}">
-        <input type="radio" id="priceQuery" name="priceQuery" th:value="${priceQuery}"
-               th:checked="${priceQuery == selectedPriceQuery}" th:text="${priceQuery}">
-        <br/>
-    </label>
     <input type="submit" value="Search">
 </form>
 <div th:if="${errors != null  && errors != ''}" style="color: red">
@@ -58,12 +52,12 @@
     <thead>
     <tr>
         <th>#</th>
-        <th>Brand</th>
-        <th>Model</th>
-        <th>Color</th>
-        <th>Country</th>
-        <th>Price</th>
-        <th>Storage count</th>
+        <th><span th:text="#{products.brand}"></span></th>
+        <th><span th:text="#{products.model}"></span></th>
+        <th><span th:text="#{products.color}"></span></th>
+        <th><span th:text="#{products.country}"></span></th>
+        <th><span th:text="#{products.price}"></span></th>
+        <th><span th:text="#{products.storageCount}"></span></th>
         <th></th>
         <th></th>
     </tr>
@@ -91,7 +85,7 @@
                 <label>
                     <input type="number" name="addCount" th:value="${addCount}" required/>
                 </label>
-                <button type="submit" value="submit">Add count</button>
+                <button type="submit" value="submit"><span th:text="#{products.addCount}"></span></button>
             </form>
         </td>
         <td>
@@ -108,7 +102,7 @@
                 <label>
                     <input type="number" name="removeCount" th:value="${removeCount}"/>
                 </label>
-                <button type="submit" value="submit">Remove count</button>
+                <button type="submit" value="submit"><span th:text="#{products.removeCount}"></span></button>
             </form>
         </td>
         <td>
@@ -121,7 +115,7 @@
                 <input type="hidden" name="maxPrice" th:value="${maxPrice}"/>
                 <input type="hidden" name="count" th:value="${count}"/>
                 <input type="hidden" name="priceQuery" th:value="${selectedPriceQuery}"/>
-                <button type="submit" value="submit">Delete</button>
+                <button type="submit" value="submit"><span th:text="#{delete.delete}"></span></button>
             </form>
         </td>
     </tr>
@@ -139,11 +133,11 @@
         <input type="hidden" name="maxPrice" th:value="${maxPrice}"/>
         <input type="hidden" name="count" th:value="${count}"/>
         <input type="hidden" name="priceQuery" th:value="${selectedPriceQuery}"/>
-        <button th:if="${products.hasPrevious}" type="submit" name="page" value="0">First</button>
-        <button th:if="${products.hasPrevious}" type="submit" name="page" th:value="${products.number - 1}">Previous
+        <button th:if="${products.hasPrevious}" type="submit" name="page" value="0"><span th:text="#{page.first}"></span></button>
+        <button th:if="${products.hasPrevious}" type="submit" name="page" th:value="${products.number - 1}"><span th:text="#{page.previous}"></span>
         </button>
-        <button th:if="${products.hasNext}" type="submit" name="page" th:value="${products.number + 1}">Next</button>
-        <button th:if="${products.hasNext}" type="submit" name="page" th:value="${products.totalPages - 1}">Last
+        <button th:if="${products.hasNext}" type="submit" name="page" th:value="${products.number + 1}"><span th:text="#{page.next}"></span></button>
+        <button th:if="${products.hasNext}" type="submit" name="page" th:value="${products.totalPages - 1}"><span th:text="#{page.last}"></span>
         </button>
     </form>
 

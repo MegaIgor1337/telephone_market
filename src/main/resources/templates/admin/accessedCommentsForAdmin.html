@@ -6,7 +6,7 @@
 </head>
 <body>
 <a th:href="@{/admin/menu}">
-    <button type="button">Back to menu</button>
+    <button type="button"><span th:text="#{menu.backToMenu}"></span></button>
 </a><br/>
 <th:block th:if="${not #lists.isEmpty(accessedComments)}">
     <th:block th:each="comment, status : ${accessedComments}">
@@ -14,12 +14,12 @@
         <form method="post"
               th:action="@{/admin/menu/accessedComments}">
             <input type="hidden" name="commentId" th:value="${comment.id}"/>
-            <button type="submit" value="Delete">Delete</button>
+            <button type="submit" value="Delete"><span th:text="#{delete.delete}"></span></button>
         </form>
     </th:block>
 </th:block>
 <th:block th:unless="${not #lists.isEmpty(accessedComments)}">
-    <p>There are no comments</p>
+    <p><span th:text="#{comments.noComments}"></span></p>
 </th:block>
 </body>
 </html>

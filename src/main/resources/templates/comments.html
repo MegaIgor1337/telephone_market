@@ -5,15 +5,15 @@
 </head>
 <body>
 <a th:href="@{/users/{userId}/personalComments(userId=${userDto.id})}">
-    <button type="button"> View your comments </button>
+    <button type="button"><span th:text="#{comments.personalComments}"></span> </button>
 </a>
 <a th:href="@{/users}">
-    <button type="button">Back to menu</button>
+    <button type="button"><span th:text="#{menu.backToMenu}"></span></button>
 </a>
 <a th:href="@{/users/{userId}/addComment(userId=${userDto.id})}">
-    <button type="button">Add comment</button>
+    <button type="button"><span th:text="#{comments.addComment}"></span></button>
 </a>
-<h1>Comments:</h1>
+<h1><span th:text="#{comments.comments}"></span>:</h1>
 <ul>
     <th:block th:if="${not #lists.isEmpty(comments)}">
         <th:block th:each="comment, counter : ${comments}">

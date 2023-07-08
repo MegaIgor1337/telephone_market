@@ -6,7 +6,10 @@ import market.enums.Gender;
 import market.enums.Role;
 import market.exception.ValidationException;
 import market.service.UserService;
+import market.util.AccessDeniedExceptionHelper;
 import market.util.ModelHelper;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -41,15 +44,19 @@ public class RegistrationController {
 
     @GetMapping
     public String registration() {
+        SecurityContextHolder.clearContext();
         return "/registration";
     }
 
     @PostMapping
     public String registration(Model model, CreateUserDto createUserDto,
+                               Authentication authentication,
                                RedirectAttributes redirectAttributes) {
         try {
             var userDto = userService.create(createUserDto);
             addAttributes(model, Map.of(USER_DTO, userDto));
+            AccessDeniedExceptionHelper.setNewAuthentication(authentication,
+                    createUserDto.getUsername());
             return "redirect:/address/addAddress";
         } catch (ValidationException exception) {
             addAttributes(model, Map.of(ERRORS, exception.getErrors()));

@@ -6,18 +6,18 @@
 </head>
 <body>
 <form method="get" th:action="@{/admin/menu/moderateOrders}">
-    <button type="submit" name="button">Back</button>
+    <button type="submit" name="button"><span th:text="#{menu.back}"></span></button>
 </form>
 <table th:if="${not #lists.isEmpty(moderateOrder.products.content)}">
     <thead>
     <tr>
         <th>#</th>
-        <th>Brand</th>
-        <th>Model</th>
-        <th>Color</th>
-        <th>Country</th>
-        <th>Count</th>
-        <th>Price</th>
+        <th><span th:text="#{products.brand}"></span></th>
+        <th><span th:text="#{products.model}"></span></th>
+        <th><span th:text="#{products.color}"></span></th>
+        <th><span th:text="#{products.country}"></span></th>
+        <th><span th:text="#{products.count}"></span></th>
+        <th><span th:text="#{products.price}"></span></th>
         <th></th>
         <th></th>
     </tr>
@@ -38,15 +38,15 @@
 <div th:if="${not #lists.isEmpty(moderateOrder.products)}">
     <form th:if="${not #lists.isEmpty(moderateOrder.products)}" method="GET"
           th:action="@{/admin/menu/moderateOrders/{orderId}/moderate(orderId=${moderateOrder.id})}">
-        <button th:if="${moderateOrder.products.hasPrevious}" type="submit" name="pagePr" value="0">First</button>
+        <button th:if="${moderateOrder.products.hasPrevious}" type="submit" name="pagePr" value="0"><span th:text="#{page.first}"></span></button>
         <button th:if="${moderateOrder.products.hasPrevious}" type="submit" name="pagePr" th:value="${moderateOrder.products.number - 1}">
-            Previous
+            <span th:text="#{page.previous}"></span>
         </button>
         <button th:if="${moderateOrder.products.hasNext}" type="submit" name="pagePr" th:value="${moderateOrder.products.number + 1}">
-            Next
+            <span th:text="#{page.next}"></span>
         </button>
         <button th:if="${moderateOrder.products.hasNext}" type="submit" name="pagePr" th:value="${moderateOrder.products.totalPages - 1}">
-            Last
+            <span th:text="#{page.last}"></span>
         </button>
     </form>
 </div>
@@ -56,14 +56,14 @@ Deliver address:
 
 </span>
 <form method="post" th:action="@{/admin/menu/moderateOrders/{orderId}/moderate(orderId=${moderateOrder.id})}">
-    <label for="dateOfDelivery">Date of delivery:
+    <label for="dateOfDelivery"><span th:text="#{order.dateOfDelivery}"></span>
         <input type="date" name="dateOfDelivery" id="dateOfDelivery"/>
     </label><br/>
-    <label for="status"></label><select name="status" id="status">Status:
+    <label for="status"></label><select name="status" id="status"><span th:text="#{order.status}"></span>
         <option th:each="status : ${orderStatuses}" th:text="${status}" th:value="${status}" ></option>
     </select><br/>
 
-    <button type="submit" name="send">Send</button>
+    <button type="submit" name="send"><span th:text="#{registration.send}"></span></button>
 </form>
 <div th:if="${errors != null  && errors != ''}" style="color: red">
     <span th:each="error : ${errors}" th:text="${error.message}"></span>

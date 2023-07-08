@@ -82,8 +82,9 @@ public class AddressController {
     }
 
     @PostMapping("/address/deleteAddress")
-    public String deleteAddress(String addressId,
-                                Model model, String pageA) {
+    public String deleteAddress(Model model,
+                                String addressId,
+                                String pageA) {
         addAttributes(model, Map.of(PAGE_A, pageA));
         addressService.delete(Long.valueOf(addressId));
         return "redirect:/users";

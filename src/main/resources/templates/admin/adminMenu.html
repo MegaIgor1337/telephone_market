@@ -6,43 +6,43 @@
 <body>
 1)
 <a th:href="@{/admin/menu/moderateComments}">
-  Moderate comments  (<span th:text="${sizeModerateComments}"></span>)
+  <span th:text="#{comments.moderateComments}"></span>  (<span th:text="${sizeModerateComments}"></span>)
 </a><br/>
 2)
 <a th:href="@{/admin/menu/accessedComments}">
-  View accessed comments
+  <span th:text="#{admin.viewAccessedComments}"></span>
 </a><br/>
 3)
 <a th:href="@{/admin/menu/users}">
-  View all users
+  <span th:text="#{admin.viewAllUsers}"></span>
 </a><br/>
 4)
 <a th:href="@{/admin/menu/productsForAdmin}">
-  View all products
+  <span th:text="#{admin.viewAllProducts}"></span>
 </a><br/>
 5)
 <a th:href="@{/admin/menu/promoCodesForAdmin}">
-  View promo codes
+  <span th:text="#{admin.viewAllPromoCodes}"></span>
 </a><br/>
 6)
 <a th:href="@{/admin/menu/addPromoCodeInfo}">
-  Add promo code
+  <span th:text="#{admin.addPromoCode}"></span>
 </a><br/>
 7)
 <a th:href="@{/admin/menu/addNewProduct}">
-  Add new product
+  <span th:text="#{admin.addProduct}"></span>
 </a><br/>
 8)
 <a th:href="@{/logout}">
-  Log out
+  <span th:text="#{menu.logout}"></span>
 </a><br/>
 9)
 <a th:href="@{/admin/menu/moderateOrders}">
-  Moderate orders (<span th:text="${sizeModerateOrders}"></span>)
+  <span th:text="#{order.moderateOrders}"></span>(<span th:text="${sizeModerateOrders}"></span>)
 </a><br/>
 10)
 <a th:href="@{/admin/menu/orders}">
-  View orders
+  <span th:text="#{order.orders}"></span>
 </a><br/>
 </body>
 </html>

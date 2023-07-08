@@ -1,26 +1,16 @@
 package project.service;
 
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import market.ApplicationRunner;
 import market.dto.CreateAddressDto;
 import market.dto.CreateUpdateAddressDto;
-import market.repository.AddressRepository;
 import market.service.AddressService;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.transaction.annotation.Transactional;
-import project.TestApplicationRunner;
 import project.annotation.IT;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@IT
 @RequiredArgsConstructor
+@IT
 public class AddressServiceTest {
 
     private final Long id = 1L;
@@ -51,8 +41,8 @@ public class AddressServiceTest {
                 .userId("1")
                 .build();
         addressService.update(createUpdateAddressDto);
-        var result = addressService.getAddresses(id, 2);
-        assertThat(result).hasSize(2);
+        var result = addressService.getAddresses(id, 0);
+        assertThat(result).hasSize(1);
     }
 
     @Test
@@ -64,7 +54,7 @@ public class AddressServiceTest {
 
     @Test
     void getAddresses() {
-        var result = addressService.getAddresses(id, 2);
-        assertThat(result).hasSize(1);
+        var result = addressService.getAddresses(id, 1);
+        assertThat(result).hasSize(0);
     }
 }

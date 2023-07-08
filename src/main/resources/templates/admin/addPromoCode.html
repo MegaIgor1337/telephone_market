@@ -6,17 +6,17 @@
 </head>
 <body>
 <form method="get" th:action="@{/admin/menu}">
-    <button type="submit" name="button"> Back to menu</button>
+    <button type="submit" name="button"> <span th:text="#{menu.backToMenu}"></span></button>
 </form>
 <div th:if="${errors != null  && errors != ''}" style="color: red">
     <span th:each="error : ${errors}" th:text="${error.message}"></span>
     <br/>
 </div>
 <form method="post" th:object="${createPromoCodeDto}" th:action="@{/admin/menu/addPromoCodeInfo}">
-    <label>Name:
+    <label><span th:text="#{login.username}"></span>
         <input type="text" name="name" th:value="${name}" required/>
     </label><br/>
-    <label>Discount
+    <label><span th:text="#{promoCode.discount}"></span>
         <input type="number" step="any" name="discount" th:value="${discount}" required>
     </label><br/>
     <div th:each="product : ${products}">
@@ -28,7 +28,7 @@
              + product.storageCount}"></span>
         </label>
     </div>
-    <button type="submit" name="submit">Add</button>
+    <button type="submit" name="submit"><span th:text="#{order.add}"></span></button>
 </form>
 </body>
 </html>

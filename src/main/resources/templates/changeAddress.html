@@ -6,27 +6,27 @@
 </head>
 <body>
 <a th:href="@{/users}">
-    <button type="button">Back to menu</button>
+    <button type="button"><span th:text="#{menu.backToMenu}"></span></button>
 </a>
 <form th:action="@{/address/changeAddress}" method="post">
-    <p>Change address for delivery</p>
-    <label for="country">Country:
+    <p><span th:text="#{comments.changeAddress}"></span></p>
+    <label for="country"><span th:text="#{address.country}">Country:</span>
         <input type="text" name="country" id="country" th:value="${country}" required>
     </label><br/>
-    <label for="city">City:
+    <label for="city"><span th:text="#{address.city}">City:</span>
         <input type="text" name="city" id="city" th:value="${city}" required>
     </label><br/>
-    <label for="street">Street:
+    <label for="street"><span th:text="#{address.street}">Street:</span>
         <input type="text" name="street" id="street" th:value="${street}" required>
     </label><br/>
-    <label for="house">House:
+    <label for="house"><span th:text="#{address.house}">House:</span>
         <input type="text" name="house" id="house" th:value="${house}" required>
     </label><br/>
-    <label for="flat">Flat:
+    <label for="flat"><span th:text="#{address.flat}">Flat:</span>
         <input type="text" name="flat" id="flat" th:value="${flat}" required>
     </label><br/>
     <label for="submit">
-        <input type="submit" value="send" id="submit">
+        <input type="submit" th:value="#{registration.send}" id="submit">
     </label>
 </form>
 <div th:if="${errors != null}" style="color: red">

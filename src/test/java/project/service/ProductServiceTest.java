@@ -40,7 +40,6 @@ public class ProductServiceTest {
     void getProductsByPredicates() {
         var createUserProductDto = ProductFilter.builder()
                 .country("Germany").build();
-        var pageable = PageRequest.of(0, 3);
             var result = productService.getProductsByPredicates(createUserProductDto, 0);
             assertThat(result).hasSize(2);
     }

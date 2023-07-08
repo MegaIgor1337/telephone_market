@@ -7,6 +7,7 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -28,7 +29,7 @@ public class SecurityConfiguration   {
                                 "/v3/api-docs/**", "/swagger-ui/**").permitAll()
                         .requestMatchers("/admin/menu/**").hasAnyAuthority(Role.ADMIN.getAuthority())
                         .anyRequest().authenticated())
-                //.csrf(CsrfConfigurer::disable)
+                .csrf(CsrfConfigurer::disable)
                 .httpBasic(Customizer.withDefaults())
                 .formLogin(login -> login
                         .loginPage("/login")

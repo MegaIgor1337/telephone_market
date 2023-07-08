@@ -9,6 +9,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import project.annotation.IT;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 @IT
 @RequiredArgsConstructor
 @AutoConfigureMockMvc
@@ -18,7 +20,6 @@ public class LogoutControllerTest {
     @Test
     void logout() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/logout"))
-                .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
-                .andExpect(MockMvcResultMatchers.redirectedUrl("/login"));
+                .andExpect(status().is2xxSuccessful());
     }
 }

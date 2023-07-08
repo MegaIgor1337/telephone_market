@@ -6,10 +6,10 @@
 </head>
 <body>
 <a th:href="@{/users}">
-    <button type="button">Back to menu</button>
+    <button type="button"><span th:text="#{menu.backToMenu}"></span></button>
 </a>
 <p>
-    Your order has been sent for moderating.
+    <span th:text="#{order.sendToModerate}"></span>
 </p>
 </body>
 </html>

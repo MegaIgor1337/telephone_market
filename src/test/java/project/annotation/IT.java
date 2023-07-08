@@ -1,6 +1,5 @@
 package project.annotation;
 
-import lombok.RequiredArgsConstructor;
 import market.ApplicationRunner;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,9 +15,7 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
+@SpringBootTest(classes = {TestApplicationRunner.class, ApplicationRunner.class})
 @Transactional
-@SpringBootTest(classes = {ApplicationRunner.class, TestApplicationRunner.class})
-@ExtendWith(SpringExtension.class)
-@Rollback
 public @interface IT {
 }

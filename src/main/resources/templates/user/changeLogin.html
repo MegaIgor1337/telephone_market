@@ -6,14 +6,14 @@
 </head>
 <body>
 <a th:href="@{/users/{userId}/profileMenu(userId=${userDto.id})}">
-    <button type="button">Back to menu</button>
+    <button type="button"><span th:text="#{menu.backToMenu}"></span></button>
 </a>
 <form th:action="@{/users/{userId}/profileMenu/changeLogin(userId=${userDto.id})}" method="post">
-    <label>New Login:
+    <label><span th:text="#{user.newName}"></span>
         <input type="text" name="newLogin" id="newLogin" th:value="${newName}" required>
     </label>
     <label for="submit">
-        <input type="submit" value="send" id="submit">
+        <input type="submit" th:value="#{registration.send}" id="submit">
     </label>
 </form>
 <div th:if="${errors != null}" style="color: red">

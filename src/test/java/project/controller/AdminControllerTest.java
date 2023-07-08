@@ -9,6 +9,7 @@ import market.repository.CommentRepository;
 import market.service.CommentService;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import project.annotation.IT;
@@ -27,17 +28,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @IT
 @RequiredArgsConstructor
 @AutoConfigureMockMvc
+@WithMockUser(username = "Gennadiy22", password = "test", authorities = {"ADMIN", "USER"})
 public class AdminControllerTest {
     private final MockMvc mockMvc;
-    private final CommentService commentService;
-    private final CommentRepository commentRepository;
-    private final CommentMapper commentMapper;
 
     @Test
     void adminMenu() throws Exception {
         mockMvc.perform(get("/admin/menu"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("admin/adminMenu"));
+                .andExpect(view().name("/admin/adminMenu"));
     }
 
     @Test

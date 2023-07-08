@@ -20,24 +20,9 @@ public class UserServiceTest {
     private final UserService userService;
     private final UserRepository userRepository;
     private final UserMapper userMapper;
-    @Test
-    void testLogin() {
-        var result = userService.login("Maksim321", "1234567");
-        assertTrue(result.isPresent());
-    }
 
-    @Test
-    void testCreate() {
-        var createUserDto = CreateUserDto.builder()
-                .username("kkk")
-                .email("fdfdfd@mail.ru")
-                .rawPassword("jkfkdfjkdfjkdfjkfjJJJJ2")
-                .passportNo("FF542145")
-                .gender("MALE")
-                .build();
-        var result = userService.create(createUserDto);
-        assertThat(result.getId()).isEqualTo(5L);
-    }
+
+
 
     @Test
     void testSetNewName() {

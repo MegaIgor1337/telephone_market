@@ -9,6 +9,7 @@ import market.service.*;
 import market.util.ModelHelper;
 import market.validator.Error;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -57,7 +58,8 @@ public class UserController {
     }
 
     @GetMapping("/{id}/addComment")
-    public String addComment(@PathVariable(ID) Long id, Authentication authentication) {
+    public String addComment(@PathVariable(ID) Long id,
+                             Authentication authentication) {
         authorizeCheck(userService, authentication, id);
         return "/addComment";
     }
@@ -81,7 +83,7 @@ public class UserController {
         return "/userComments";
     }
 
-    @PostMapping("/{id}/personalComments")
+    @PostMapping("/{id}/personalComments/delete")
     public String personalComments(@PathVariable(ID) Long id,
                                    String commentId,
                                    Authentication authentication) {

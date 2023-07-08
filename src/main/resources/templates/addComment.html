@@ -6,13 +6,13 @@
 </head>
 <body>
 <form method="post" th:action="@{/users/{id}/addComment(id=${userDto.id})}">
-    <label for="comment">Write comment:</label>
+    <label for="comment"><span th:text="#{comments.writeComment}">Write comment:</span></label>
     <br/>
     <textarea id="comment" name="comment" rows="5" cols="40"></textarea>
     <br/>
-    <button type="submit">Send</button>
+    <button type="submit"><span th:text="#{registration.send}">Send:</span></button>
     <a th:href="@{/users}">
-        <button type="button">Back to menu</button>
+        <button type="button"><span th:text="#{menu.backToMenu}">Menu:</span></button>
     </a>
 </form>
 </body>

@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import market.dto.UserDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -16,6 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @IT
 @RequiredArgsConstructor
 @AutoConfigureMockMvc
+@WithMockUser(username = "test@gmail.com", password = "test", authorities = {"ADMIN", "USER"})
 public class AddressControllerTest {
     private final MockMvc mockMvc;
 
@@ -39,14 +41,15 @@ public class AddressControllerTest {
                         .param("flat", "TestFlat")
                         .sessionAttr("userDto", userDto)) // Установка атрибута в сессии
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/users/menu"));
+                .andExpect(redirectedUrl("/users"));
     }
 
     @Test
     void changeAddress() throws Exception {
-        String addressId = "2";
+        String addressId = "5";
         mockMvc.perform(MockMvcRequestBuilders.get("/address/changeAddress")
-                        .param("addressId", addressId))
+                        .param("addressId", addressId)
+                        .param("pageA", "0"))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.view().name("/changeAddress"))
                 .andExpect(MockMvcResultMatchers.model().attribute("userDto", addressId));
@@ -67,15 +70,16 @@ public class AddressControllerTest {
                         .sessionAttr("addressId", "2")
                 )
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/users/menu"));
+                .andExpect(redirectedUrl("/users"));
     }
 
     @Test
     void delete() throws Exception{
         mockMvc.perform(MockMvcRequestBuilders.post("/address/deleteAddress")
                         .param("addressId", "2")
+                        .param("pageA", "1")
                 )
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/users/menu"));
+                .andExpect(redirectedUrl("/users"));
     }
 }

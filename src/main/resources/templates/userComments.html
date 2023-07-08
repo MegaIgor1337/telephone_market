@@ -7,7 +7,7 @@
 </head>
 <body>
 <a th:href="@{/users}">
-    <button type="button">Back to menu</button>
+    <button type="button"><span th:text="#{menu.backToMenu}">Back to menu:</span></button>
 </a> <br/>
 <th:block th:if="${userComments != null and not #lists.isEmpty(userComments)}">
     <th:block th:each="comment, status : ${userComments}">
@@ -16,12 +16,12 @@
         <form method="post"
               th:action="@{/users/{userId}/personalComments/delete(userId=${userDto.id})}">
             <input type="hidden" name="commentId" th:value="${comment.id}"/>
-            <button type="submit" value="Delete">Delete</button>
+            <button type="submit" value="Delete"><span th:text="#{delete.delete}">Delete</span></button>
         </form>
     </th:block>
 </th:block>
 <th:block th:unless="${userComments != null and not #lists.isEmpty(userComments)}">
-    <p>You do not have any comments</p>
+    <p><span th:text="#{comments.userNotComments}"></span></p>
 </th:block>
 </body>
 </html>

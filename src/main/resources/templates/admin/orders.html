@@ -6,34 +6,34 @@
 </head>
 <body>
 <form method="get" th:action="@{/admin/menu}">
-    <button type="submit" name="button"> Back to menu</button>
+    <button type="submit" name="button"> <span th:text="#{menu.backToMenu}"></span></button>
 </form>
 <form th:action="@{/admin/menu/orders}" method="get">
-    <label>Username:
+    <label><span th:text="#{login.username}"></span>
         <input type="text" name="username" th:value="${username}"/>
     </label><br/>
-    <label>Number of order:
+    <label><span th:text="#{order.numberOfOrder}"></span>
         <input type="number" name="number" th:value="${number}"/>
-    </label><br/>Status:
+    </label><br/><span th:text="#{order.status}"></span>
     <label for="status"></label><select name="status" id="status">Status:
     <option></option>
     <option th:each="status : ${orderStatuses}" th:text="${status}" th:value="${status}"></option>
 </select><br/>
-    <button type="submit" name="submit">Search</button>
+    <button type="submit" name="submit"><span th:text="#{search.search}"></span></button>
 </form>
-<p>Orders:</p>
+<p><span th:text="#{order.orders}"></span></p>
 <span th:if="${#lists.isEmpty(orders.content)}">
-<p>No orders</p>
+<p><span th:text="#{order.noOrders}"></span></p>
 </span>
 <table th:if="${not #lists.isEmpty(orders.content)}">
     <thead>
     <tr>
         <th>#</th>
-        <th>Status</th>
-        <th>Date</th>
-        <th>Count of products</th>
-        <th>Date of delivery</th>
-        <th>Price</th>
+        <th><span th:text="#{order.status}"></span></th>
+        <th><span th:text="#{order.date}"></span></th>
+        <th><span th:text="#{order.countOfProducts}"></span></th>
+        <th><span th:text="#{order.dateOfDelivery}"></span></th>
+        <th><span th:text="#{products.price}"></span></th>
         <th></th>
         <th></th>
     </tr>
@@ -55,15 +55,15 @@
 <div th:if="${not #lists.isEmpty(orders)}">
     <form th:if="${not #lists.isEmpty(orders)}" method="GET"
           th:action="@{/admin/menu/orders}">
-        <button th:if="${orders.hasPrevious}" type="submit" name="page" value="0">First</button>
+        <button th:if="${orders.hasPrevious}" type="submit" name="page" value="0"><span th:text="#{page.first}"></span></button>
         <button th:if="${orders.hasPrevious}" type="submit" name="page" th:value="${orders.number - 1}">
-            Previous
+            <span th:text="#{page.previous}"></span>
         </button>
         <button th:if="${orders.hasNext}" type="submit" name="page" th:value="${orders.number + 1}">
-            Next
+            <span th:text="#{page.next}"></span>
         </button>
         <button th:if="${orders.hasNext}" type="submit" name="page" th:value="${orders.totalPages - 1}">
-            Last
+            <span th:text="#{page.last}"></span>
         </button>
     </form>
 </div>

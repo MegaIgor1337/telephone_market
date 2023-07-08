@@ -7,39 +7,39 @@
 <body>
 1)
 <a th:href="@{/market}">
-    About us
+    <span th:text="#{menu.aboutUs}">About us</span>
 </a><br/>
 2)
 <a th:href="@{/comments}">
-    View comments
+    <span th:text="#{menu.viewComments}">View comments</span>
 </a><br/>
 3)
 <a th:href="@{/users/{userId}/profileMenu(userId=${userDto.id})}">
-    Profile
+    <span th:text="#{menu.profile}">Profile</span>
 </a><br/>
 4)
 <a th:href="@{/users/{userId}/products(userId=${userDto.id})}">
-    Catalog
+    <span th:text="#{menu.catalog}">Catalog</span>
 </a><br/>
 5)
 <a th:href="@{/logout}">
-    Log out
+    <span th:text="#{menu.logout}">Log out</span>
 </a><br/>
 6)
 <a th:href="@{/users/{userId}/addComment(userId=${userDto.id})}">
-    Add comment
+    <span th:text="#{menu.addComment}">Add comment</span>
 </a><br/>
 7)
 <a th:href="@{/users/{userId}/order(userId=${userDto.id})}">
-    Basket
+    <span th:text="#{menu.basket}">Basket</span>
 </a><br/>
 8)
 <a th:href="@{/users/{userId}/orderHistory(userId=${userDto.id})}">
-    Order history
+    <span th:text="#{menu.orderHistory}">Order history</span>
 </a><br/>
 9)
 <a th:href="@{/users/{userId}/favourite(userId=${userDto.id})}">
-    Favourite
+    <span th:text="#{menu.favourite}">Favourite</span>
 </a><br/>
 </body>
 </html>

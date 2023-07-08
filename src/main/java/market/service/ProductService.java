@@ -176,10 +176,7 @@ public class ProductService {
 
     @Transactional
     public void addNewProduct(CreateProductDto createProductDto) {
-        createProductValidator.putColors(colorRepository.findAll());
-        createProductValidator.putModels(modelRepository.findAll());
-        createProductValidator.putCountries(countryRepository.findAll());
-        createProductValidator.putBrands(brandRepository.findAll());
+        createProductValidator.putProducts(productRepository.findAll());
         var validationResult = createProductValidator.isValid(createProductDto);
         if (!validationResult.isValid()) {
             throw new ValidationException(validationResult.getErrors());

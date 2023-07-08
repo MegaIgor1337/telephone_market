@@ -5,9 +5,9 @@
 </head>
 <body>
 <form method="get" th:action="@{/admin/menu}">
-    <button type="submit" name="button"> Back to menu </button>
+    <button type="submit" name="button"><span th:text="#{menu.backToMenu}"></span></button>
 </form>
-<h1>Comments:</h1>
+<h1><span th:text="#{comments.comments}"></span></h1>
 <ul>
     <th:block th:if="${not #lists.isEmpty(moderateComments)}">
         <th:block th:each="comment, counter : ${moderateComments}">
@@ -17,8 +17,8 @@
             </li>
             <form method="post" th:action="@{/admin/menu/moderateComments}">
                 <input type="hidden" name="commentId" th:value="${comment.id}"/>
-                <button type="submit" value="access" name="value"> Access </button>
-                <button type="submit" value="delete" name="value"> Delete </button>
+                <button type="submit" value="access" name="value"> <span th:text="#{comments.access}"></span> </button>
+                <button type="submit" value="delete" name="value"> <span th:text="#{delete.delete}"></span> </button>
             </form>
         </th:block>
     </th:block>

@@ -6,17 +6,17 @@
 </head>
 <body>
 <a th:href="@{/users}">
-    <button type="button">Back to menu</button>
+    <button type="button"><span th:text="#{menu.backToMenu}"></span></button>
 </a>
 <table th:if="${not #lists.isEmpty(userOrders.content)}">
     <thead>
     <tr>
         <th>#</th>
-        <th>Status</th>
-        <th>Date</th>
-        <th>Count of products</th>
-        <th>Date of delivery</th>
-        <th>Price</th>
+        <th><span th:text="#{order.status}">Status</span></th>
+        <th><span th:text="#{order.date}">Date</span></th>
+        <th><span th:text="#{order.countOfProducts}">Count of products</span></th>
+        <th><span th:text="#{order.dateOfDelivery}">Date of delivery</span></th>
+        <th><span th:text="#{products.price}">Price</span></th>
         <th></th>
         <th></th>
     </tr>
@@ -39,15 +39,15 @@
 <div th:if="${not #lists.isEmpty(userOrders)}">
     <form th:if="${not #lists.isEmpty(userOrders)}" method="GET"
           th:action="@{/users/{userId}/orderHistory(userId=${userDto.id})}">
-        <button th:if="${userOrders.hasPrevious}" type="submit" name="page" value="0">First</button>
+        <button th:if="${userOrders.hasPrevious}" type="submit" name="page" value="0"><span th:text="#{page.first}">First</span></button>
         <button th:if="${userOrders.hasPrevious}" type="submit" name="page" th:value="${userOrders.number - 1}">
-            Previous
+            <span th:text="#{page.previous}">Previous</span>
         </button>
         <button th:if="${userOrders.hasNext}" type="submit" name="page" th:value="${userOrders.number + 1}">
-            Next
+            <span th:text="#{page.next}">Next</span>
         </button>
         <button th:if="${userOrders.hasNext}" type="submit" name="page" th:value="${userOrders.totalPages - 1}">
-            Last
+            <span th:text="#{page.last}">Last</span>
         </button>
     </form>
 </div>
