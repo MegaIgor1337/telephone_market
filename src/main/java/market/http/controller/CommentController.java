@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 
 import java.util.Map;
 
-import static market.util.StringContainer.COMMENTS;
-import static market.util.StringContainer.USER_DTO;
+import static market.util.ConstantContainer.COMMENTS;
+import static market.util.ConstantContainer.USER_DTO;
 
 @Controller
 @RequiredArgsConstructor

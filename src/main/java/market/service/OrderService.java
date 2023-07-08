@@ -8,7 +8,6 @@ import market.entity.PromoCodeProduct;
 import market.enums.OrderStatus;
 import market.exception.LackOfMoneyException;
 import market.exception.ValidationException;
-import market.mapper.AddressMapper;
 import market.mapper.OrderDtoWithPageMapper;
 import market.mapper.OrderMapper;
 import market.mapper.UserMapper;
@@ -32,16 +31,14 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import static market.util.StringContainer.*;
+import static market.util.ConstantContainer.*;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @Transactional(readOnly = true)
 @Service
 @RequiredArgsConstructor
 public class OrderService {
-    private final Integer pageSize = 2;
     private final AddressRepository addressRepository;
-    private final AddressMapper addressMapper;
     private final ModerateOrderDtoValidator moderateOrderDtoValidator;
     private final OrderMapper orderMapper;
     private final PromoCodeRepository promoCodeRepository;
@@ -104,12 +101,12 @@ public class OrderService {
         }
         var orderDto = orderMapper.orderToOrderDto(order.get());
         OrderDtoWithPage orderDtoWithPage = orderDtoWithPageMapper
-                .orderDtoToOrderDtoWithPage(orderDto, page, pageSize);
+                .orderDtoToOrderDtoWithPage(orderDto, page, PAGE_SIZE);
         return Optional.of(orderDtoWithPage);
     }
 
     public OrderDtoWithPage getOrderDtoWithPage(OrderDto orderDto, Integer page) {
-        return orderDtoWithPageMapper.orderDtoToOrderDtoWithPage(orderDto, page, pageSize);
+        return orderDtoWithPageMapper.orderDtoToOrderDtoWithPage(orderDto, page, PAGE_SIZE);
     }
 
     @Transactional
@@ -187,7 +184,7 @@ public class OrderService {
 
     public Page<OrderDto> findAllOrdersByUserID(Long userId, Integer page) {
         var orders = orderRepository.findAllByUserId(userId);
-        Pageable pageable = PageRequest.of(page, pageSize, Sort.by(DATE).descending());
+        Pageable pageable = PageRequest.of(page, PAGE_SIZE, Sort.by(DATE).descending());
         var pageOrder = PageUtil.createPageFromList(orders, pageable);
         return pageOrder.map(orderMapper::orderToOrderDto);
     }
@@ -196,7 +193,7 @@ public class OrderService {
         var order = orderRepository.findById(orderId);
         return orderDtoWithPageMapper.orderDtoToOrderDtoWithPage(orderMapper
                 .orderToOrderDto(order
-                        .orElseThrow(() -> new ResponseStatusException(NOT_FOUND))), page, pageSize);
+                        .orElseThrow(() -> new ResponseStatusException(NOT_FOUND))), page, PAGE_SIZE);
     }
 
     public Integer getSizeModerateOrders() {
@@ -204,7 +201,7 @@ public class OrderService {
     }
 
     public Page<OrderDto> getOrdersByStatus(OrderStatus orderStatus, Integer page) {
-        return orderRepository.findAllByStatus(orderStatus, PageRequest.of(page, pageSize))
+        return orderRepository.findAllByStatus(orderStatus, PageRequest.of(page, PAGE_SIZE))
                 .map(orderMapper::orderToOrderDto);
     }
 
@@ -249,7 +246,7 @@ public class OrderService {
 
     public Page<OrderDto> getAllOrders(Integer page, OrderFilterDto orderFilterDto) {
         var specifications = getSpecifications(orderFilterDto);
-        return orderRepository.findAll(specifications, PageRequest.of(page, pageSize))
+        return orderRepository.findAll(specifications, PageRequest.of(page, PAGE_SIZE))
                 .map(orderMapper::orderToOrderDto);
     }
 

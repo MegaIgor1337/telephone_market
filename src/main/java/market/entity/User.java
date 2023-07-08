@@ -38,19 +38,19 @@ public class User implements BaseEntity<Long> {
     private String image;
     @Builder.Default
     @ToString.Exclude
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Address> addresses = new ArrayList<>();
     @Builder.Default
     @ToString.Exclude
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user")
     private List<Comment> comments = new ArrayList<>();
     @Builder.Default
     @ToString.Exclude
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user")
     private List<Order> orders = new ArrayList<>();
 
     @Builder.Default
     @ToString.Exclude
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user")
     private List<Favourite> favourites = new ArrayList<>();
 }

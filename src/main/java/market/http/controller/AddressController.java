@@ -17,7 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.Map;
 
 import static market.util.ModelHelper.addAttributes;
-import static market.util.StringContainer.*;
+import static market.util.ConstantContainer.*;
 
 @Controller
 @RequiredArgsConstructor

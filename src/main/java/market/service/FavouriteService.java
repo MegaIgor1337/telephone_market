@@ -18,11 +18,12 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static market.util.ConstantContainer.PAGE_SIZE;
+
 @Transactional(readOnly = true)
 @Service
 @RequiredArgsConstructor
 public class FavouriteService {
-    private final Integer pageSize = 2;
     private final FavouriteRepository favouriteRepository;
     private final FavouriteMapper favouriteMapper;
     private final ProductRepository productRepository;
@@ -45,7 +46,7 @@ public class FavouriteService {
     public Page<FavouriteDto> getFavouritesByUserId(Long userId, Integer page) {
         return  PageUtil.createPageFromList(favouriteRepository.findAllByUserId(userId)
                 .stream().map(favouriteMapper::favouriteToFavouriteDto).toList(),
-                PageRequest.of(page, pageSize));
+                PageRequest.of(page, PAGE_SIZE));
     }
 
     @Transactional

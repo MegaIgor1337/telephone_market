@@ -3,7 +3,8 @@ package market.util;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
-public class StringContainer {
+public class ConstantContainer {
+    public static final Integer PAGE_SIZE = 2;
     public static final String EMPTY_PARAM = "";
     public static final String USER_DTO = "userDto";
     public static final String ADDRESS_ID = "addressId";

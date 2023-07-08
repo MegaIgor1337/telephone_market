@@ -6,6 +6,7 @@ import market.mapper.UserMapper;
 import market.repository.UserRepository;
 import market.service.UserService;
 import org.junit.jupiter.api.Test;
+import project.IntegrationTestBase;
 import project.annotation.IT;
 
 import java.math.BigDecimal;
@@ -15,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @IT
 @RequiredArgsConstructor
-public class UserServiceTest {
+public class UserServiceTest extends IntegrationTestBase {
     private final Long id = 1L;
     private final UserService userService;
     private final UserRepository userRepository;

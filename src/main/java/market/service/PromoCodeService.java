@@ -1,6 +1,5 @@
 package market.service;
 
-import jakarta.persistence.Table;
 import lombok.RequiredArgsConstructor;
 import market.dto.CreatePromoCodeDto;
 import market.dto.PromoCodeDto;
@@ -20,16 +19,14 @@ import market.validator.AddedPromoCodeValidator;
 import market.validator.ChangeDiscountPromoCodeValidator;
 import market.validator.ChangeNamePromoCodeValidator;
 import market.validator.EnteredPromoCodeValidator;
-import org.apache.el.stream.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import static market.util.StringContainer.*;
+import static market.util.ConstantContainer.*;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @Service
@@ -42,7 +39,6 @@ public class PromoCodeService {
     private final PromoCodeMapper promoCodeMapper;
     private final ProductRepository productRepository;
     private final ChangeDiscountPromoCodeValidator changeDiscountPromoCodeValidator;
-    private final Integer pageSize = 2;
     private final PromoCodeRepository promoCodeRepository;
     private final ProductMapper productMapper;
     private final PromoCodeProductRepository promoCodeProductRepository;
@@ -56,7 +52,7 @@ public class PromoCodeService {
             throw new ValidationException(validationResult.getErrors());
         }
         Specification<PromoCode> specification = getSpecifications(promoCodeFilter);
-        return promoCodeRepository.findAll(specification, PageRequest.of(page, pageSize))
+        return promoCodeRepository.findAll(specification, PageRequest.of(page, PAGE_SIZE))
                 .map(promoCodeMapper::promoCodeTopromoCodeDto);
     }
 
@@ -82,7 +78,7 @@ public class PromoCodeService {
         var promoCode = promoCodeRepository.findById(id);
         return promoCodeDtoWithPageMapper.promoCodeDtoToPromoCodeDtoWithPage(promoCodeMapper
                 .promoCodeTopromoCodeDto(promoCode
-                        .orElseThrow(() -> new ResponseStatusException(NOT_FOUND))), page, pageSize);
+                        .orElseThrow(() -> new ResponseStatusException(NOT_FOUND))), page, PAGE_SIZE);
     }
 
     @Transactional

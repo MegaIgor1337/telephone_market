@@ -26,7 +26,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.math.BigDecimal;
 import java.util.List;
 
-import static market.util.StringContainer.*;
+import static market.util.ConstantContainer.*;
 
 
 
@@ -34,7 +34,6 @@ import static market.util.StringContainer.*;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class ProductService {
-    private final Integer pageSize = 2;
     private final ProductRepository productRepository;
     private final CreateProductValidator createProductValidator;
     private final EnteredRemoveCountValidator enteredRemoveCountValidator;
@@ -87,7 +86,7 @@ public class ProductService {
         } else if (REACH_FIRST.equals(filter.getPriceQuery())) {
             sort = Sort.by(COST).descending();
         }
-        var pageable = PageRequest.of(page, pageSize, sort);
+        var pageable = PageRequest.of(page, PAGE_SIZE, sort);
         return productRepository.findAll(specification, pageable)
                 .map(productMapper::productToProductDto);
     }

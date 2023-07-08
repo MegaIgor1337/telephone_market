@@ -31,14 +31,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static market.util.StringContainer.*;
+import static market.util.ConstantContainer.*;
 
 
 @RequiredArgsConstructor
 @Service
 @Transactional(readOnly = true)
 public class UserService implements UserDetailsService {
-    private final Integer pageSize = 2;
     private final ImageService imageService;
     private final CreateUserValidator createUserValidator;
     private final CreateUserMapper createUserMapper;
@@ -189,7 +188,8 @@ public class UserService implements UserDetailsService {
 
     public Page<UserDto> getUsersByPredicates(UserFilter filter, Integer page) {
         Specification<User> specifications = getSpecifications(filter);
-        var users = userRepository.findAll(specifications, PageRequest.of(page, pageSize));
+        var users = userRepository.findAll(specifications, PageRequest.of(page, PAGE_SIZE
+        ));
         return users.map(userMapper::userToUserDto);
     }
 

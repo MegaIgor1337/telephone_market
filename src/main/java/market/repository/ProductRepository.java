@@ -13,8 +13,8 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static market.util.StringContainer.ID;
-import static market.util.StringContainer.STATUS;
+import static market.util.ConstantContainer.ID;
+import static market.util.ConstantContainer.STATUS;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpecificationExecutor<Product>,

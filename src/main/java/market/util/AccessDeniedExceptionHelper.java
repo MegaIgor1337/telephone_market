@@ -10,7 +10,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import static market.util.StringContainer.EMPTY_PARAM;
+import static market.util.ConstantContainer.EMPTY_PARAM;
 
 @UtilityClass
 public class AccessDeniedExceptionHelper {

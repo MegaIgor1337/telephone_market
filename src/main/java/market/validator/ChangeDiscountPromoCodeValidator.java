@@ -1,9 +1,8 @@
 package market.validator;
 
-import org.eclipse.tags.shaded.org.apache.regexp.RE;
 import org.springframework.stereotype.Component;
 
-import static market.util.StringContainer.*;
+import static market.util.ConstantContainer.*;
 
 @Component
 public class ChangeDiscountPromoCodeValidator implements Validator<Double> {

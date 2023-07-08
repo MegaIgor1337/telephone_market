@@ -10,21 +10,20 @@ import market.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import project.annotation.IT;
+import project.IntegrationTestBase;
 
 import java.math.BigDecimal;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
-import static market.util.StringContainer.ID;
+import static market.util.ConstantContainer.ID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 
-@IT
 @RequiredArgsConstructor
-public class UserRepositoryTest {
+public class UserRepositoryTest extends IntegrationTestBase {
     private final EntityManager entityManager;
 
     private final UserRepository userRepository;

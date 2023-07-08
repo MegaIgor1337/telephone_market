@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-import static market.util.StringContainer.*;
+import static market.util.ConstantContainer.*;
 
 @Component
 public class UsernameValidator implements Validator<String> {

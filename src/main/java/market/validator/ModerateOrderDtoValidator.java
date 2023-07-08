@@ -5,8 +5,8 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 
-import static market.util.StringContainer.DATE_OF_DELIVERY;
-import static market.util.StringContainer.MESSAGE_DATE_OF_DELIVERY_INVALID;
+import static market.util.ConstantContainer.DATE_OF_DELIVERY;
+import static market.util.ConstantContainer.MESSAGE_DATE_OF_DELIVERY_INVALID;
 
 @Component
 public class ModerateOrderDtoValidator implements Validator<ModerateOrderDto> {

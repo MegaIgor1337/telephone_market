@@ -5,7 +5,6 @@ import lombok.*;
 
 import java.util.List;
 
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -25,7 +24,6 @@ public class Address implements BaseEntity<Long> {
     private User user;
 
     @ToString.Exclude
-    @OneToMany(mappedBy = "address", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "address")
     private List<Order> orders;
-
 }

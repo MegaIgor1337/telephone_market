@@ -7,14 +7,15 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import project.IntegrationTestBase;
 import project.annotation.IT;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@IT
+
 @RequiredArgsConstructor
 @AutoConfigureMockMvc
-public class LogoutControllerTest {
+public class LogoutControllerTest extends IntegrationTestBase {
     private final MockMvc mockMvc;
 
     @Test

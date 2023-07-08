@@ -4,7 +4,7 @@ import market.dto.ProductDto;
 import market.entity.Product;
 import org.mapstruct.Mapper;
 
-import static market.util.StringContainer.SPRING;
+import static market.util.ConstantContainer.SPRING;
 
 @Mapper(componentModel = SPRING, uses = {ColorMapper.class, CountryMapper.class, BrandMapper.class, ModelMapper.class})
 public interface ProductMapper {

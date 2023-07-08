@@ -1,19 +1,19 @@
--- Вставка данных в таблицу "users"
+-- Заполнение таблицы "users"
 INSERT INTO users (username, password, passport_no, email, role, gender, balance)
 VALUES
-    ('Igor', '{noop}FjfjfsjdlJJJJ32', 'JJ321444', 'tasfs@mail.ru', 'USER', 'MALE', 0),
-    ('Maksim321', '{noop}1234567', 'FF432444', 'Jksjds@mail.ru', 'USER', 'MALE', 0),
-    ('Gennadiy22', '{noop}boring', 'LL324455', 'fkdkf@mail.ru', 'ADMIN', 'MALE', 0),
-    ('Georgiy', '{noop}borirstweng', 'LL324355', 'fkddfgfdh@mail.ru', 'ADMIN', 'MALE', 0);
+    ('Igor', '{noop}FjfjfsjdlJJJJ32', 'JJ321444', 'tasfs@mail.ru', 'USER', 'MALE', 0.00),
+    ('Maksim321', '{noop}1234567', 'FF432444', 'Jksjds@mail.ru', 'USER', 'MALE', 0.00),
+    ('Gennadiy22', '{noop}boring', 'LL324455', 'fkdkf@mail.ru', 'ADMIN', 'MALE', 0.00),
+    ('Georgiy', '{noop}borirstweng', 'LL324355', 'fkddfgfdh@mail.ru', 'ADMIN', 'MALE', 0.00);
 
--- Вставка данных в таблицу "addresses"
-INSERT INTO addresses (country, city, street, house, flat, user_id)
+-- Заполнение таблицы "addresses"
+INSERT INTO address (country, city, street, house, flat, user_id)
 VALUES
     ('Belarus', 'Grodno', 'Oginskogo', '4a', '14', 1),
     ('Russia', 'Moscow', 'Arbat', '42', '12', 2);
 
--- Вставка данных в таблицу "brands"
-INSERT INTO brands (name)
+-- Заполнение таблицы "brands"
+INSERT INTO brand (brand)
 VALUES
     ('Xiaomi'),
     ('Samsung'),
@@ -21,8 +21,8 @@ VALUES
     ('Google Pixel'),
     ('Apple');
 
--- Вставка данных в таблицу "models"
-INSERT INTO models (name)
+-- Заполнение таблицы "models"
+INSERT INTO model (model)
 VALUES
     ('12 Pro'),
     ('Galaxy S5'),
@@ -30,22 +30,22 @@ VALUES
     ('L4500'),
     ('5L');
 
--- Вставка данных в таблицу "colors"
-INSERT INTO colors (color)
+-- Заполнение таблицы "colors"
+INSERT INTO color (color)
 VALUES
     ('Black'),
     ('Yellow'),
     ('Pink'),
     ('Gray');
 
--- Вставка данных в таблицу "countries"
-INSERT INTO countries (country)
+-- Заполнение таблицы "countries"
+INSERT INTO country (country)
 VALUES
     ('Russia'),
     ('Germany'),
     ('USA');
 
--- Вставка данных в таблицу "comments"
+-- Заполнение таблицы "comments"
 INSERT INTO comments (comment, user_id, status)
 VALUES
     ('Nice', 1, 'MODERATING'),
@@ -53,36 +53,36 @@ VALUES
     ('Perfect', 2, 'MODERATING'),
     ('Lalal', 2, 'ACCESSED');
 
--- Вставка данных в таблицу "products"
-INSERT INTO products (brand_id, model_id, color_id, country_id, storage_count, cost)
+-- Заполнение таблицы "products"
+INSERT INTO product (brand_id, model_id, color_id, country_id, count_on_storage, cost)
 VALUES
-    (2, 1, 3, 1, 14, 250),
-    (1, 2, 1, 2, 10, 150),
-    (3, 3, 3, 3, 20, 350),
-    (4, 4, 2, 2, 40, 300),
-    (5, 5, 1, 3, 70, 320);
+    (1, 2, 3, 1, 14, 250.00),
+    (2, 1, 1, 2, 10, 150.00),
+    (3, 3, 3, 3, 20, 350.00),
+    (4, 4, 2, 2, 40, 300.00),
+    (5, 5, 1, 3, 70, 320.00);
 
--- Вставка данных в таблицу "orders"
-INSERT INTO orders (user_id, cost, date, status)
+-- Заполнение таблицы "orders"
+INSERT INTO "order" (user_id, cost, date, status, date_of_delivery)
 VALUES
-    (1, 300, NOW(), 'DELIVERED'),
-    (2, 750, NOW(), 'WAITING_PAID');
+    (1, 300.00, NOW(), 'DELIVERED', NOW()),
+    (2, 750.00, NOW(), 'WAITING_PAID', NOW());
 
--- Вставка данных в таблицу "order_products"
-INSERT INTO order_products (order_id, product_id, user_count)
+-- Заполнение таблицы "order_products"
+INSERT INTO order_product (order_id, product_id, user_count)
 VALUES
     (1, 4, 2),
     (1, 3, 5),
     (2, 2, 5);
 
--- Вставка данных в таблицу "promo_codes"
-INSERT INTO promo_codes (discount, code, status)
+-- Заполнение таблицы "promo_codes"
+INSERT INTO promo_code (discount, name, status)
 VALUES
     (3.0, 'JJDKE44', 'ACTIVE'),
     (10.0, 'FIRST', 'ACTIVE');
 
--- Вставка данных в таблицу "promo_code_products"
-INSERT INTO promo_code_products (product_id, promo_code_id, start_date, end_date)
+-- Заполнение таблицы "promo_code_products"
+INSERT INTO promo_code_product (product_id, promo_code_id, date_of_begin, date_of_end)
 VALUES
     (1, 1, NOW(), NULL),
     (2, 1, NOW(), NULL),
@@ -93,8 +93,8 @@ VALUES
     (4, 2, NOW(), NULL),
     (5, 2, NOW(), NULL);
 
--- Вставка данных в таблицу "favourites"
-INSERT INTO favourites (product_id, user_id, date_added)
+-- Заполнение таблицы "favourites"
+INSERT INTO favourite (product_id, user_id, date)
 VALUES
     (2, 1, NOW()),
     (3, 2, NOW());

@@ -4,7 +4,7 @@ import market.dto.FavouriteDto;
 import market.entity.Favourite;
 import org.mapstruct.Mapper;
 
-import static market.util.StringContainer.SPRING;
+import static market.util.ConstantContainer.SPRING;
 
 @Mapper(componentModel = SPRING, uses = {UserMapper.class, ProductMapper.class})
 public interface FavouriteMapper {

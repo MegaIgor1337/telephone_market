@@ -2,7 +2,7 @@ package market.validator;
 
 import org.springframework.stereotype.Component;
 
-import static market.util.StringContainer.*;
+import static market.util.ConstantContainer.*;
 
 @Component
 public class EnteredAddCountValidator implements Validator<String> {

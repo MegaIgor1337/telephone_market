@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import java.math.BigDecimal;
 import java.util.List;
 
-import static market.util.StringContainer.*;
+import static market.util.ConstantContainer.*;
 
 @Component
 @NoArgsConstructor

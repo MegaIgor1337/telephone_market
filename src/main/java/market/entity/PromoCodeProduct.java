@@ -27,6 +27,6 @@ public class PromoCodeProduct implements BaseEntity<Long> {
     private Product product;
     @Column(name = "date_of_begin")
     private LocalDateTime dateOfBegin;
-    @Column(name = "date_od_end")
+    @Column(name = "date_of_end")
     private LocalDateTime dateOfEnd;
 }

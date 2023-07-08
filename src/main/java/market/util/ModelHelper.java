@@ -7,8 +7,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Map;
 
-import static market.util.StringContainer.*;
-import static market.util.StringContainer.SELECTED_PRICE_QUERY;
+import static market.util.ConstantContainer.*;
+import static market.util.ConstantContainer.SELECTED_PRICE_QUERY;
 
 @UtilityClass
 public class ModelHelper {

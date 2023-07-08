@@ -21,7 +21,7 @@ import java.util.Map;
 
 import static market.util.ModelHelper.addAttributes;
 import static market.util.ModelHelper.redirectAttributes;
-import static market.util.StringContainer.*;
+import static market.util.ConstantContainer.*;
 
 @Controller
 @RequestMapping("/admin")
@@ -124,7 +124,7 @@ public class AdminController {
                                   Model model, UserFilter filter, String pageU,
                                   RedirectAttributes redirectAttributes) {
         var userOrders = orderService.findAllOrdersByUserID(id, pageO);
-        var addresses = addressService.getAddresses(id, pageA);
+        var addresses = addressService.getAddressesByUserId(id, pageA);
         var user = userService.findById(id);
         if (pageU != null)
             model.addAttribute(PAGE_U, pageU);

@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static market.util.StringContainer.*;
+import static market.util.ConstantContainer.*;
 
 @Component
 public class UserPassportNoValidator implements Validator<String> {

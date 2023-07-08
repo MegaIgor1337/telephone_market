@@ -1,13 +1,12 @@
 package market.validator;
 
 import market.dto.UserDto;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static market.util.StringContainer.*;
+import static market.util.ConstantContainer.*;
 
 @Component
 public class UserPasswordValidator implements Validator<String> {

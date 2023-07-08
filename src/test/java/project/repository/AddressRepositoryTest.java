@@ -7,13 +7,13 @@ import market.repository.AddressRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import project.IntegrationTestBase;
 import project.annotation.IT;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@IT
 @RequiredArgsConstructor
-public class AddressRepositoryTest {
+public class AddressRepositoryTest extends IntegrationTestBase {
 
     private final AddressRepository addressRepository;
    @Test

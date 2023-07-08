@@ -5,7 +5,7 @@ import market.dto.OrderDto;
 import market.entity.Order;
 import org.mapstruct.Mapper;
 
-import static market.util.StringContainer.SPRING;
+import static market.util.ConstantContainer.SPRING;
 
 @Mapper(componentModel = SPRING, uses = {OrderProductMapper.class, AddressMapper.class})
 public interface OrderMapper {

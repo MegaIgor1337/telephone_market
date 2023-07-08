@@ -7,7 +7,6 @@ import market.enums.Role;
 import market.exception.ValidationException;
 import market.service.UserService;
 import market.util.AccessDeniedExceptionHelper;
-import market.util.ModelHelper;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -21,7 +20,7 @@ import java.util.Map;
 
 import static market.util.ModelHelper.addAttributes;
 import static market.util.ModelHelper.redirectAttributes;
-import static market.util.StringContainer.*;
+import static market.util.ConstantContainer.*;
 
 @Controller
 @RequiredArgsConstructor

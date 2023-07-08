@@ -2,22 +2,12 @@ package project.controller;
 
 
 import lombok.RequiredArgsConstructor;
-import market.dto.CommentDto;
-import market.enums.CommentStatus;
-import market.mapper.CommentMapper;
-import market.repository.CommentRepository;
-import market.service.CommentService;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import project.annotation.IT;
+import project.IntegrationTestBase;
 
-import java.util.Arrays;
-import java.util.List;
-
-import static market.util.StringContainer.MODERATE_COMMENTS;
 import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -25,11 +15,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@IT
+
 @RequiredArgsConstructor
 @AutoConfigureMockMvc
 @WithMockUser(username = "Gennadiy22", password = "test", authorities = {"ADMIN", "USER"})
-public class AdminControllerTest {
+public class AdminControllerTest extends IntegrationTestBase {
     private final MockMvc mockMvc;
 
     @Test

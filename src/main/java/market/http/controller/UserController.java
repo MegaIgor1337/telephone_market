@@ -9,7 +9,6 @@ import market.service.*;
 import market.util.ModelHelper;
 import market.validator.Error;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -27,7 +26,7 @@ import static market.util.AccessDeniedExceptionHelper.authorizeCheck;
 import static market.util.AccessDeniedExceptionHelper.setNewAuthentication;
 import static market.util.ModelHelper.addAttributes;
 import static market.util.ModelHelper.redirectAttributes;
-import static market.util.StringContainer.*;
+import static market.util.ConstantContainer.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -100,7 +99,7 @@ public class UserController {
         authorizeCheck(userService, authentication, id);
         String pageA = (String) model.getAttribute(PAGE_A);
         String pageMain = EMPTY_PARAM.equals(pageA) || pageA == null ? page.toString() : pageA;
-        var addressDtoList = addressService.getAddresses(id, Integer.valueOf(pageMain));
+        var addressDtoList = addressService.getAddressesByUserId(id, Integer.valueOf(pageMain));
         addAttributes(model, Map.of(PAGE_A, EMPTY_PARAM,
                 ERRORS, Error.of(EMPTY_PARAM, EMPTY_PARAM),
                 ADDRESSES, addressDtoList));

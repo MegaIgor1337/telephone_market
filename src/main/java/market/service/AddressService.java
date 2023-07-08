@@ -18,13 +18,13 @@ import market.validator.CreateAddressValidator;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
+
+import static market.util.ConstantContainer.PAGE_SIZE;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
 public class AddressService {
-    private final Integer pageSize = 2;
     private final AddressMapper addressMapper;
     private final AddressRepository addressRepository;
     private final CreateUpdateAddressDtoMapper createUpdateAddressDtoMapper;
@@ -55,8 +55,8 @@ public class AddressService {
         }
     }
 
-    public Page<AddressDto> getAddresses(Long id, Integer page) {
-        return addressRepository.findByUserId(id, PageRequest.of(page, pageSize))
+    public Page<AddressDto> getAddressesByUserId(Long id, Integer page) {
+        return addressRepository.findByUserId(id, PageRequest.of(page, PAGE_SIZE))
                 .map(addressMapper::addressToAddressDto);
     }
 

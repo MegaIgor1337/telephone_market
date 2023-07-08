@@ -5,8 +5,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
-import static market.util.StringContainer.LOGIN;
-import static market.util.StringContainer.LOGIN_MESSAGE;
+import static market.util.ConstantContainer.LOGIN;
+import static market.util.ConstantContainer.LOGIN_MESSAGE;
 
 @Component
 public class LoginUserValidator implements Validator<Optional<UserDto>> {

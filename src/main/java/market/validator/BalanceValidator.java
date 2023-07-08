@@ -4,8 +4,8 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 
-import static market.util.StringContainer.BALANCE;
-import static market.util.StringContainer.BALANCE_MESSAGE;
+import static market.util.ConstantContainer.BALANCE;
+import static market.util.ConstantContainer.BALANCE_MESSAGE;
 
 @Component
 public class BalanceValidator implements Validator<String> {

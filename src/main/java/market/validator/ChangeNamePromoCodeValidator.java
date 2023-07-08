@@ -4,10 +4,9 @@ import market.entity.PromoCode;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Objects;
 
-import static market.util.StringContainer.PROMO_CODE;
-import static market.util.StringContainer.PROMO_CODE_NAME_INVALID;
+import static market.util.ConstantContainer.PROMO_CODE;
+import static market.util.ConstantContainer.PROMO_CODE_NAME_INVALID;
 
 @Component
 public class ChangeNamePromoCodeValidator implements Validator<String> {

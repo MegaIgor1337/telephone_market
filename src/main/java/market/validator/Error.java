@@ -2,7 +2,7 @@ package market.validator;
 
 import lombok.Value;
 
-import static market.util.StringContainer.INVALID;
+import static market.util.ConstantContainer.INVALID;
 
 
 @Value(staticConstructor = "of")

@@ -6,8 +6,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-import static market.util.StringContainer.*;
-import static market.util.StringContainer.DISCOUNT_MORE_HUNDRED;
+import static market.util.ConstantContainer.*;
+import static market.util.ConstantContainer.DISCOUNT_MORE_HUNDRED;
 
 @Component
 public class AddedPromoCodeValidator implements Validator<CreatePromoCodeDto> {

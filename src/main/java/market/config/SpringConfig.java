@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 @ComponentScan(value = {"market.repository"})
 @RequiredArgsConstructor
 public class SpringConfig {
-    @Bean
+   /* @Bean
     public CommandLineRunner dataLoad(
             @Autowired UserRepository userRepository,
             @Autowired AddressRepository addressRepository,
@@ -255,5 +255,5 @@ public class SpringConfig {
                 .build();
         favouriteRepository.save(favourite);
         return favourite;
-    }
+    }*/
 }
