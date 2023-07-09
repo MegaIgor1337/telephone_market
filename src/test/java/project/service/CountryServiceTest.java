@@ -4,14 +4,12 @@ package project.service;
 import lombok.RequiredArgsConstructor;
 import market.service.CountryService;
 import org.junit.jupiter.api.Test;
-import project.IntegrationTestBase;
 import project.annotation.IT;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 @RequiredArgsConstructor
-public class CountryServiceTest extends IntegrationTestBase {
+@IT
+public class CountryServiceTest {
     private final CountryService countryService;
     @Test
     void getCountries() {

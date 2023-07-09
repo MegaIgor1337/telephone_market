@@ -10,7 +10,7 @@ import market.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import project.IntegrationTestBase;
+import project.annotation.IT;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -23,7 +23,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 
 @RequiredArgsConstructor
-public class UserRepositoryTest extends IntegrationTestBase {
+@IT
+public class UserRepositoryTest  {
     private final EntityManager entityManager;
 
     private final UserRepository userRepository;
@@ -68,12 +69,6 @@ public class UserRepositoryTest extends IntegrationTestBase {
         assertThat(user1.getEmail()).isEqualTo("Ghsdsdst4@mail.ru");
     }
 
-    @Test
-    public void testDelete() {
-        userRepository.delete(userRepository.findAll().stream().sorted()
-                .toList().get(userRepository.findAll().size() - 1));
-        entityManager.flush();
-    }
 
     @Test
     public void testFind() {

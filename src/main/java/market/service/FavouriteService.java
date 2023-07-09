@@ -2,6 +2,7 @@ package market.service;
 
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import market.dto.FavouriteDto;
 import market.entity.Favourite;
 import market.entity.Product;
@@ -23,6 +24,7 @@ import static market.util.ConstantContainer.PAGE_SIZE;
 @Transactional(readOnly = true)
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class FavouriteService {
     private final FavouriteRepository favouriteRepository;
     private final FavouriteMapper favouriteMapper;
@@ -40,6 +42,7 @@ public class FavouriteService {
                     .date(LocalDateTime.now())
                     .build();
             favouriteRepository.save(favourite);
+            log.info("User {}, added product {} to favourite", userId, productId);
         }
     }
 
@@ -53,5 +56,6 @@ public class FavouriteService {
     public void deleteProductFromFavourite(Long favouriteId) {
         var favourite = favouriteRepository.findById(favouriteId);
         favourite.ifPresent(favouriteRepository::delete);
+        log.info("Favourite {} deleted", favouriteId);
     }
 }

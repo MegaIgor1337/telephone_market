@@ -1,6 +1,7 @@
 package market.http.controller;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import market.dto.*;
 import market.enums.OrderStatus;
 import market.exception.LackOfMoneyException;
@@ -29,6 +30,7 @@ import static market.util.ModelHelper.redirectAttributes;
 import static market.util.ConstantContainer.*;
 
 @Controller
+@Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/users")
 @SessionAttributes({USER_DTO, USER_COMMENTS, PRODUCTS_IN_BASKET, MESSAGE_IF_SEARCHED_PRODUCTS_EMPTY,
@@ -67,8 +69,10 @@ public class UserController {
     public String addComment(@PathVariable(ID) Long id,
                              Authentication authentication,
                              String comment) {
+        log.info("User with id {} started adding comment", id);
         authorizeCheck(userService, authentication, id);
         commentService.save(comment, id);
+        log.info("User with id {} wrote comment", id);
         return "redirect:/users";
     }
 
@@ -201,11 +205,13 @@ public class UserController {
                            RedirectAttributes redirectAttributes,
                            Authentication authentication) {
         try {
+            log.info("User with id {}, started putting money {}", id, money);
             authorizeCheck(userService, authentication, id);
             addAttributes(model, Map.of(USER_DTO, userService.putMoney(id, money)
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND))));
             return "redirect:/users/{id}/profileMenu";
         } catch (ValidationException e) {
+            log.info("User with id {} entered invalid count of money {}", id, money);
             addAttributes(model, Map.of(ERRORS, e.getErrors()));
             ModelHelper.redirectAttributes(redirectAttributes, Map.of(MONEY, money));
             return "redirect:/users/{id}/profileMenu/putMoney";
@@ -264,6 +270,7 @@ public class UserController {
                                  ProductFilter productFilter,
                                  Authentication authentication,
                                  RedirectAttributes redirectAttributes) {
+        log.info("User {} started adding product {} to favourite", id, productId);
         authorizeCheck(userService, authentication, id);
         favouriteService.addFavourite(id, Long.valueOf(productId));
         addAttributes(model, Map.of(PAGE_FB, pageFB));
@@ -280,6 +287,7 @@ public class UserController {
                               ProductFilter productFilter,
                               Authentication authentication,
                               RedirectAttributes redirectAttributes) {
+        log.info("User {} started processing of adding product {} to basket", id, productId);
         authorizeCheck(userService, authentication, id);
         orderService.addProductToBasket(id, productId, count);
         addAttributes(model, Map.of(PAGE_FB, pageFB));
@@ -312,6 +320,7 @@ public class UserController {
                                           String pageOr,
                                           Model model,
                                           Authentication authentication) {
+        log.info("User {} started processing of deleting product {} from basket", id, productId);
         authorizeCheck(userService, authentication, id);
         orderService.deleteProductFromBasket(Long.valueOf(productId), id);
         addAttributes(model, Map.of(PAGE_OR, pageOr));
@@ -333,11 +342,13 @@ public class UserController {
                            @SessionAttribute OrderDtoWithPage order,
                            Authentication authentication) {
         try {
+            log.info("User with id {}, started paein order {}", id,order.getId());
             authorizeCheck(userService, authentication, id);
             discountedOrder = null;
             orderService.payOrder(userDto, deliveryAddress,  order);
             return "redirect:/users/{id}/order/paidOrder";
         } catch (LackOfMoneyException e) {
+            log.info("User does not have money");
             addAttributes(model, Map.of(ERRORS, e.getErrors()));
             return "redirect:/users/{id}/profileMenu/putMoney";
         }
@@ -383,6 +394,7 @@ public class UserController {
                                   String pageF,
                                   Long favouriteId,
                                   Authentication authentication) {
+        log.info("User {} started deleting product {} from favourite", id, favouriteId);
         authorizeCheck(userService, authentication, id);
         addAttributes(model, Map.of(PAGE_F, pageF));
         favouriteService.deleteProductFromFavourite(favouriteId);
@@ -395,6 +407,7 @@ public class UserController {
                                            String pageF,
                                            Authentication authentication,
                                            String productId) {
+        log.info("User {} started adding product {} to basket", id, productId);
         authorizeCheck(userService, authentication, id);
         orderService.addProductToBasket(id, productId, null);
         addAttributes(model, Map.of(PAGE_F, pageF));

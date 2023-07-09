@@ -40,7 +40,6 @@ public class PromoCodeService {
     private final ProductRepository productRepository;
     private final ChangeDiscountPromoCodeValidator changeDiscountPromoCodeValidator;
     private final PromoCodeRepository promoCodeRepository;
-    private final ProductMapper productMapper;
     private final PromoCodeProductRepository promoCodeProductRepository;
     private final PromoCodeDtoWithPageMapper promoCodeDtoWithPageMapper;
     private final EnteredPromoCodeValidator enteredPromoCodeValidator;

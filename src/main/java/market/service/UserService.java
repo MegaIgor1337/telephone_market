@@ -3,6 +3,7 @@ package market.service;
 import jakarta.persistence.criteria.Join;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import market.dto.*;
 import market.entity.Address;
 import market.entity.User;
@@ -36,6 +37,7 @@ import static market.util.ConstantContainer.*;
 
 @RequiredArgsConstructor
 @Service
+@Slf4j
 @Transactional(readOnly = true)
 public class UserService implements UserDetailsService {
     private final ImageService imageService;
@@ -156,6 +158,7 @@ public class UserService implements UserDetailsService {
             var balance = userDto.get().getBalance();
             var newBalance = balance.add(new BigDecimal(money));
             userDto.get().setBalance(newBalance);
+            log.info("User {} putted money {}", id, money);
             return Optional.of(userMapper.userToUserDto(userRepository
                     .saveAndFlush(userDto.get())));
         }

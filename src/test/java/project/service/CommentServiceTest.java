@@ -7,7 +7,6 @@ import market.mapper.CommentMapper;
 import market.repository.CommentRepository;
 import market.service.CommentService;
 import org.junit.jupiter.api.Test;
-import project.IntegrationTestBase;
 import project.annotation.IT;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
@@ -15,7 +14,8 @@ import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 
 @RequiredArgsConstructor
-public class CommentServiceTest extends IntegrationTestBase {
+@IT
+public class CommentServiceTest  {
     private final CommentService commentService;
     private final CommentRepository commentRepository;
     private final CommentMapper commentMapper;

@@ -1,6 +1,7 @@
 package market.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import market.dto.*;
 import market.entity.Order;
 import market.entity.OrderProduct;
@@ -36,6 +37,7 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @Transactional(readOnly = true)
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class OrderService {
     private final AddressRepository addressRepository;
@@ -69,6 +71,7 @@ public class OrderService {
                     .build();
             orderRepository.saveAndFlush(order.get());
             orderProductRepository.save(orderProduct);
+            log.info("Product {} added to basket, that has created late", productId);
         }
         if (product.isPresent() && order.isEmpty()) {
             var newOrder = Order.builder()
@@ -84,6 +87,7 @@ public class OrderService {
                     .build();
             orderRepository.saveAndFlush(newOrder);
             orderProductRepository.save(orderProduct);
+            log.info("Product {} added to basket, that was created at right now", productId);
         }
     }
 
@@ -124,6 +128,7 @@ public class OrderService {
             orderRepository.saveAndFlush(order.get());
             productRepository.saveAndFlush(product.get());
             orderProductRepository.deleteOrderProductByProductAndOrder(product.get(), order.get());
+            log.info("Product {} deleted from basket", productId);
         }
 
     }
@@ -143,7 +148,8 @@ public class OrderService {
             o.setCost(orderDto.getCost());
         });
         order.ifPresent(orderRepository::saveAndFlush);
-         userRepository.saveAndFlush(userMapper.userDtotoUser(userDto));
+        userRepository.saveAndFlush(userMapper.userDtotoUser(userDto));
+        log.info("User paied order, price - {}",orderDto.getCost());
     }
 
     public OrderDto acceptPromoCode(String promoCode, Long userId) {

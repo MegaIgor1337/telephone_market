@@ -6,15 +6,12 @@ import market.enums.OrderStatus;
 import market.service.ProductService;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.PageRequest;
-import project.IntegrationTestBase;
 import project.annotation.IT;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 @IT
 @RequiredArgsConstructor
-public class ProductServiceTest extends IntegrationTestBase {
+public class ProductServiceTest  {
     private final ProductService productService;
 
     private final Long userId = 1L;

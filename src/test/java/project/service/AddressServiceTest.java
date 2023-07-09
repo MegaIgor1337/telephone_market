@@ -6,14 +6,13 @@ import market.dto.CreateUpdateAddressDto;
 import market.repository.UserRepository;
 import market.service.AddressService;
 import org.junit.jupiter.api.Test;
-import org.springframework.test.annotation.Rollback;
-import org.springframework.transaction.annotation.Transactional;
-import project.IntegrationTestBase;
+import project.annotation.IT;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RequiredArgsConstructor
-public class AddressServiceTest extends IntegrationTestBase {
+@IT
+public class AddressServiceTest {
 
     private final Long id = 1L;
     private final UserRepository userRepository;

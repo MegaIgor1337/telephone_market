@@ -6,8 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import project.IntegrationTestBase;
 import project.annotation.IT;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -15,7 +13,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RequiredArgsConstructor
 @AutoConfigureMockMvc
-public class LogoutControllerTest extends IntegrationTestBase {
+@IT
+public class LogoutControllerTest  {
     private final MockMvc mockMvc;
 
     @Test

@@ -7,13 +7,13 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import project.IntegrationTestBase;
 import project.annotation.IT;
 
 
 @RequiredArgsConstructor
 @AutoConfigureMockMvc
-public class MarketControllerTest extends IntegrationTestBase {
+@IT
+public class MarketControllerTest {
     private final MockMvc mockMvc;
 
     @Test

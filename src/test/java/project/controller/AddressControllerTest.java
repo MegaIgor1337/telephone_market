@@ -9,7 +9,6 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import project.IntegrationTestBase;
 import project.annotation.IT;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
@@ -18,8 +17,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RequiredArgsConstructor
 @AutoConfigureMockMvc
+@IT
 @WithMockUser(username = "test@gmail.com", password = "test", authorities = {"ADMIN", "USER"})
-public class AddressControllerTest extends IntegrationTestBase {
+public class AddressControllerTest  {
     private final MockMvc mockMvc;
 
     @Test

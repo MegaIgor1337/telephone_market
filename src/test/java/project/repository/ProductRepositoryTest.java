@@ -6,15 +6,16 @@ import market.repository.ProductRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import project.IntegrationTestBase;
+import project.annotation.IT;
 
 import static market.util.ConstantContainer.ID;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 
 @RequiredArgsConstructor
-public class ProductRepositoryTest extends IntegrationTestBase {
+@IT
+public class ProductRepositoryTest {
     private final ProductRepository productRepository;
 
     @Test

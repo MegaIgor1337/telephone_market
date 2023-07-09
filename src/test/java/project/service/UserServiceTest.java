@@ -1,22 +1,19 @@
 package project.service;
 
 import lombok.RequiredArgsConstructor;
-import market.dto.CreateUserDto;
 import market.mapper.UserMapper;
 import market.repository.UserRepository;
 import market.service.UserService;
 import org.junit.jupiter.api.Test;
-import project.IntegrationTestBase;
 import project.annotation.IT;
 
 import java.math.BigDecimal;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @IT
 @RequiredArgsConstructor
-public class UserServiceTest extends IntegrationTestBase {
+public class UserServiceTest  {
     private final Long id = 1L;
     private final UserService userService;
     private final UserRepository userRepository;

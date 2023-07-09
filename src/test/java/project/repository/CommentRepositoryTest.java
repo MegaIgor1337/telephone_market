@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import market.entity.Comment;
 import market.repository.CommentRepository;
 import org.junit.jupiter.api.Test;
-import project.IntegrationTestBase;
 import project.annotation.IT;
 
 import java.util.List;
@@ -14,7 +13,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 
 @RequiredArgsConstructor
-public class CommentRepositoryTest extends IntegrationTestBase {
+@IT
+public class CommentRepositoryTest  {
     private final CommentRepository commentRepository;
     @Test
     public void testFindByUserId() {

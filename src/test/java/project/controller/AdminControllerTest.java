@@ -6,11 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import project.IntegrationTestBase;
+import project.annotation.IT;
 
-import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -18,8 +15,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RequiredArgsConstructor
 @AutoConfigureMockMvc
+@IT
 @WithMockUser(username = "Gennadiy22", password = "test", authorities = {"ADMIN", "USER"})
-public class AdminControllerTest extends IntegrationTestBase {
+public class AdminControllerTest  {
     private final MockMvc mockMvc;
 
     @Test
