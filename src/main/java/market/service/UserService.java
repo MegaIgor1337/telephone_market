@@ -82,28 +82,13 @@ public class UserService implements UserDetailsService {
         }
         userDto.setBalance(BigDecimal.ZERO);
         return  Optional.of(userDto)
-                .map(dto -> {
-                    uploadImage(dto.getImage());
-                    return createUserMapper.map(dto);
-                })
+                .map(createUserMapper::map)
                 .map(userRepository::save)
                 .map(userMapper::userToUserDto)
                 .orElseThrow();
     }
 
-    @Transactional
-    public UserDto setNewAvatar(Long id, MultipartFile image) {
-        var user = userRepository.findById(id).orElseThrow();
-        var updateUser = createUserMapper.map(user, image);
-        return Optional.of(updateUser)
-                .map(dto -> {
-                    uploadImage(image);
-                    return createUserMapper.map(dto);
-                })
-                .map(userRepository::saveAndFlush)
-                .map(userMapper::userToUserDto)
-                .orElseThrow();
-    }
+
 
     private List<INameUserDto> getAllNames() {
         return userRepository.findAllByUsernameNotNull();
@@ -165,19 +150,14 @@ public class UserService implements UserDetailsService {
         return Optional.empty();
     }
 
-    @SneakyThrows
+  /*  @SneakyThrows
     private void uploadImage(MultipartFile image) {
         if(!image.isEmpty()) {
             imageService.upload(image.getOriginalFilename(), image.getInputStream());
         }
-    }
+    }*/
 
-    public Optional<byte[]> findAvatar(Long id) {
-        return userRepository.findById(id)
-                .map(User::getImage)
-                .filter(StringUtils::hasText)
-                .flatMap(imageService::get);
-    }
+
 
     public UserDto getCurrentUser(Authentication authentication) {
         if (authentication == null) {

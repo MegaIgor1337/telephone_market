@@ -437,14 +437,5 @@ public class UserController {
         return "user/productFromOH";
     }
 
-    @PostMapping("/{id}/avatar/setNew")
-    public String setNewAvatar(@PathVariable(ID) Long id,
-                               Model model,
-                               Authentication authentication,
-                               MultipartFile image) {
-        authorizeCheck(userService, authentication, id);
-        var user = userService.setNewAvatar(id, image);
-        addAttributes(model, Map.of(USER_DTO, user));
-        return "redirect:/users/{id}/profileMenu";
-    }
+
 }

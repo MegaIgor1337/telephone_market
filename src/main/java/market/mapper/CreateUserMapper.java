@@ -2,7 +2,6 @@ package market.mapper;
 
 import lombok.RequiredArgsConstructor;
 import market.dto.CreateUserDto;
-import market.dto.UpdateImageUserDto;
 import market.entity.User;
 import market.enums.Gender;
 import market.enums.Role;
@@ -27,23 +26,9 @@ public class CreateUserMapper  {
         return user;
     }
 
-    public UpdateImageUserDto map(User user, MultipartFile image) {
-        return new UpdateImageUserDto(
-                user.getUsername(),
-                user.getPassword(),
-                user.getPassportNo(),
-                user.getEmail(),
-                String.valueOf(user.getRole()),
-                String.valueOf(user.getGender()),
-                image,
-                user.getBalance(),
-                user.getId());
-    }
+
 
     private void copy(CreateUserDto object, User user) {
-        if (object instanceof UpdateImageUserDto) {
-            user.setId(((UpdateImageUserDto) object).getId());
-        }
         user.setUsername(object.getUsername());
         user.setPassword(object.getRawPassword());
         user.setEmail(object.getEmail());
@@ -57,8 +42,6 @@ public class CreateUserMapper  {
                 .map(passwordEncoder::encode)
                 .ifPresent(user::setPassword);
 
-        Optional.ofNullable(object.getImage())
-                .filter(Predicate.not(MultipartFile::isEmpty))
-                .ifPresent(image -> user.setImage(image.getOriginalFilename()));
+
     }
 }

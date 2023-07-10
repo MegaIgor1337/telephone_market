@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Error 403</title>
+</head>
+<body>
+<p><span th:text="#{error.error403}">Access is denied</span></p>
+    <br/>
+    <img width="100" th:src="@{/api/v3/errors/picture}" alt="Error image"/>
+<br/>
+    <a th:href="@{/users}">
+        <button type="button"><span th:text="#{menu.backToMenu}"></span></button>
+    </a>
+
+
+</body>
+</html>

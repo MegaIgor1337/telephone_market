@@ -8,7 +8,7 @@
 <a th:href="@{/users}">
     <button type="button"><span th:text="#{menu.backToMenu}"></span></button>
 </a>
-<span th:if="${#lists.isEmpty(favouriteProducts.content)}">
+<span th:if="${#lists.isEmpty(favouriteProducts)}">
     <p> <span th:text="#{favourite.NotFavourites}"></span> </p>
 </span>
 

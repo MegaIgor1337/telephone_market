@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import market.dto.*;
 import market.entity.Order;
 import market.entity.OrderProduct;
+import market.entity.Product;
 import market.entity.PromoCodeProduct;
 import market.enums.OrderStatus;
 import market.exception.LackOfMoneyException;
@@ -61,18 +62,14 @@ public class OrderService {
         int productCount = count != null && !count.isBlank() ? Integer.parseInt(count) : 1;
         product.ifPresent(p -> p.setStorageCount(p.getStorageCount() - productCount));
         product.ifPresent(productRepository::saveAndFlush);
-        if (product.isPresent() && order.isPresent()) {
-            BigDecimal presentCost = order.get().getCost();
-            order.get().setCost(presentCost.add(product.get().getCost().multiply(new BigDecimal(productCount))));
-            var orderProduct = OrderProduct.builder()
-                    .product(product.get())
-                    .order(order.get())
-                    .userCount(productCount)
-                    .build();
-            orderRepository.saveAndFlush(order.get());
-            orderProductRepository.save(orderProduct);
-            log.info("Product {} added to basket, that has created late", productId);
-        }
+        addProductToCreatedBasket(order, product, productCount, productId);
+        addProductToNewBasket(order, product, userId, productCount, productId);
+    }
+
+
+    private void addProductToNewBasket(Optional<Order> order, Optional<Product> product,
+                                       Long userId, Integer productCount,
+                                       String productId) {
         if (product.isPresent() && order.isEmpty()) {
             var newOrder = Order.builder()
                     .status(OrderStatus.WAITING_PAID)
@@ -88,6 +85,22 @@ public class OrderService {
             orderRepository.saveAndFlush(newOrder);
             orderProductRepository.save(orderProduct);
             log.info("Product {} added to basket, that was created at right now", productId);
+        }
+    }
+
+    private void addProductToCreatedBasket(Optional<Order> order, Optional<Product> product,
+                                           Integer productCount, String productId) {
+        if (product.isPresent() && order.isPresent()) {
+            BigDecimal presentCost = order.get().getCost();
+            order.get().setCost(presentCost.add(product.get().getCost().multiply(new BigDecimal(productCount))));
+            var orderProduct = OrderProduct.builder()
+                    .product(product.get())
+                    .order(order.get())
+                    .userCount(productCount)
+                    .build();
+            orderRepository.saveAndFlush(order.get());
+            orderProductRepository.save(orderProduct);
+            log.info("Product {} added to basket, that has created late", productId);
         }
     }
 
@@ -121,10 +134,12 @@ public class OrderService {
             var orderProduct = orderProductRepository
                     .findOrderProductByOrderAndProduct(order.get(), product.get());
             Integer userCount = orderProduct.isPresent() ? orderProduct.get().getUserCount() : 0;
-            var productCount = product.get().getStorageCount();
-            BigDecimal orderCost = order.get().getCost();
-            order.get().setCost(orderCost.subtract(product.get().getCost().multiply(new BigDecimal(userCount))));
-            product.get().setStorageCount(productCount + userCount);
+            if (userCount == 0) {
+                var productCount = product.get().getStorageCount();
+                BigDecimal orderCost = order.get().getCost();
+                order.get().setCost(orderCost.subtract(product.get().getCost().multiply(new BigDecimal(userCount))));
+                product.get().setStorageCount(productCount + userCount);
+            }
             orderRepository.saveAndFlush(order.get());
             productRepository.saveAndFlush(product.get());
             orderProductRepository.deleteOrderProductByProductAndOrder(product.get(), order.get());

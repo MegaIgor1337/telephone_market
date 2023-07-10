@@ -1,6 +1,8 @@
 package market.config;
 
 import market.enums.Role;
+import market.http.handler.ControllerExceptionHandler;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -12,6 +14,7 @@ import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
 
 import java.util.Set;
 
@@ -19,6 +22,9 @@ import java.util.Set;
 @EnableMethodSecurity
 @EnableWebSecurity
 public class SecurityConfiguration   {
+
+    @Autowired
+    private ControllerExceptionHandler accessDeniedHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -42,12 +48,16 @@ public class SecurityConfiguration   {
                             }
                         })
                         .permitAll())
+
                 .logout(logout -> logout
                         .clearAuthentication(true)
                         .invalidateHttpSession(true)
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/login")
-                        .deleteCookies("JSESSIONID"));
+                        .deleteCookies("JSESSIONID"))
+                .exceptionHandling(config -> config.accessDeniedHandler(accessDeniedHandler));
+
+
         return http.build();
 
     }

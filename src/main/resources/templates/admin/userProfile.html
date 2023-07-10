@@ -8,9 +8,7 @@
 <a th:href="@{/admin/menu/users}">
     <button type="button"><span th:text="#{menu.back}">Back</span></button>
 </a>
-<div th:if="${user.image}">
-    <img width="40" th:src="@{/users/{userId}/avatar(userId=${user.id})}" alt="User image"/>
-</div>
+
 <p><span th:text="#{login.username}"></span></p>
 <span th:text="${user.username}"></span>
 <p><span th:text="#{user.email}"></span></p>

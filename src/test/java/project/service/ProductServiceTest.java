@@ -1,8 +1,10 @@
 package project.service;
 
 import lombok.RequiredArgsConstructor;
+import market.dto.CreateProductDto;
 import market.dto.ProductFilter;
 import market.enums.OrderStatus;
+import market.repository.ProductRepository;
 import market.service.ProductService;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.PageRequest;
@@ -13,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RequiredArgsConstructor
 public class ProductServiceTest  {
     private final ProductService productService;
-
+    private final ProductRepository productRepository;
     private final Long userId = 1L;
     @Test
     void getProducts() {
@@ -41,4 +43,39 @@ public class ProductServiceTest  {
             var result = productService.getProductsByPredicates(createUserProductDto, 0);
             assertThat(result).hasSize(2);
     }
+
+    @Test
+    void addNewProduct() {
+        var createProductDto = CreateProductDto.builder()
+                .brand("Xiaomi")
+                .model("Redmi 6")
+                .color("Black")
+                .country("USA")
+                .count(12)
+                .cost(42.5).build();
+        productService.addNewProduct(createProductDto);
+        var result = productService.getProducts();
+        assertThat(result).hasSize(6);
+    }
+
+    @Test
+    void deleteProduct() {
+        productService.deleteProduct(2L);
+        assertThat(productService.getProducts()).hasSize(4);
+    }
+
+    @Test
+    void removeCount() {
+        productService.removeCount(5L, "20");
+        assertThat(productRepository.findById(5L).get()
+                .getStorageCount()).isEqualTo(50);
+    }
+
+    @Test
+    void addCount() {
+        productService.addCount(5L, "20");
+        assertThat(productRepository.findById(5L).get()
+                .getStorageCount()).isEqualTo(90);
+    }
+
 }

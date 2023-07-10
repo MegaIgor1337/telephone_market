@@ -8,16 +8,7 @@
 <a th:href="@{/users}">
     <button type="button"><span th:text="#{menu.backToMenu}">Menu:</span></button>
 </a><br/>
-<div th:if="${userDto.image}">
-    <img width="40" th:src="@{/users/{userId}/avatar(userId=${userDto.id})}" alt="User image"/>
-</div>
-<span th:text="#{user.changeAvatar}">Change avatar:</span><br/>
-<form th:action="@{/users/{userId}/avatar/setNew(userId=${userDto.id})}" enctype="multipart/form-data" method="post">
-    <label for="image"> <span th:text="#{user.image}">Image</span>
-        <input id="image" type="file" name="image">
-    </label><br>
-    <button value="change" type="submit"><span th:text="#{user.change}">Change</span></button>
-</form>
+
 <p><span th:text="#{login.username}">Login</span></p>
 <span th:text="${userDto.username}"></span>
 <a th:href="@{/users/{userId}/profileMenu/changeLogin(userId=${userDto.id})}">
