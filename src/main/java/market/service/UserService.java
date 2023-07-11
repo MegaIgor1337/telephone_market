@@ -11,6 +11,7 @@ import market.enums.Role;
 import market.exception.ValidationException;
 import market.mapper.CreateUserMapper;
 import market.mapper.UserMapper;
+import market.repository.AddressRepository;
 import market.repository.UserRepository;
 import market.validator.*;
 import org.springframework.data.domain.Page;
@@ -41,6 +42,7 @@ import static market.util.ConstantContainer.*;
 @Transactional(readOnly = true)
 public class UserService implements UserDetailsService {
     private final ImageService imageService;
+    private final AddressRepository addressRepository;
     private final CreateUserValidator createUserValidator;
     private final CreateUserMapper createUserMapper;
     private final UsernameValidator usernameValidator;
@@ -105,10 +107,16 @@ public class UserService implements UserDetailsService {
         if (!validationResultName.isValid()) {
             throw new ValidationException(validationResultName.getErrors());
         }
-        userDto.setUsername(newLogin);
-        userRepository.saveAndFlush(userMapper.userDtotoUser(userDto));
+        var userEntity = userMapper.userDtotoUser(userDto);
+        userEntity.setUsername(newLogin);
+        setAddressAndSave(userEntity);
     }
 
+    private void setAddressAndSave(User user) {
+        var userAddresses = addressRepository.findByUserId(user.getId());
+        user.setAddresses(userAddresses);
+        userRepository.saveAndFlush(user);
+    }
 
 
     @Transactional
@@ -117,8 +125,9 @@ public class UserService implements UserDetailsService {
         if (!validationResultPassportNo.isValid()) {
             throw new ValidationException(validationResultPassportNo.getErrors());
         }
-        userDto.setPassportNo(newPassportNo);
-        userRepository.save(userMapper.userDtotoUser(userDto));
+        var userEntity = userMapper.userDtotoUser(userDto);
+        userEntity.setPassportNo(newPassportNo);
+        setAddressAndSave(userEntity);
     }
 
     @Transactional
@@ -128,8 +137,9 @@ public class UserService implements UserDetailsService {
         if (!validationResultEmail.isValid()) {
             throw new ValidationException(validationResultEmail.getErrors());
         }
-        userDto.setEmail(newEmail);
-        userRepository.save(userMapper.userDtotoUser(userDto));
+        var userEntity = userMapper.userDtotoUser(userDto);
+        userEntity.setEmail(newEmail);
+        setAddressAndSave(userEntity);
     }
 
     @Transactional
@@ -256,6 +266,11 @@ public class UserService implements UserDetailsService {
 
     public UserDto getUserByName(String username) {
         return userRepository.findByUsername(username).map(userMapper::userToUserDto)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    }
+
+    public String getUsernameByID(Long id) {
+        return userRepository.findById(id).map(User::getUsername)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 }

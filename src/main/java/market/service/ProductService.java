@@ -13,6 +13,7 @@ import market.validator.CreateProductValidator;
 import market.validator.EnteredAddCountValidator;
 import market.validator.EnteredProductInfoValidator;
 import market.validator.EnteredRemoveCountValidator;
+import org.hibernate.Hibernate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -165,7 +166,8 @@ public class ProductService {
 
     public List<ProductDto> getProductsForAddingPromoCode(Long promoCodeId) {
         return productRepository.findProductsForAddingPromoCode(promoCodeId)
-                .stream().map(productMapper::productToProductDto).toList();
+                .stream()
+                .map(productMapper::productToProductDto).toList();
     }
 
     public List<ProductDto> getProducts() {

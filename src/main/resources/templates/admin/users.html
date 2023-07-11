@@ -52,7 +52,6 @@
     <thead>
     <tr>
         <th>#</th>
-        <th><span th:text="#{user.image}"></span></th>
         <th><span th:text="#{login.username}"></span></th>
         <th><span th:text="#{user.email}"></span></th>
         <th><span th:text="#{login.password}"></span></th>
@@ -65,9 +64,6 @@
     <tbody>
     <tr th:each="user, loop : ${users}">
         <td th:text="${loop.index + 1}"></td>
-        <td ><div th:if="${user.image}">
-            <img width="40" th:src="@{/users/{userId}/avatar(userId=${user.id})}" alt="User image"/>
-        </div></td>
         <td th:text="${user.username}"></td>
         <td th:text="${user.email}"></td>
         <td th:text="${user.password}"></td>

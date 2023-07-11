@@ -23,6 +23,7 @@ public class ControllerExceptionHandler implements AccessDeniedHandler {
     }
 
     @Override
+    @ExceptionHandler(AccessDeniedException.class)
     public void handle(HttpServletRequest request, HttpServletResponse response,
                        AccessDeniedException accessDeniedException) throws IOException {
         log.info("403 error");

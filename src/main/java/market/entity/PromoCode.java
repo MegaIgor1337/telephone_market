@@ -27,6 +27,6 @@ public class PromoCode implements BaseEntity<Long> {
 
     @Builder.Default
     @ToString.Exclude
-    @OneToMany(mappedBy = "promoCode", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "promoCode", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<PromoCodeProduct> products = new ArrayList<>();
 }

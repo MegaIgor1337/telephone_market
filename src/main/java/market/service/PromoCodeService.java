@@ -5,6 +5,7 @@ import market.dto.CreatePromoCodeDto;
 import market.dto.PromoCodeDto;
 import market.dto.PromoCodeDtoWithPage;
 import market.dto.PromoCodeFilter;
+import market.entity.Product;
 import market.entity.PromoCode;
 import market.enums.PromoCodeStatus;
 import market.exception.ValidationException;
@@ -19,12 +20,15 @@ import market.validator.AddedPromoCodeValidator;
 import market.validator.ChangeDiscountPromoCodeValidator;
 import market.validator.ChangeNamePromoCodeValidator;
 import market.validator.EnteredPromoCodeValidator;
+import org.hibernate.Hibernate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
 
 import static market.util.ConstantContainer.*;
 import static org.springframework.http.HttpStatus.NOT_FOUND;

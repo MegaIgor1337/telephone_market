@@ -10,6 +10,7 @@ import market.entity.PromoCodeProduct;
 import market.enums.OrderStatus;
 import market.exception.LackOfMoneyException;
 import market.exception.ValidationException;
+import market.mapper.AddressMapper;
 import market.mapper.OrderDtoWithPageMapper;
 import market.mapper.OrderMapper;
 import market.mapper.UserMapper;
@@ -42,6 +43,7 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 @RequiredArgsConstructor
 public class OrderService {
     private final AddressRepository addressRepository;
+    private final AddressMapper addressMapper;
     private final ModerateOrderDtoValidator moderateOrderDtoValidator;
     private final OrderMapper orderMapper;
     private final PromoCodeRepository promoCodeRepository;
@@ -149,12 +151,16 @@ public class OrderService {
     }
 
     @Transactional
-    public void payOrder(UserDto userDto, Long addressId, OrderDtoWithPage orderDto) {
+    public void payOrder(UserDto userDto, Long addressId, OrderDtoWithPage orderDto)  {
+
         lackOfMoneyValidator.putOrderCost(orderDto.getCost());
         var moneyResult = lackOfMoneyValidator.isValid(userDto);
         if (!moneyResult.isValid()) throw new LackOfMoneyException(moneyResult.getErrors());
         var address = addressRepository.findById(addressId)
                 .orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
+       /* var usersAddresses= addressRepository.findByUserId(userDto.getId())
+                .stream().map().;
+*/
         var userBalance = userDto.getBalance();
         userDto.setBalance(userBalance.subtract(orderDto.getCost()));
         var order = orderRepository.findAllByUserIdAndStatus(userDto.getId(), OrderStatus.WAITING_PAID);
@@ -163,8 +169,11 @@ public class OrderService {
             o.setCost(orderDto.getCost());
         });
         order.ifPresent(orderRepository::saveAndFlush);
-        userRepository.saveAndFlush(userMapper.userDtotoUser(userDto));
-        log.info("User paied order, price - {}",orderDto.getCost());
+        var userEntity = userMapper.userDtotoUser(userDto);
+        var userAddresses = addressRepository.findByUserId(userEntity.getId());
+        userEntity.setAddresses(userAddresses);
+        userRepository.saveAndFlush(userEntity);
+        log.info("User paied order, price - {}", orderDto.getCost());
     }
 
     public OrderDto acceptPromoCode(String promoCode, Long userId) {

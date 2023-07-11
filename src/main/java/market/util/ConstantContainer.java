@@ -4,7 +4,7 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class ConstantContainer {
-    public static final Integer PAGE_SIZE = 2;
+    public static final Integer PAGE_SIZE = 4;
     public static final String EMPTY_PARAM = "";
     public static final String USER_DTO = "userDto";
     public static final String ADDRESS_ID = "addressId";
@@ -38,8 +38,6 @@ public class ConstantContainer {
     public static final String NEW_LOGIN = "newName";
     public static final String NEW_EMAIL = "newEmail";
     public static final String NEW_PASSPORT_NO = "newPassportNo";
-    public static final String NEW_PASSWORD = "newPassword";
-    public static final String OLD_PASSWORD = "oldPassword";
     public static final String MONEY = "money";
     public static final String PAGE = "page";
     public static final String ZERO = "0";

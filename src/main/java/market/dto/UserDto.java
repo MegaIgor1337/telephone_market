@@ -6,6 +6,7 @@ import market.enums.Role;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -20,6 +21,6 @@ public class  UserDto {
     private Role role;
     private Gender gender;
     private BigDecimal balance;
-
+    private List<AddressDto> addresses;
 
 }

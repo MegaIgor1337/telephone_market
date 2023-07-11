@@ -10,6 +10,7 @@ import market.service.*;
 import market.util.ModelHelper;
 import market.validator.Error;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -59,28 +60,26 @@ public class UserController {
     }
 
     @GetMapping("/{id}/addComment")
+    @PreAuthorize("(@userService.getUsernameByID(#id)) == authentication.principal.username ")
     public String addComment(@PathVariable(ID) Long id,
                              Authentication authentication) {
-        authorizeCheck(userService, authentication, id);
         return "/addComment";
     }
 
     @PostMapping("/{id}/addComment")
     public String addComment(@PathVariable(ID) Long id,
-                             Authentication authentication,
                              String comment) {
         log.info("User with id {} started adding comment", id);
-        authorizeCheck(userService, authentication, id);
         commentService.save(comment, id);
         log.info("User with id {} wrote comment", id);
         return "redirect:/users";
     }
 
     @GetMapping("/{id}/personalComments")
+    @PreAuthorize("(@userService.getUsernameByID(#id)) == authentication.principal.username ")
     public String personalComments(@PathVariable(ID) Long id,
                                    Model model,
                                    Authentication authentication) {
-        authorizeCheck(userService, authentication, id);
         List<CommentDto> comments = commentService.findCommentsByUserId(id);
         addAttributes(model, Map.of(USER_COMMENTS, comments));
         return "/userComments";
@@ -88,19 +87,17 @@ public class UserController {
 
     @PostMapping("/{id}/personalComments/delete")
     public String personalComments(@PathVariable(ID) Long id,
-                                   String commentId,
-                                   Authentication authentication) {
-        authorizeCheck(userService, authentication, id);
+                                   String commentId) {
         commentService.deleteComment(Long.valueOf(commentId));
         return "redirect:/users/{id}/personalComments";
     }
 
     @GetMapping("/{id}/profileMenu")
+    @PreAuthorize("(@userService.getUsernameByID(#id)) == authentication.principal.username ")
     public String personalMenu(@PathVariable(ID) Long id,
                                Authentication authentication,
                                @RequestParam(name = PAGE, defaultValue = ZERO) Integer page,
                                Model model) {
-        authorizeCheck(userService, authentication, id);
         String pageA = (String) model.getAttribute(PAGE_A);
         String pageMain = EMPTY_PARAM.equals(pageA) || pageA == null ? page.toString() : pageA;
         var addressDtoList = addressService.getAddressesByUserId(id, Integer.valueOf(pageMain));
@@ -111,9 +108,9 @@ public class UserController {
     }
 
     @GetMapping("/{id}/profileMenu/changeLogin")
+    @PreAuthorize("(@userService.getUsernameByID(#id)) == authentication.principal.username ")
     public String changeLogin(@PathVariable(ID) Long id,
                               Authentication authentication) {
-        authorizeCheck(userService, authentication, id);
         return "/user/changeLogin";
     }
 
@@ -123,10 +120,9 @@ public class UserController {
                               String newLogin,
                               @SessionAttribute UserDto userDto,
                               RedirectAttributes redirectAttributes) {
-        authorizeCheck(userService, authentication, id);
         try {
             userService.setNewLogin(userDto, newLogin);
-            addAttributes(model, Map.of(USER_DTO, userDto));
+            addAttributes(model, Map.of(USER_DTO, userService.findById(id)));
             setNewAuthentication(authentication, newLogin);
             return "redirect:/users/{id}/profileMenu";
         } catch (ValidationException e) {
@@ -137,9 +133,9 @@ public class UserController {
     }
 
     @GetMapping("/{id}/profileMenu/changeEmail")
+    @PreAuthorize("(@userService.getUsernameByID(#id)) == authentication.principal.username ")
     public String changeEmail(@PathVariable(ID) Long id,
                               Authentication authentication) {
-        authorizeCheck(userService, authentication, id);
         return "user/changeEmail";
     }
 
@@ -148,12 +144,10 @@ public class UserController {
                               Model model,
                               @SessionAttribute UserDto userDto,
                               String newEmail,
-                              RedirectAttributes redirectAttributes,
-                              Authentication authentication) {
+                              RedirectAttributes redirectAttributes) {
         try {
-            authorizeCheck(userService, authentication, id);
             userService.setNewEmail(userDto, newEmail);
-            addAttributes(model, Map.of(USER_DTO, userDto));
+            addAttributes(model, Map.of(USER_DTO, userService.findById(id)));
             return "redirect:/users/{id}/profileMenu";
         } catch (ValidationException e) {
             ModelHelper.redirectAttributes(redirectAttributes, Map.of(NEW_EMAIL, newEmail));
@@ -164,9 +158,9 @@ public class UserController {
     }
 
     @GetMapping("/{id}/profileMenu/changePassportNo")
+    @PreAuthorize("(@userService.getUsernameByID(#id)) == authentication.principal.username ")
     public String changePassportNo(@PathVariable(ID) Long id,
                                    Authentication authentication) {
-        authorizeCheck(userService, authentication, id);
         return "/user/changePassportNo";
     }
 
@@ -175,12 +169,10 @@ public class UserController {
                                    Model model,
                                    @SessionAttribute UserDto userDto,
                                    String newPassportNo,
-                                   RedirectAttributes redirectAttributes,
-                                   Authentication authentication) {
+                                   RedirectAttributes redirectAttributes) {
         try {
-            authorizeCheck(userService, authentication, id);
             userService.setNewPassportNo(userDto, newPassportNo);
-            addAttributes(model, Map.of(USER_DTO, userDto));
+            addAttributes(model, Map.of(USER_DTO, userService.findById(id)));
             return "redirect:/users/{id}/profileMenu";
         } catch (ValidationException e) {
             ModelHelper.redirectAttributes(redirectAttributes, Map.of(NEW_PASSPORT_NO, newPassportNo));
@@ -192,9 +184,9 @@ public class UserController {
 
 
     @GetMapping("/{id}/profileMenu/putMoney")
+    @PreAuthorize("(@userService.getUsernameByID(#id)) == authentication.principal.username ")
     public String putMoney(@PathVariable(ID) Long id,
                            Authentication authentication) {
-        authorizeCheck(userService, authentication, id);
         return "user/putMoney";
     }
 
@@ -202,11 +194,9 @@ public class UserController {
     public String putMoney(@PathVariable(ID) Long id,
                            String money,
                            Model model,
-                           RedirectAttributes redirectAttributes,
-                           Authentication authentication) {
+                           RedirectAttributes redirectAttributes) {
         try {
             log.info("User with id {}, started putting money {}", id, money);
-            authorizeCheck(userService, authentication, id);
             addAttributes(model, Map.of(USER_DTO, userService.putMoney(id, money)
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND))));
             return "redirect:/users/{id}/profileMenu";
@@ -220,13 +210,13 @@ public class UserController {
 
 
     @GetMapping("/{id}/products")
+    @PreAuthorize("(@userService.getUsernameByID(#id)) == authentication.principal.username ")
     public String viewProducts(@PathVariable(ID) Long id,
                                @RequestParam(name = PAGE, defaultValue = ZERO) Integer page,
                                Model m,
                                RedirectAttributes redirectAttributes,
                                Authentication authentication,
                                ProductFilter filter) {
-        authorizeCheck(userService, authentication, id);
         addAttributes(m, Map.of(ERRORS, Error.of(EMPTY_PARAM, EMPTY_PARAM),
                 MODELS, modelService.getAllModels(),
                 COUNTRIES, countryService.getAllCountries(),
@@ -268,10 +258,8 @@ public class UserController {
                                  String productId,
                                  String pageFB,
                                  ProductFilter productFilter,
-                                 Authentication authentication,
                                  RedirectAttributes redirectAttributes) {
         log.info("User {} started adding product {} to favourite", id, productId);
-        authorizeCheck(userService, authentication, id);
         favouriteService.addFavourite(id, Long.valueOf(productId));
         addAttributes(model, Map.of(PAGE_FB, pageFB));
         redirectAttributes(redirectAttributes, productFilter);
@@ -285,10 +273,8 @@ public class UserController {
                               Model model,
                               String count,
                               ProductFilter productFilter,
-                              Authentication authentication,
                               RedirectAttributes redirectAttributes) {
         log.info("User {} started processing of adding product {} to basket", id, productId);
-        authorizeCheck(userService, authentication, id);
         orderService.addProductToBasket(id, productId, count);
         addAttributes(model, Map.of(PAGE_FB, pageFB));
         redirectAttributes(redirectAttributes, productFilter);
@@ -296,11 +282,11 @@ public class UserController {
     }
 
     @GetMapping("/{id}/order")
+    @PreAuthorize("(@userService.getUsernameByID(#id)) == authentication.principal.username ")
     public String order(@PathVariable(ID) Long id,
                         Model model,
                         @RequestParam(name = PAGE, defaultValue = ZERO) Integer page,
                         Authentication authentication) {
-        authorizeCheck(userService, authentication, id);
         String pageM = (String) model.getAttribute(PAGE_OR);
         String pageFB = EMPTY_PARAM.equals(pageM) || pageM == null ? page.toString() : pageM;
         addAttributes(model, Map.of(PAGE_OR, EMPTY_PARAM));
@@ -318,19 +304,17 @@ public class UserController {
     public String deleteProductFromBasket(@PathVariable(ID) Long id,
                                           String productId,
                                           String pageOr,
-                                          Model model,
-                                          Authentication authentication) {
+                                          Model model) {
         log.info("User {} started processing of deleting product {} from basket", id, productId);
-        authorizeCheck(userService, authentication, id);
         orderService.deleteProductFromBasket(Long.valueOf(productId), id);
         addAttributes(model, Map.of(PAGE_OR, pageOr));
         return "redirect:/users/{id}/order";
     }
 
     @GetMapping("/{id}/order/paidOrder")
+    @PreAuthorize("(@userService.getUsernameByID(#id)) == authentication.principal.username ")
     public String payiedOrder(@PathVariable(ID) Long id,
                               Authentication authentication) {
-        authorizeCheck(userService, authentication, id);
         return "user/paidOrder";
     }
 
@@ -339,11 +323,9 @@ public class UserController {
                            Model model,
                            Long deliveryAddress,
                            @ModelAttribute UserDto userDto,
-                           @SessionAttribute OrderDtoWithPage order,
-                           Authentication authentication) {
+                           @SessionAttribute OrderDtoWithPage order) {
         try {
             log.info("User with id {}, started paein order {}", id,order.getId());
-            authorizeCheck(userService, authentication, id);
             discountedOrder = null;
             orderService.payOrder(userDto, deliveryAddress,  order);
             return "redirect:/users/{id}/order/paidOrder";
@@ -358,9 +340,7 @@ public class UserController {
     public String searchPromoCode(@PathVariable(ID) Long id,
                                   Model model,
                                   String promoCode,
-                                  RedirectAttributes redirectAttributes,
-                                  Authentication authentication) {
-        authorizeCheck(userService, authentication, id);
+                                  RedirectAttributes redirectAttributes) {
         try {
             discountedOrder = orderService.acceptPromoCode(promoCode, id);
             return "redirect:/users/{id}/order";
@@ -373,11 +353,11 @@ public class UserController {
 
 
     @GetMapping("/{id}/favourite")
+    @PreAuthorize("(@userService.getUsernameByID(#id)) == authentication.principal.username ")
     public String viewFavourite(@PathVariable(ID) Long id,
                                 Model model,
                                 @RequestParam(name = PAGE, defaultValue = ZERO) Integer page,
                                 Authentication authentication) {
-        authorizeCheck(userService, authentication, id);
         String pageM = (String) model.getAttribute(PAGE_F);
         String pageF = EMPTY_PARAM.equals(pageM) || pageM == null ? page.toString() : pageM;
         var favourites = favouriteService.getFavouritesByUserId(id, Integer.valueOf(pageF));
@@ -392,10 +372,8 @@ public class UserController {
     public String deleteFavourite(@PathVariable(ID) Long id,
                                   Model model,
                                   String pageF,
-                                  Long favouriteId,
-                                  Authentication authentication) {
+                                  Long favouriteId) {
         log.info("User {} started deleting product {} from favourite", id, favouriteId);
-        authorizeCheck(userService, authentication, id);
         addAttributes(model, Map.of(PAGE_F, pageF));
         favouriteService.deleteProductFromFavourite(favouriteId);
         return "redirect:/users/{id}/favourite";
@@ -405,37 +383,33 @@ public class UserController {
     public String addToBasketFromFavourite(@PathVariable(ID) Long id,
                                            Model model,
                                            String pageF,
-                                           Authentication authentication,
                                            String productId) {
         log.info("User {} started adding product {} to basket", id, productId);
-        authorizeCheck(userService, authentication, id);
         orderService.addProductToBasket(id, productId, null);
         addAttributes(model, Map.of(PAGE_F, pageF));
         return "redirect:/users/{id}/favourite";
     }
 
     @GetMapping("/{id}/orderHistory")
+    @PreAuthorize("(@userService.getUsernameByID(#id)) == authentication.principal.username ")
     public String viewOrderHistory(@PathVariable(ID) Long id,
                                    Authentication authentication,
                                    @RequestParam(name = PAGE, defaultValue = ZERO) String page,
                                    Model model) {
-        authorizeCheck(userService, authentication, id);
         var pageOrders = orderService.findAllOrdersByUserID(id, Integer.valueOf(page));
         addAttributes(model, Map.of(USER_ORDERS, pageOrders));
         return "user/orderHistory";
     }
 
     @GetMapping("/{id}/orders/{orderId}")
+    @PreAuthorize("(@userService.getUsernameByID(#id)) == authentication.principal.username ")
     public String viewOrder(@PathVariable(ID) Long id,
                             Authentication authentication,
                             @PathVariable(ORDER_ID) Long orderId,
                             Model model,
                             @RequestParam(name = PAGE, defaultValue = ZERO) Integer page) {
-        authorizeCheck(userService, authentication, id);
         var order = orderService.findById(orderId, page);
         addAttributes(model, Map.of(USER_ORDER, order));
         return "user/productFromOH";
     }
-
-
 }
