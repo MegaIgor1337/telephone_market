@@ -20,8 +20,6 @@ public class UserServiceTest  {
     private final UserMapper userMapper;
 
 
-
-
     @Test
     void testSetNewName() {
         var user = userRepository.findById(id).orElse(null);
@@ -54,5 +52,6 @@ public class UserServiceTest  {
         var result = userRepository.findById(id).map(userMapper::userToUserDto);
         result.ifPresent(u -> assertThat(u.getBalance())
                 .isEqualTo(new BigDecimal("15.75")));
+        System.out.println(userRepository.findAll());
     }
 }

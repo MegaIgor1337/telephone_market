@@ -1,21 +1,28 @@
 package project;
 
-import market.entity.*;
-import market.enums.*;
-import market.repository.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
+import org.springframework.jdbc.datasource.init.DatabasePopulator;
+import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import javax.sql.DataSource;
 
 @SpringBootApplication
 public class TestApplicationRunner {
+
     @Bean
+    public DataSource dataSource() {
+        return new EmbeddedDatabaseBuilder()
+                .setType(EmbeddedDatabaseType.H2)
+                .addScript("classpath:sql/init.sql")
+                .addScript("classpath:sql/data.sql")
+                .build();
+    }
+
+   /* @Bean
     public CommandLineRunner dataLoad(
             @Autowired UserRepository userRepository,
             @Autowired AddressRepository addressRepository,
@@ -252,5 +259,5 @@ public class TestApplicationRunner {
                 .build();
         favouriteRepository.save(favourite);
         return favourite;
-    }
+    }*/
 }

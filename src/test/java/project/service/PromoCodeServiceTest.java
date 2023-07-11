@@ -32,7 +32,7 @@ class PromoCodeServiceTest {
     @Test
     void getPromoCodeWithPage() {
         var result = promoCodeService.getPromoCodeWithPage(2L, 0);
-        assertThat(result.getProducts()).hasSize(2);
+        assertThat(result.getProducts()).hasSize(4);
     }
 
     @Test

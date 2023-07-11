@@ -27,14 +27,16 @@ public class AccessDeniedExceptionHelper {
     }
 
     public static void setNewAuthentication(Authentication authentication, String newName) {
-        Object principal = authentication.getPrincipal();
-        if (principal instanceof UserDetails) {
-            UserDetails userDetails = (UserDetails) principal;
-            User updatedUserDetails = new User(newName, EMPTY_PARAM ,userDetails.getAuthorities());
-            Authentication newAuthentication = new UsernamePasswordAuthenticationToken(updatedUserDetails,
-                    authentication.getCredentials(), authentication.getAuthorities());
-            SecurityContextHolder.getContext().setAuthentication(newAuthentication);
-            SecurityContextHolder.getContext().setAuthentication(newAuthentication);
+        if (authentication != null) {
+            Object principal = authentication.getPrincipal();
+            if (principal instanceof UserDetails) {
+                UserDetails userDetails = (UserDetails) principal;
+                User updatedUserDetails = new User(newName, EMPTY_PARAM, userDetails.getAuthorities());
+                Authentication newAuthentication = new UsernamePasswordAuthenticationToken(updatedUserDetails,
+                        authentication.getCredentials(), authentication.getAuthorities());
+                SecurityContextHolder.getContext().setAuthentication(newAuthentication);
+                SecurityContextHolder.getContext().setAuthentication(newAuthentication);
+            }
         }
     }
 }

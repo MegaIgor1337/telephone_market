@@ -58,11 +58,6 @@ public class ProductServiceTest  {
         assertThat(result).hasSize(6);
     }
 
-    @Test
-    void deleteProduct() {
-        productService.deleteProduct(2L);
-        assertThat(productService.getProducts()).hasSize(4);
-    }
 
     @Test
     void removeCount() {

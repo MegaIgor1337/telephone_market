@@ -1,16 +1,26 @@
+#spring:
+#  mvc:
+#    view:
+#      prefix: /WEB-INF/jsp/
+#      suffix: .jsp
+#  datasource:
+#    url: jdbc:postgresql://localhost:5432/online_telephone_market_test
+#    username: postgres
+#    password: 1234
+#    driver-class-name: org.postgresql.Driver
+#  jpa:
+#    open-in-view: false
+#    properties.hibernate:
+#      show_sql: true
+#      format_sql: true
+#      hbm2ddl.auto: create
+
 spring:
-  mvc:
-    view:
-      prefix: /WEB-INF/jsp/
-      suffix: .jsp
   datasource:
-    url: jdbc:postgresql://localhost:5432/online_telephone_market_test
-    username: postgres
-    password: 1234
-    driver-class-name: org.postgresql.Driver
+   url: jdbc:h2:mem:testdb
+   username: sa
+   password:
+   driverClassName: org.h2.Driver
   jpa:
-    open-in-view: false
-    properties.hibernate:
-      show_sql: true
-      format_sql: true
-      hbm2ddl.auto: create
+   database-platform: org.hibernate.dialect.H2Dialect
+   hibernate.ddl-auto: create
