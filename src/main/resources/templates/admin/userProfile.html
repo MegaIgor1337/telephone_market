@@ -45,7 +45,7 @@
 </table>
 <div th:if="${not #lists.isEmpty(addresses)}">
     <form th:if="${not #lists.isEmpty(addresses)}" method="GET"
-          th:action="@{admin/menu/users/{userId}/profile(userId=${user.id})}">
+          th:action="@{/admin/menu/users/{userId}/profile(userId=${user.id})}">
         <input type="hidden" name="pageO" th:value="${userOrders.number}">
         <button th:if="${addresses.hasPrevious}" type="submit" name="pageA" value="0"><span th:text="#{page.first}">First</span></button>
         <button th:if="${addresses.hasPrevious}" type="submit" name="pageA" th:value="${addresses.number - 1}">Pr<span th:text="#{page.previous}">Previous</span>evious

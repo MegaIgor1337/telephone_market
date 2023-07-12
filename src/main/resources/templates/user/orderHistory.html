@@ -23,7 +23,7 @@
     </thead>
     <tbody>
     <tr th:each="order, loop : ${userOrders}">
-        <td>  <a th:href="@{/users/{userId}/orders/{orderId}(orderId=${order.id}, userId=${order.id})}">
+        <td>  <a th:href="@{/users/{userId}/orders/{orderId}(orderId=${order.id}, userId=${userDto.id})}">
             <input type="hidden" name="pageOH" th:value="${userOrders.number}"/>
             <span style="text-align: center;" th:text="${order.id}"></span>
         </a></td>

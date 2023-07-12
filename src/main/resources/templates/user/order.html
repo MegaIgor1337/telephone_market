@@ -41,7 +41,7 @@
 </form>
 <span th:if="${#lists.isEmpty(order.products.content)}">
     <p>
-        <span th:text="#{address.NoProducts}">First</span>
+        <span th:text="#{address.NoProducts}"></span>
     </p>
 </span>
 <table th:if="${not #lists.isEmpty(order.products.content)}">
