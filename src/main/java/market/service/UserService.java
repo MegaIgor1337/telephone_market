@@ -2,7 +2,6 @@ package market.service;
 
 import jakarta.persistence.criteria.Join;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import market.dto.*;
 import market.entity.Address;
@@ -24,8 +23,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
@@ -36,12 +33,11 @@ import java.util.Optional;
 import static market.util.ConstantContainer.*;
 
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
-@Slf4j
 @Transactional(readOnly = true)
 public class UserService implements UserDetailsService {
-    private final ImageService imageService;
     private final AddressRepository addressRepository;
     private final CreateUserValidator createUserValidator;
     private final CreateUserMapper createUserMapper;
@@ -160,12 +156,6 @@ public class UserService implements UserDetailsService {
         return Optional.empty();
     }
 
-  /*  @SneakyThrows
-    private void uploadImage(MultipartFile image) {
-        if(!image.isEmpty()) {
-            imageService.upload(image.getOriginalFilename(), image.getInputStream());
-        }
-    }*/
 
 
 
