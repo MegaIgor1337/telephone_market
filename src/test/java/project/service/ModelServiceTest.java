@@ -2,7 +2,7 @@ package project.service;
 
 
 import lombok.RequiredArgsConstructor;
-import market.service.ModelService;
+import market.service.impl.ModelServiceImpl;
 import org.junit.jupiter.api.Test;
 import project.annotation.IT;
 
@@ -10,7 +10,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @IT
 @RequiredArgsConstructor
 public class ModelServiceTest  {
-    private final ModelService modelService;
+    private final ModelServiceImpl modelService;
 
     @Test
     void getAllModels() {

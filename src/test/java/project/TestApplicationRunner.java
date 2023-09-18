@@ -13,14 +13,6 @@ import javax.sql.DataSource;
 @SpringBootApplication
 public class TestApplicationRunner {
 
-    @Bean
-    public DataSource dataSource() {
-        return new EmbeddedDatabaseBuilder()
-                .setType(EmbeddedDatabaseType.H2)
-                .addScript("classpath:sql/init.sql")
-                .addScript("classpath:sql/data.sql")
-                .build();
-    }
 
    /* @Bean
     public CommandLineRunner dataLoad(

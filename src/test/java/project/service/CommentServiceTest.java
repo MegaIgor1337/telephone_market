@@ -5,7 +5,7 @@ import market.dto.CommentDto;
 import market.enums.CommentStatus;
 import market.mapper.CommentMapper;
 import market.repository.CommentRepository;
-import market.service.CommentService;
+import market.service.impl.CommentServiceImpl;
 import org.junit.jupiter.api.Test;
 import project.annotation.IT;
 
@@ -16,7 +16,7 @@ import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 @RequiredArgsConstructor
 @IT
 public class CommentServiceTest  {
-    private final CommentService commentService;
+    private final CommentServiceImpl commentService;
     private final CommentRepository commentRepository;
     private final CommentMapper commentMapper;
 

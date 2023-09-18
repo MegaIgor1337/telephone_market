@@ -3,7 +3,7 @@ package market.util;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import market.dto.UserDto;
-import market.service.UserService;
+import market.service.impl.UserServiceImpl;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -16,7 +16,7 @@ import static market.util.ConstantContainer.EMPTY_PARAM;
 @UtilityClass
 @Slf4j
 public class AccessDeniedExceptionHelper {
-    public static void authorizeCheck(UserService userService, Authentication authentication, Long id) {
+    public static void authorizeCheck(UserServiceImpl userService, Authentication authentication, Long id) {
         UserDto currentUser = userService.getCurrentUser(authentication);
         if (!currentUser.getId().equals(id)) {
             log.info("User dose not have access");

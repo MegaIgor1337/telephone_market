@@ -6,6 +6,7 @@ import market.enums.Gender;
 import market.enums.Role;
 import market.exception.ValidationException;
 import market.service.UserService;
+import market.service.impl.UserServiceImpl;
 import market.util.AccessDeniedExceptionHelper;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

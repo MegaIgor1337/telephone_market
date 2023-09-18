@@ -33,10 +33,7 @@ public class Aspect {
     @Pointcut("isControllerLayer() && args(org.springframework.ui.Model,..)")
     public void hasModelArg() {
     }
-
-   /*  @Pointcut("isControllerLayer() && @args(market.validator.UserInfo,..)")
-    public void hasUserInfoAnnotation() {
-    }*/
+    
 
 
     @Pointcut("execution(public * market.service.*Service.findById(*))")
@@ -51,7 +48,7 @@ public class Aspect {
     public void anyServiceSetParameterMethod() {
     }
 
-    @Pointcut("execution(public * market.service.OrderService.payOrder(..))")
+    @Pointcut("execution(public * market.service.impl.OrderServiceImpl.payOrder(..))")
     public void anyServicePayOrder() {}
 
 

@@ -2,7 +2,7 @@ package project.service;
 
 import lombok.RequiredArgsConstructor;
 import market.repository.FavouriteRepository;
-import market.service.FavouriteService;
+import market.service.impl.FavouriteServiceImpl;
 import org.junit.jupiter.api.Test;
 import project.annotation.IT;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -10,7 +10,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @IT
 @RequiredArgsConstructor
 public class FavouriteServiceTest {
-    private final FavouriteService favouriteService;
+    private final FavouriteServiceImpl favouriteService;
     private final FavouriteRepository favouriteRepository;
     @Test
     void addFavourite() {

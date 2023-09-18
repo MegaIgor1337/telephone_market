@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import market.dto.CreateAddressDto;
 import market.dto.CreateUpdateAddressDto;
 import market.repository.UserRepository;
-import market.service.AddressService;
+import market.service.impl.AddressServiceImpl;
 import org.junit.jupiter.api.Test;
 import project.annotation.IT;
 
@@ -16,7 +16,7 @@ public class AddressServiceTest {
 
     private final Long id = 1L;
     private final UserRepository userRepository;
-    private final AddressService addressService;
+    private final AddressServiceImpl addressService;
 
     @Test
     void save() {

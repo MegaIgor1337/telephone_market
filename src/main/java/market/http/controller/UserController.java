@@ -7,6 +7,7 @@ import market.enums.OrderStatus;
 import market.exception.LackOfMoneyException;
 import market.exception.ValidationException;
 import market.service.*;
+import market.service.impl.*;
 import market.util.ModelHelper;
 import market.validator.Error;
 import org.springframework.http.HttpStatus;
@@ -17,14 +18,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 import java.util.Map;
 
-import static market.util.AccessDeniedExceptionHelper.authorizeCheck;
 import static market.util.AccessDeniedExceptionHelper.setNewAuthentication;
 import static market.util.ModelHelper.addAttributes;
 import static market.util.ModelHelper.redirectAttributes;
@@ -60,7 +59,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}/addComment")
-    @PreAuthorize("(@userService.getUsernameByID(#id)) == authentication.principal.username ")
+    @PreAuthorize("(@userServiceImpl.getUsernameByID(#id)) == authentication.principal.username ")
     public String addComment(@PathVariable(ID) Long id,
                              Authentication authentication) {
         return "/addComment";
@@ -76,7 +75,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}/personalComments")
-    @PreAuthorize("(@userService.getUsernameByID(#id)) == authentication.principal.username ")
+    @PreAuthorize("(@userServiceImpl.getUsernameByID(#id)) == authentication.principal.username ")
     public String personalComments(@PathVariable(ID) Long id,
                                    Model model,
                                    Authentication authentication) {
@@ -93,7 +92,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}/profileMenu")
-    @PreAuthorize("(@userService.getUsernameByID(#id)) == authentication.principal.username ")
+    @PreAuthorize("(@userServiceImpl.getUsernameByID(#id)) == authentication.principal.username ")
     public String personalMenu(@PathVariable(ID) Long id,
                                Authentication authentication,
                                @RequestParam(name = PAGE, defaultValue = ZERO) Integer page,
@@ -108,7 +107,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}/profileMenu/changeLogin")
-    @PreAuthorize("(@userService.getUsernameByID(#id)) == authentication.principal.username ")
+    @PreAuthorize("(@userServiceImpl.getUsernameByID(#id)) == authentication.principal.username ")
     public String changeLogin(@PathVariable(ID) Long id,
                               Authentication authentication) {
         return "/user/changeLogin";
@@ -133,7 +132,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}/profileMenu/changeEmail")
-    @PreAuthorize("(@userService.getUsernameByID(#id)) == authentication.principal.username ")
+    @PreAuthorize("(@userServiceImpl.getUsernameByID(#id)) == authentication.principal.username ")
     public String changeEmail(@PathVariable(ID) Long id,
                               Authentication authentication) {
         return "user/changeEmail";
@@ -158,7 +157,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}/profileMenu/changePassportNo")
-    @PreAuthorize("(@userService.getUsernameByID(#id)) == authentication.principal.username ")
+    @PreAuthorize("(@userServiceImpl.getUsernameByID(#id)) == authentication.principal.username ")
     public String changePassportNo(@PathVariable(ID) Long id,
                                    Authentication authentication) {
         return "/user/changePassportNo";
@@ -184,7 +183,7 @@ public class UserController {
 
 
     @GetMapping("/{id}/profileMenu/putMoney")
-    @PreAuthorize("(@userService.getUsernameByID(#id)) == authentication.principal.username ")
+    @PreAuthorize("(@userServiceImpl.getUsernameByID(#id)) == authentication.principal.username ")
     public String putMoney(@PathVariable(ID) Long id,
                            Authentication authentication) {
         return "user/putMoney";
@@ -210,7 +209,7 @@ public class UserController {
 
 
     @GetMapping("/{id}/products")
-    @PreAuthorize("(@userService.getUsernameByID(#id)) == authentication.principal.username ")
+    @PreAuthorize("(@userServiceImpl.getUsernameByID(#id)) == authentication.principal.username ")
     public String viewProducts(@PathVariable(ID) Long id,
                                @RequestParam(name = PAGE, defaultValue = ZERO) Integer page,
                                Model m,
@@ -282,7 +281,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}/order")
-    @PreAuthorize("(@userService.getUsernameByID(#id)) == authentication.principal.username ")
+    @PreAuthorize("(@userServiceImpl.getUsernameByID(#id)) == authentication.principal.username ")
     public String order(@PathVariable(ID) Long id,
                         Model model,
                         @RequestParam(name = PAGE, defaultValue = ZERO) Integer page,
@@ -312,7 +311,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}/order/paidOrder")
-    @PreAuthorize("(@userService.getUsernameByID(#id)) == authentication.principal.username ")
+    @PreAuthorize("(@userServiceImpl.getUsernameByID(#id)) == authentication.principal.username ")
     public String payiedOrder(@PathVariable(ID) Long id,
                               Authentication authentication) {
         return "user/paidOrder";
@@ -353,7 +352,7 @@ public class UserController {
 
 
     @GetMapping("/{id}/favourite")
-    @PreAuthorize("(@userService.getUsernameByID(#id)) == authentication.principal.username ")
+    @PreAuthorize("(@userServiceImpl.getUsernameByID(#id)) == authentication.principal.username ")
     public String viewFavourite(@PathVariable(ID) Long id,
                                 Model model,
                                 @RequestParam(name = PAGE, defaultValue = ZERO) Integer page,
@@ -391,7 +390,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}/orderHistory")
-    @PreAuthorize("(@userService.getUsernameByID(#id)) == authentication.principal.username ")
+    @PreAuthorize("(@userServiceImpl.getUsernameByID(#id)) == authentication.principal.username ")
     public String viewOrderHistory(@PathVariable(ID) Long id,
                                    Authentication authentication,
                                    @RequestParam(name = PAGE, defaultValue = ZERO) String page,
@@ -402,7 +401,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}/orders/{orderId}")
-    @PreAuthorize("(@userService.getUsernameByID(#id)) == authentication.principal.username ")
+    @PreAuthorize("(@userServiceImpl.getUsernameByID(#id)) == authentication.principal.username ")
     public String viewOrder(@PathVariable(ID) Long id,
                             Authentication authentication,
                             @PathVariable(ORDER_ID) Long orderId,

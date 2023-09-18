@@ -10,7 +10,7 @@ import market.mapper.OrderMapper;
 import market.mapper.UserMapper;
 import market.repository.OrderRepository;
 import market.repository.UserRepository;
-import market.service.OrderService;
+import market.service.impl.OrderServiceImpl;
 import org.junit.jupiter.api.Test;
 import project.annotation.IT;
 
@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class OrderServiceTest {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
-    private final OrderService orderService;
+    private final OrderServiceImpl orderService;
     private final OrderRepository orderRepository;
     private final OrderMapper orderMapper;
     @Test

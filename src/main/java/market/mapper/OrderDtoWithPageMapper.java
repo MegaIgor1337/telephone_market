@@ -3,19 +3,9 @@ package market.mapper;
 import lombok.RequiredArgsConstructor;
 import market.dto.OrderDto;
 import market.dto.OrderDtoWithPage;
-import market.dto.OrderProductDto;
-import market.dto.ProductFilter;
-import market.repository.ProductRepository;
-import market.service.ProductService;
 import market.util.PageUtil;
-import org.ehcache.core.util.CollectionUtil;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 @Component
 @RequiredArgsConstructor

@@ -5,7 +5,7 @@ import market.dto.CreateProductDto;
 import market.dto.ProductFilter;
 import market.enums.OrderStatus;
 import market.repository.ProductRepository;
-import market.service.ProductService;
+import market.service.impl.ProductServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.PageRequest;
 import project.annotation.IT;
@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @IT
 @RequiredArgsConstructor
 public class ProductServiceTest  {
-    private final ProductService productService;
+    private final ProductServiceImpl productService;
     private final ProductRepository productRepository;
     private final Long userId = 1L;
     @Test
