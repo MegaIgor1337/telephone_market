@@ -3,6 +3,7 @@ package project.service;
 import lombok.RequiredArgsConstructor;
 import market.mapper.UserMapper;
 import market.repository.UserRepository;
+import market.service.UserService;
 import market.service.impl.UserServiceImpl;
 import org.junit.jupiter.api.Test;
 import project.annotation.IT;
@@ -15,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RequiredArgsConstructor
 public class UserServiceTest  {
     private final Long id = 1L;
-    private final UserServiceImpl userService;
+    private final UserService userService;
     private final UserRepository userRepository;
     private final UserMapper userMapper;
 

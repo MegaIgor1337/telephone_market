@@ -5,6 +5,7 @@ import market.dto.CreatePromoCodeDto;
 import market.dto.PromoCodeFilter;
 import market.enums.PromoCodeStatus;
 import market.repository.PromoCodeRepository;
+import market.service.PromoCodeService;
 import market.service.impl.PromoCodeServiceImpl;
 import org.junit.jupiter.api.Test;
 import project.annotation.IT;
@@ -17,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @IT
 @RequiredArgsConstructor
 class PromoCodeServiceTest {
-    private final PromoCodeServiceImpl promoCodeService;
+    private final PromoCodeService promoCodeService;
     private final PromoCodeRepository promoCodeRepository;
 
     @Test

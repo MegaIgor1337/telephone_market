@@ -12,9 +12,8 @@ import project.annotation.IT;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 
-
-@RequiredArgsConstructor
 @IT
+@RequiredArgsConstructor
 public class CommentServiceTest  {
     private final CommentServiceImpl commentService;
     private final CommentRepository commentRepository;

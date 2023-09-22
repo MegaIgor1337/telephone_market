@@ -2,15 +2,16 @@ package project.service;
 
 
 import lombok.RequiredArgsConstructor;
+import market.service.BrandService;
 import market.service.impl.BrandServiceImpl;
 import org.junit.jupiter.api.Test;
 import project.annotation.IT;
 
 import static org.assertj.core.api.Assertions.assertThat;
-@RequiredArgsConstructor
 @IT
+@RequiredArgsConstructor
 public class BrandServiceTest  {
-    private final BrandServiceImpl brandService;
+    private final BrandService brandService;
     @Test
     void gerBrands() {
         var result = brandService.getAllBrands();
