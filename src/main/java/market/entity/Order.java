@@ -12,12 +12,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "\"order\"")
-public class Order implements BaseEntity<Long>{
+public class Order implements BaseEntity<Long> {
     @Id
     @EqualsAndHashCode.Include
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,7 +27,7 @@ public class Order implements BaseEntity<Long>{
     private User user;
     private BigDecimal cost;
     private LocalDateTime date;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id")
     private Address address;
     @Enumerated(EnumType.STRING)

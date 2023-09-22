@@ -8,7 +8,6 @@ import org.springframework.data.domain.Page;
 import java.util.List;
 
 public interface AddressService {
-    void update(CreateUpdateAddressDto createUpdateAddressDto);
     void delete(Long id);
     Page<AddressDto> getAddressesByUserId(Long id, Integer page);
     List<AddressDto> getAddressesByUserId(Long userId);

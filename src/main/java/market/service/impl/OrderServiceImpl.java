@@ -14,6 +14,7 @@ import market.mapper.OrderDtoWithPageMapper;
 import market.mapper.OrderMapper;
 import market.mapper.UserMapper;
 import market.repository.*;
+import market.service.OrderService;
 import market.util.PageUtil;
 import market.validator.LackOfMoneyValidator;
 import market.validator.ModerateOrderDtoValidator;
@@ -40,7 +41,7 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class OrderServiceImpl implements market.service.OrderService {
+public class OrderServiceImpl implements OrderService {
     private final AddressRepository addressRepository;
     private final ModerateOrderDtoValidator moderateOrderDtoValidator;
     private final OrderMapper orderMapper;
@@ -289,6 +290,7 @@ public class OrderServiceImpl implements market.service.OrderService {
                 .map(orderMapper::orderToOrderDto);
     }
 
+
     private Specification<Order> getSpecifications(OrderFilterDto orderFilterDto) {
         Specification<Order> specification = Specification.where(null);
         if (orderFilterDto.getUsername() != null && !orderFilterDto.getUsername().isBlank()) {
@@ -306,4 +308,6 @@ public class OrderServiceImpl implements market.service.OrderService {
         }
         return specification;
     }
+
+
 }

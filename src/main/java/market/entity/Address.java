@@ -26,4 +26,5 @@ public class Address implements BaseEntity<Long> {
     @ToString.Exclude
     @OneToMany(mappedBy = "address")
     private List<Order> orders;
+    private Boolean deleted;
 }

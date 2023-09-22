@@ -56,13 +56,6 @@
         <td th:text="${address.house}"></td>
         <td th:text="${address.flat}"></td>
         <td>
-            <form method="get" th:action="@{/address/changeAddress}">
-                <input type="hidden" name="addressId" th:value="${address.id}"/>
-                <input type="hidden" name="pageA" th:value="${addresses.number}">
-                <input type="submit" th:value="#{user.change}"/>
-            </form>
-        </td>
-        <td>
             <form method="post" th:action="@{/address/deleteAddress}">
                 <input type="hidden" name="addressId" th:value="${address.id}"/>
                 <input type="hidden" name="pageA" th:value="${addresses.number}">

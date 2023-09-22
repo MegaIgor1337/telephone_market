@@ -56,31 +56,8 @@ public class AddressController {
         redirectAttributes.addFlashAttribute(FLAT, flat);
     }
 
-    @GetMapping("/address/changeAddress")
-    public String changeAddress(Model model, String addressId,
-                                String pageA) {
-        addAttributes(model, Map.of(PAGE_A, pageA,
-                USER_DTO, addressId));
-        return "/changeAddress";
-    }
 
-    @PostMapping("/address/changeAddress")
-    public String changeAddress(CreateUpdateAddressDto createAddressDto, Model model,
-                                @SessionAttribute UserDto userDto,
-                                @SessionAttribute String addressId,
-                                RedirectAttributes redirectAttributes) {
-        createAddressDto.setId(addressId);
-        createAddressDto.setUserId(String.valueOf(userDto.getId()));
-        try {
-            addressService.update(createAddressDto);
-            return "redirect:/users";
-        } catch (ValidationException e) {
-            addAttributes(model, Map.of(ERRORS, e.getErrors()));
-            redirectAtt(redirectAttributes, createAddressDto.getCity(), createAddressDto.getCountry(),
-                    createAddressDto.getHouse(), createAddressDto.getStreet(), createAddressDto.getFlat());
-            return "redirect:/address/changeAddress";
-        }
-    }
+
 
     @PostMapping("/address/deleteAddress")
     public String deleteAddress(Model model,

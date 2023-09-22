@@ -11,6 +11,8 @@ import market.exception.ValidationException;
 import lombok.RequiredArgsConstructor;
 import market.mapper.AddressMapper;
 import market.mapper.CreateAddressMapper;
+import market.service.AddressService;
+import market.service.OrderService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -24,10 +26,9 @@ import static market.util.ConstantContainer.PAGE_SIZE;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class AddressServiceImpl implements market.service.AddressService {
+public class AddressServiceImpl implements AddressService {
     private final AddressMapper addressMapper;
     private final AddressRepository addressRepository;
-    private final CreateUpdateAddressDtoMapper createUpdateAddressDtoMapper;
     private final CreateAddressMapper createAddressMapper;
     private final CreateAddressValidator createAddressValidator;
 
@@ -45,23 +46,17 @@ public class AddressServiceImpl implements market.service.AddressService {
         }
     }
 
-    @Override
-    public void update(CreateUpdateAddressDto createUpdateAddressDto) {
-        validateAddressParams(createUpdateAddressDto);
-        Address address = createUpdateAddressDtoMapper
-                .CreateUpdateAddressDtoToAddress(createUpdateAddressDto);
-        addressRepository.save(address);
-    }
+
     @Override
     public void delete(Long id) {
-        if (addressRepository.findById(id).isPresent()) {
-            addressRepository.delete(addressRepository.findById(id).get());
-        }
+        var address = addressRepository.findById(id);
+        address.ifPresent(a -> a.setDeleted(true));
+        address.ifPresent(addressRepository::save);
     }
 
     @Override
     public Page<AddressDto> getAddressesByUserId(Long id, Integer page) {
-        return addressRepository.findByUserId(id, PageRequest.of(page, PAGE_SIZE))
+        return addressRepository.findByUserIdAndDeletedFalse(id, PageRequest.of(page, PAGE_SIZE))
                 .map(addressMapper::addressToAddressDto);
     }
     @Override
