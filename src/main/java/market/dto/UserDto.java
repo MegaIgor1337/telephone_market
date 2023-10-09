@@ -21,6 +21,7 @@ public class  UserDto {
     private Role role;
     private Gender gender;
     private BigDecimal balance;
+    private String image;
     private List<AddressDto> addresses;
 
 }

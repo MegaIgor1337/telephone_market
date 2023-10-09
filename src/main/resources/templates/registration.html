@@ -8,6 +8,9 @@
 <div th:insert="~{fragment :: locale}"></div>
 <br/>
 <form th:action="@{/registration}" enctype="multipart/form-data" method="post">
+    <label for="image"><span th:text="#{login.avatar}">Avatar:</span>:
+        <input id="image" type="file" name="image">
+    </label><br>
     <label for="name"><span th:text="#{login.username}">Username:</span>
         <input type="text" name="username" id="name" th:value="${username}" required>
     </label><br/>

@@ -18,6 +18,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -105,6 +106,16 @@ public class UserController {
                 ADDRESSES, addressDtoList));
         return "/user/profileMenu";
     }
+
+    @PostMapping("/{id}/profileMenu/changeAvatar")
+    @PreAuthorize("(@userServiceImpl.getUsernameByID(#id)) == authentication.principal.username ")
+    public String changeImage(@PathVariable(ID) Long id,
+                              MultipartFile image,
+                              Authentication authentication) {
+        userService.updateImage(id, image);
+        return "redirect:/users/{id}/profileMenu";
+    }
+
 
     @GetMapping("/{id}/profileMenu/changeLogin")
     @PreAuthorize("(@userServiceImpl.getUsernameByID(#id)) == authentication.principal.username ")

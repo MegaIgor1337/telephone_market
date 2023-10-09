@@ -16,5 +16,6 @@ public class CreateUserDto {
     private String email;
     private String gender;
     private BigDecimal balance;
+    private MultipartFile image;
 
 }

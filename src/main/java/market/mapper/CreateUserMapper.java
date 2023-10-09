@@ -27,6 +27,16 @@ public class CreateUserMapper  {
     }
 
 
+    public CreateUserDto map(User user, MultipartFile multipartFile) {
+        var createUserDto = new CreateUserDto();
+        createUserDto.setImage(multipartFile);
+        createUserDto.setBalance(user.getBalance());
+        createUserDto.setGender(user.getGender().toString());
+        createUserDto.setEmail(user.getEmail());
+        createUserDto.setPassportNo(user.getPassportNo());
+        return createUserDto;
+    }
+
 
     private void copy(CreateUserDto object, User user) {
         user.setUsername(object.getUsername());
@@ -42,6 +52,12 @@ public class CreateUserMapper  {
                 .map(passwordEncoder::encode)
                 .ifPresent(user::setPassword);
 
+        Optional.ofNullable(object.getImage())
+                .filter(Predicate.not(MultipartFile::isEmpty))
+                .ifPresent(image -> user.setImage(image.getOriginalFilename()));
 
     }
+
+
+
 }

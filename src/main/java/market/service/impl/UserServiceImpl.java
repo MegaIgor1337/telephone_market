@@ -2,6 +2,7 @@ package market.service.impl;
 
 import jakarta.persistence.criteria.Join;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import market.dto.*;
 import market.entity.Address;
@@ -12,6 +13,8 @@ import market.mapper.CreateUserMapper;
 import market.mapper.UserMapper;
 import market.repository.AddressRepository;
 import market.repository.UserRepository;
+import market.service.ImageService;
+import market.service.UserService;
 import market.validator.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,12 +26,15 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 import static market.util.ConstantContainer.*;
 
@@ -37,12 +43,13 @@ import static market.util.ConstantContainer.*;
 @RequiredArgsConstructor
 @Service
 @Transactional(readOnly = true)
-public class UserServiceImpl implements UserDetailsService, market.service.UserService {
+public class UserServiceImpl implements UserDetailsService, UserService {
     private final AddressRepository addressRepository;
     private final CreateUserValidator createUserValidator;
     private final CreateUserMapper createUserMapper;
     private final UsernameValidator usernameValidator;
     private final UserMapper userMapper;
+    private final ImageService imageService;
     private final LoginUserValidator loginUserValidator;
     private final UserRepository userRepository;
     private final UserEmailValidator userEmailValidator;
@@ -55,7 +62,7 @@ public class UserServiceImpl implements UserDetailsService, market.service.UserS
                 .stream()
                 .filter(it -> it.getUsername()
                                       .equals(login)
-                                                   && it.getPassword().equals(password))
+                              && it.getPassword().equals(password))
                 .map(userMapper::userToUserDto).findFirst();
         var validationResult = loginUserValidator.isValid(userDto);
         if (!validationResult.isValid()) {
@@ -83,13 +90,15 @@ public class UserServiceImpl implements UserDetailsService, market.service.UserS
             throw new ValidationException(validationResult.getErrors());
         }
         userDto.setBalance(BigDecimal.ZERO);
-        return  Optional.of(userDto)
-                .map(createUserMapper::map)
+        return Optional.of(userDto)
+                .map(dto -> {
+                    uploadImage(dto.getImage());
+                    return createUserMapper.map(dto);
+                })
                 .map(userRepository::save)
                 .map(userMapper::userToUserDto)
                 .orElseThrow();
     }
-
 
 
     private List<INameUserDto> getAllNames() {
@@ -145,6 +154,39 @@ public class UserServiceImpl implements UserDetailsService, market.service.UserS
         userEntity.setEmail(newEmail);
         setAddressAndSave(userEntity);
     }
+
+    @Transactional
+    public Optional<UserDto> updateImage(Long id, MultipartFile image) {
+        return userRepository.findById(id)
+                .map(entity -> {
+                    uploadImage(image);
+                    Optional.ofNullable(image)
+                            .filter(Predicate.not(MultipartFile::isEmpty))
+                            .ifPresent(avatar -> entity.setImage(avatar.getOriginalFilename()));
+                    return entity;
+                })
+                .map(userRepository::saveAndFlush)
+                .map(userMapper::userToUserDto);
+    }
+
+
+    /*
+    *  Optional.ofNullable(object.getImage())
+                .filter(Predicate.not(MultipartFile::isEmpty))
+                .ifPresent(image -> user.setImage(image.getOriginalFilename()));
+    * */
+
+
+    /*
+    *  return userRepository.findById(id)
+                .map(entity -> {
+                    uploadImage(image);
+                    return createUserMapper.map(createUserDto);
+                })
+                .map(userRepository::saveAndFlush)
+                .map(userMapper::userToUserDto);
+    * */
+
 
     @Override
     @Transactional
@@ -262,6 +304,20 @@ public class UserServiceImpl implements UserDetailsService, market.service.UserS
                         Collections.singleton(user.getRole())
                 ))
                 .orElseThrow(() -> new UsernameNotFoundException(USER_NOT_FOUND + username));
+    }
+
+    @SneakyThrows
+    private void uploadImage(MultipartFile image) {
+        if (!image.isEmpty()) {
+            imageService.upload(image.getOriginalFilename(), image.getInputStream());
+        }
+    }
+
+    public Optional<byte[]> findAvatar(Long id) {
+        return userRepository.findById(id)
+                .map(User::getImage)
+                .filter(StringUtils::hasText)
+                .flatMap(imageService::get);
     }
 
     @Override

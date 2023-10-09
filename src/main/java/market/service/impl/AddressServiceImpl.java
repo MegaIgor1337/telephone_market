@@ -11,6 +11,7 @@ import market.exception.ValidationException;
 import lombok.RequiredArgsConstructor;
 import market.mapper.AddressMapper;
 import market.mapper.CreateAddressMapper;
+import market.repository.OrderRepository;
 import market.service.AddressService;
 import market.service.OrderService;
 import org.springframework.data.domain.Page;
@@ -29,6 +30,7 @@ import static market.util.ConstantContainer.PAGE_SIZE;
 public class AddressServiceImpl implements AddressService {
     private final AddressMapper addressMapper;
     private final AddressRepository addressRepository;
+    private final OrderRepository orderRepository;
     private final CreateAddressMapper createAddressMapper;
     private final CreateAddressValidator createAddressValidator;
 
@@ -36,6 +38,7 @@ public class AddressServiceImpl implements AddressService {
     public AddressDto save(CreateAddressDto createAddressDto) {
         validateAddressParams(createAddressDto);
         var addressEntity = createAddressMapper.createAddressDtoToAddress(createAddressDto);
+        addressEntity.setDeleted(false);
         return addressMapper.addressToAddressDto(addressRepository.save(addressEntity));
     }
 
@@ -50,8 +53,12 @@ public class AddressServiceImpl implements AddressService {
     @Override
     public void delete(Long id) {
         var address = addressRepository.findById(id);
-        address.ifPresent(a -> a.setDeleted(true));
-        address.ifPresent(addressRepository::save);
+        if (!orderRepository.findAllByAddressId(id).isEmpty()) {
+            address.ifPresent(a -> a.setDeleted(true));
+            address.ifPresent(addressRepository::save);
+        } else {
+            addressRepository.deleteById(id);
+        }
     }
 
     @Override

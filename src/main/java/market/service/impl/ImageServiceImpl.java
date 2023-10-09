@@ -1,15 +1,18 @@
 package market.service.impl;
 
 import lombok.SneakyThrows;
+import market.entity.User;
 import market.service.ImageService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 @Service
 public class ImageServiceImpl implements ImageService {

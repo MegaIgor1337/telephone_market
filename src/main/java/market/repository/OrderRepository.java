@@ -18,4 +18,5 @@ public interface OrderRepository extends JpaRepository<Order, Long>, JpaSpecific
     List<Order> findAllByUserId(Long userId);
     List<Order> findAllByStatus(OrderStatus status);
     Page<Order> findAllByStatus(OrderStatus status, Pageable pageable);
+    List<Order> findAllByAddressId(Long id);
 }
