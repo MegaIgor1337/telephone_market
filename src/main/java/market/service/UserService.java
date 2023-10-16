@@ -24,4 +24,5 @@ public interface UserService {
     String getUsernameByID(Long id);
     Optional<byte[]> findAvatar(Long id);
     Optional<UserDto> updateImage(Long id, MultipartFile image);
+    void validCreateUserDto(CreateUserDto createUserDto);
 }

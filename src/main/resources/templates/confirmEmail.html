@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Confirm Email</title>
+</head>
+<body>
+<form th:action="@{/registration/confirmEmail}" method="post">
+  <label for="confirmCode"><span th:text="#{registration.confirmEmail}">Confirm Email:</span></label><br/>
+  <label>
+    <input type="number" id="confirmCode" name="inputCode" th:value="${confirmCode}" required th:text="${confirmCode}" />
+    <br/>
+  </label>
+  <input type="submit" th:value="#{registration.send}">
+  <a id="backToRegistration" th:href="@{/registration}" style="display: none;">
+    <button type="button"><span th:text="#{registration.backToRegistration}">Back to Registration</span></button>
+  </a>
+  <span th:text="#{registration.invalidEmail}"></span>
+  <div th:if="${emailErrors != null}" style="color: red">
+    <span th:text="${emailErrors}"></span>
+    <br/>
+  </div>
+</form>
+<a th:href="@{/registration}">
+  <button type="button"><span th:text="#{registration.back}"></span></button>
+</a>
+<div id="timer-container">
+  <span id="timer-text">Осталось: <span id="timer">45</span> <span th:text="#{registration.seconds}"></span></span>
+  <button id="resend-button" style="display: none;" onclick="resendConfirmationCode()"><span th:text="#{registration.sendCodeAgain}"></span></button>
+</div>
+
+<script>
+  var timer;
+  var countdown = 45; // 60 seconds
+
+  function startTimer() {
+    timer = setInterval(function () {
+      countdown--;
+      document.getElementById("timer").textContent = countdown; // Update the timer display
+      if (countdown <= 0) {
+        clearInterval(timer);
+        document.getElementById("resend-button").style.display = "block"; // Display the button
+      }
+    }, 1000); // Update every second
+  }
+
+  // Function to handle the button click and send POST request
+  function resendConfirmationCode() {
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "/registration", true);
+
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4) {
+        if (xhr.status === 200) {
+          // Handle the response here if needed
+          console.log("POST request to /registration successful");
+          countdown = 60; // Reset the countdown
+          document.getElementById("resend-button").style.display = "none"; // Hide the button
+          startTimer(); // Start the timer again
+        } else {
+          console.log("POST request to /registration failed");
+        }
+      }
+    };
+
+    // Add any data you need to send with the request
+    var data = "key=value"; // Replace with your data
+
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.send(data);
+  }
+
+  // Start the timer when the page loads
+  window.addEventListener("load", startTimer);
+</script>
+</body>
+</html>

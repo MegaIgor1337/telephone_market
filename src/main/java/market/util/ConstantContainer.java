@@ -142,4 +142,7 @@ public class ConstantContainer {
     public static final String USER_NOT_FOUND = "User not found: ";
     public static final String USER_NAME = "username";
     public static final String NUMBER = "number";
+    public static final String CREATE_USER_DTO = "createUserDto";
+    public static final String EMAIL_CONFIRM_ERROR = "emailErrors";
+    public static final String MESSAGE_IF_CODE_FOR_EMAIL_IS_WRONG = "This code is wrong. Tne new code was send on your email at that moment. Write new code";
 }

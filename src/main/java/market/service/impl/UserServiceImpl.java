@@ -82,13 +82,19 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     }
 
     @Override
-    @Transactional
-    public UserDto create(CreateUserDto userDto) {
+    public void validCreateUserDto(CreateUserDto createUserDto) {
         createUserValidator.putUserValidationInfo(getValidateInfo());
-        var validationResult = createUserValidator.isValid(userDto);
+        var validationResult = createUserValidator.isValid(createUserDto);
         if (!validationResult.isValid()) {
             throw new ValidationException(validationResult.getErrors());
         }
+    }
+
+
+    @Override
+    @Transactional
+    public UserDto create(CreateUserDto userDto) {
+        validCreateUserDto(userDto);
         userDto.setBalance(BigDecimal.ZERO);
         return Optional.of(userDto)
                 .map(dto -> {

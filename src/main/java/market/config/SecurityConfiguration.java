@@ -31,7 +31,7 @@ public class SecurityConfiguration   {
         http
 
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login", "/registration", "/market",
+                        .requestMatchers("/login", "/registration", "/market", "/registration/confirmEmail",
                                 "/v3/api-docs/**", "/swagger-ui/**").permitAll()
                         .requestMatchers("/admin/menu/**").hasAnyAuthority(Role.ADMIN.getAuthority())
                         .anyRequest().authenticated())
