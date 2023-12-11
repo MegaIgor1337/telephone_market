@@ -4,6 +4,7 @@ import market.entity.PromoCode;
 import market.entity.PromoCodeProduct;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -12,5 +13,7 @@ import java.util.List;
 public interface PromoCodeProductRepository extends JpaRepository<PromoCodeProduct, Long> {
     List<PromoCodeProduct> findAllByPromoCode(PromoCode promoCode);
     @Modifying(clearAutomatically = true)
+    @Query("DELETE FROM PromoCodeProduct pc  " +
+           "WHERE pc.product.id = :productId and pc.promoCode.id = :promoCodeId")
     void deleteAllByProductIdAndPromoCodeId(Long productId, Long promoCodeId);
 }

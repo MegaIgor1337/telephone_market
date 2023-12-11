@@ -3,10 +3,75 @@
 <head>
   <meta charset="UTF-8">
   <title>changePassportNo</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f4f4f4;
+      font-family: Arial, sans-serif;
+    }
+
+    a.button {
+      display: inline-block;
+      text-decoration: none;
+      background-color: #007bff;
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 5px;
+      transition: background-color 0.3s ease-in-out;
+      margin-bottom: 20px;
+    }
+
+    a.button:hover {
+      background-color: #0056b3;
+    }
+
+    form {
+      width: 300px;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    input[type="text"],
+    input[type="submit"] {
+      width: calc(100% - 6px);
+      padding: 8px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    input[type="submit"] {
+      background-color: #007bff;
+      color: #fff;
+      cursor: pointer;
+      font-size: 16px;
+      transition-duration: 0.4s;
+    }
+
+    input[type="submit"]:hover {
+      background-color: #0056b3;
+    }
+
+    .error {
+      color: red;
+      margin-top: 10px;
+    }
+  </style>
 </head>
 <body>
-<a th:href="@{/users/{userId}/profileMenu(userId=${userDto.id})}">
-  <button type="button"><span th:text="#{menu.backToMenu}"></span></button>
+<a th:href="@{/users/{userId}/profileMenu(userId=${userDto.id})}" class="button">
+  <span th:text="#{menu.backToMenu}"></span>
 </a>
 <form th:action="@{/users/{userId}/profileMenu/changePassportNo(userId=${userDto.id})}" method="post">
   <label><span th:text="#{user.newPassportNo}"></span>
@@ -15,7 +80,7 @@
   <label for="submit">
     <input type="submit" th:value="#{registration.send}" id="submit">
   </label>
-  <div th:if="${errors != null}" style="color: red">
+  <div th:if="${errors != null}" class="error">
     <span th:each="error : ${errors}" th:text="${error.message}"></span>
     <br/>
   </div>

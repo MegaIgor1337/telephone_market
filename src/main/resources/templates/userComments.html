@@ -3,7 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <title>Comments</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
+        button {
+            padding: 8px 16px;
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        .comment {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 6px;
+            background-color: #fff;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        form {
+            display: inline;
+        }
+
+        p {
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
 <a th:href="@{/users}">
@@ -11,13 +51,15 @@
 </a> <br/>
 <th:block th:if="${userComments != null and not #lists.isEmpty(userComments)}">
     <th:block th:each="comment, status : ${userComments}">
-        <span th:text="${(status.index + 1)}")></span> <span th:text="${comment.comment}"></span>
-        <span th:text="${comment.status}"> </span>
-        <form method="post"
-              th:action="@{/users/{userId}/personalComments/delete(userId=${userDto.id})}">
-            <input type="hidden" name="commentId" th:value="${comment.id}"/>
-            <button type="submit" value="Delete"><span th:text="#{delete.delete}">Delete</span></button>
-        </form>
+        <div class="comment">
+            <span th:text="${(status.index + 1)}"></span>) <span th:text="${comment.comment}"></span>
+            <span th:text="${comment.status}"></span>
+            <form method="post"
+                  th:action="@{/users/{userId}/personalComments/delete(userId=${userDto.id})}">
+                <input type="hidden" name="commentId" th:value="${comment.id}"/>
+                <button type="submit" value="Delete"><span th:text="#{delete.delete}">Delete</span></button>
+            </form>
+        </div>
     </th:block>
 </th:block>
 <th:block th:unless="${userComments != null and not #lists.isEmpty(userComments)}">

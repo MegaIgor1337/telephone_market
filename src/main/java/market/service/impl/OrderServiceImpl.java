@@ -253,6 +253,7 @@ public class OrderServiceImpl implements OrderService {
         var order = orderRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         order.setStatus(moderateOrderDto.getStatus());
+        order.setAddress(addressRepository.findById(moderateOrderDto.getDeliveryAddress()).orElseThrow());
         if (order.getStatus().equals(OrderStatus.DELIVER_PROCESSING)) {
             order.setDateOfDelivery(moderateOrderDto.getDateOfDelivery());
         }

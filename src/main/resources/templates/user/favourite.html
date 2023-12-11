@@ -3,6 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th,
+        td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        button {
+            width: 100%;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            transition-duration: 0.4s;
+            margin-bottom: 5px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        form button {
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            transition-duration: 0.4s;
+            margin-bottom: 5px;
+            padding: 8px 10px;
+        }
+
+        form button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
 <a th:href="@{/users}">
@@ -37,7 +98,7 @@
             <form method="post" th:action="@{/users/{userId}/favourite/deleteFavourite(userId=${userDto.id})}">
                 <input type="hidden" name="favouriteId" th:value="${favourite.id}"/>
                 <input type="hidden" name="pageF" th:value="${favouriteProducts.number}"/>
-                <input type="submit" th:value="#{delete.delete}"/>
+                <button type="submit"><span th:text="#{delete.delete}"></span></button>
             </form>
         </td>
         <td>
@@ -46,7 +107,7 @@
                       th:action="@{/users/{userId}/favourite/addToBasketFromFavourite(userId=${userDto.id})}">
                     <input type="hidden" name="productId" th:value="${favourite.product.id}"/>
                     <input type="hidden" name="pageF" th:value="${favouriteProducts.number}"/>
-                    <input type="submit" th:value="#{products.addToBasket}"/>
+                    <button type="submit"><span th:text="#{products.addToBasket}"></span></button>
                 </form>
             </span>
             <span th:if="${productsInBasket.contains(favourite.product)}">
@@ -62,16 +123,15 @@
           th:action="@{/users/{userId}/favourite(userId=${userDto.id})}">
         <button th:if="${favouriteProducts.hasPrevious}" type="submit" name="page" value="0"><span th:text="#{page.first}">First</span></button>
         <button th:if="${favouriteProducts.hasPrevious}" type="submit" name="page"
-                th:value="${favouriteProducts.number - 1}"><span th:text="#{page.first}">Previous</span>
+                th:value="${favouriteProducts.number - 1}"><span th:text="#{page.previous}">Previous</span>
         </button>
         <button th:if="${favouriteProducts.hasNext}" type="submit" name="page"
-                th:value="${favouriteProducts.number + 1}"><span th:text="#{page.first}">Next</span>
+                th:value="${favouriteProducts.number + 1}"><span th:text="#{page.next}">Next</span>
         </button>
         <button th:if="${favouriteProducts.hasNext}" type="submit" name="page"
-                th:value="${favouriteProducts.totalPages - 1}"><span th:text="#{page.first}">Last</span>
+                th:value="${favouriteProducts.totalPages - 1}"><span th:text="#{page.last}">Last</span>
         </button>
     </form>
-
 </div>
 </body>
 </html>

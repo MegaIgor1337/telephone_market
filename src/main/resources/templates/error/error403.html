@@ -3,16 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <title>Error 403</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 20px;
+        }
+
+        p {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        img {
+            display: block;
+            margin: 0 auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 4px;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
 <p><span th:text="#{error.error403}">Access is denied</span></p>
-    <br/>
-    <img width="100" th:src="@{/api/v3/errors/picture}" alt="Error image"/>
 <br/>
-    <a th:href="@{/users}">
-        <button type="button"><span th:text="#{menu.backToMenu}"></span></button>
-    </a>
-
-
+<img width="200" th:src="@{/api/v3/errors/picture}" alt="Error image"/>
+<br/>
+<a th:href="@{/users}">
+    <button type="button"><span th:text="#{menu.backToMenu}"></span></button>
+</a>
 </body>
 </html>

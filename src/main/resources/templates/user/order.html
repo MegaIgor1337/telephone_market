@@ -3,103 +3,187 @@
 <head>
     <meta charset="UTF-8">
     <title>Order</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            width: 80%;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th,
+        td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        button {
+            width: 100%;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            transition-duration: 0.4s;
+            margin-bottom: 5px;
+        }
+
+        form input[type="submit"]#send,
+        form input[type="submit"]#submit {
+            background-color: #4b7f20; /* Светло-зеленый цвет */
+            color: #fff;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            transition-duration: 0.4s;
+            margin-bottom: 5px;
+        }
+
+        form input[type="submit"]#send:hover,
+        form input[type="submit"]#submit:hover {
+            background-color: #5a9f29; /* Темно-зеленый цвет при наведении */
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        form {
+            margin-bottom: 10px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="submit"],
+        select {
+            width: calc(100% - 14px);
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+    </style>
 </head>
 <body>
-<a th:href="@{/users}">
-    <button type="button"><span th:text="#{menu.backToMenu}"></span></button>
-</a>
-<span th:if="${not #lists.isEmpty(deliveryAddresses)}">
-<form th:if="${not #lists.isEmpty(order.products.content)}" method="POST"
-      th:action="@{/users/{userId}/order/promoCode(userId=${userDto.id})}">
-    <label for="promoCode"><span th:text="#{promoCode.promoCode}">Promo code</span>
-        <input type="text" name="promoCode" id="promoCode" th:value="${promoCode}">
-    </label>
-    <label for="send">
-        <input type="submit" th:value="#{registration.send}" id="send">
-    </label>
-</form>
-<div th:if="${errors != null}" style="color: red">
-    <span th:each="error : ${errors}" th:text="${error.message}"></span>
-    <br/>
-</div>
-
-<span th:if="${not #lists.isEmpty(order.products.content)}">
-    <span th:text="#{products.price}">Price</span>
-        <span th:text="${order.cost}"></span>
-    </span>
-<form th:if="${not #lists.isEmpty(order.products.content)}" method="POST"
-      th:action="@{/users/{userId}/order/pay(userId=${userDto.id})}">
-    <label for="deliveryAddress"></label><select name="deliveryAddress" id="deliveryAddress"><span th:text="#{address.deliveryAddress}"></span>
-    <option th:each="deliveryAddress : ${deliveryAddresses}"
-            th:text="${deliveryAddress.country + ', ' + deliveryAddress.city + ', ' + deliveryAddress.street + ', '
-             + deliveryAddress.house + ', ' + deliveryAddress.flat}"
-            th:value="${deliveryAddress.id}" ></option>
-</select><br/>
-    <label for="submit">
-        <input type="submit" th:value="#{order.pay}" id="submit">
-    </label>
-</form>
-<span th:if="${#lists.isEmpty(order.products.content)}">
-    <p>
-        <span th:text="#{address.NoProducts}"></span>
-    </p>
-</span>
-<table th:if="${not #lists.isEmpty(order.products.content)}">
-    <thead>
-    <tr>
-        <th>#</th>
-        <th><span th:text="#{products.brand}">Brand</span></th>
-        <th><span th:text="#{products.model}">Model</span></th>
-        <th><span th:text="#{products.color}">Color</span></th>
-        <th><span th:text="#{products.country}">Country</span></th>
-        <th><span th:text="#{products.count}">Count</span></th>
-        <th><span th:text="#{products.price}">Price</span></th>
-        <th></th>
-        <th></th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="orderProduct, loop : ${order.products}">
-        <td th:text="${loop.index + 1}"></td>
-        <td th:text="${orderProduct.product.brand.brand}"></td>
-        <td th:text="${orderProduct.product.model.model}"></td>
-        <td th:text="${orderProduct.product.color.color}"></td>
-        <td th:text="${orderProduct.product.country.country}"></td>
-        <td th:text="${orderProduct.userCount}"></td>
-        <td th:text="${orderProduct.userCount * orderProduct.product.cost}"></td>
-        <td>
-            <form method="post" th:action="@{/users/{userId}/order/delete(userId=${userDto.id})}">
-                <input type="hidden" name="productId" th:value="${orderProduct.product.id}"/>
-                <input type="hidden" name="pageOr" th:value="${order.products.number}"/>
-                <button type="submit" value="Delete from basket"><span th:text="#{order.deleteFromBasket}">Brand</span></button>
-            </form>
-        </td>
-    </tr>
-    </tbody>
-</table>
-
-<div th:if="${not #lists.isEmpty(order.products)}">
-    <form th:if="${not #lists.isEmpty(order.products)}" method="GET"
-          th:action="@{/users/{userId}/order(userId=${userDto.id})}">
-        <button th:if="${order.products.hasPrevious}" type="submit" name="page" value="0"><span th:text="#{page.first}">First</span></button>
-        <button th:if="${order.products.hasPrevious}" type="submit" name="page" th:value="${order.products.number - 1}">
-            <span th:text="#{page.previous}">Previous</span>
-        </button>
-        <button th:if="${order.products.hasNext}" type="submit" name="page" th:value="${order.products.number + 1}">
-            <span th:text="#{page.next}">Next</span>
-        </button>
-        <button th:if="${order.products.hasNext}" type="submit" name="page" th:value="${order.products.totalPages - 1}">
-            <span th:text="#{page.last}">Last</span>
-        </button>
-    </form>
-</div>
-    </span>
-<span th:unless="${not #lists.isEmpty(deliveryAddresses)}">
-    <br/>
-    <span th:text="#{address.NoAddress}">You do not have delivery address.</span>
-    <a th:href="@{/users/{userId}/profileMenu(userId=${userDto.id})}">
-        <button type="button" value="add"><span th:text="#{order.add}">Add</span></button>
+<div class="container">
+    <a th:href="@{/users}">
+        <button type="button"><span th:text="#{menu.backToMenu}"></span></button>
     </a>
-</span>
+    <span th:if="${not #lists.isEmpty(deliveryAddresses)}">
+        <form th:if="${not #lists.isEmpty(order.products.content)}" method="POST"
+              th:action="@{/users/{userId}/order/promoCode(userId=${userDto.id})}">
+            <label for="promoCode"><span th:text="#{promoCode.promoCode}">Promo code</span></label>
+            <input type="text" name="promoCode" id="promoCode" th:value="${promoCode}">
+            <br/>
+            <input type="submit" th:value="#{registration.send}" id="send">
+        </form>
+        <div th:if="${errors != null}" style="color: red">
+            <span th:each="error : ${errors}" th:text="${error.message}"></span>
+            <br/>
+        </div>
+
+        <span th:if="${not #lists.isEmpty(order.products.content)}">
+            <span th:text="#{products.price}">Price</span>
+            <span th:text="${order.cost}"></span>
+        </span>
+        <form th:if="${not #lists.isEmpty(order.products.content)}" method="POST"
+              th:action="@{/users/{userId}/order/pay(userId=${userDto.id})}">
+            <label for="deliveryAddress"><span th:text="#{address.deliveryAddress}">Delivery Address</span></label>
+            <select name="deliveryAddress" id="deliveryAddress">
+                <option th:each="deliveryAddress : ${deliveryAddresses}"
+                        th:text="${deliveryAddress.country + ', ' + deliveryAddress.city + ', ' + deliveryAddress.street + ', ' + deliveryAddress.house + ', ' + deliveryAddress.flat}"
+                        th:value="${deliveryAddress.id}"></option>
+            </select>
+            <br/>
+            <input type="submit" th:value="#{order.pay}" id="submit">
+        </form>
+        <span th:if="${#lists.isEmpty(order.products.content)}">
+            <p>
+                <span th:text="#{address.NoProducts}">You have no products in the order.</span>
+            </p>
+        </span>
+        <table th:if="${not #lists.isEmpty(order.products.content)}">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th><span th:text="#{products.brand}">Brand</span></th>
+                <th><span th:text="#{products.model}">Model</span></th>
+                <th><span th:text="#{products.color}">Color</span></th>
+                <th><span th:text="#{products.country}">Country</span></th>
+                <th><span th:text="#{products.count}">Count</span></th>
+                <th><span th:text="#{products.price}">Price</span></th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="orderProduct, loop : ${order.products}">
+                <td th:text="${loop.index + 1}"></td>
+                <td th:text="${orderProduct.product.brand.brand}"></td>
+                <td th:text="${orderProduct.product.model.model}"></td>
+                <td th:text="${orderProduct.product.color.color}"></td>
+                <td th:text="${orderProduct.product.country.country}"></td>
+                <td th:text="${orderProduct.userCount}"></td>
+                <td th:text="${orderProduct.userCount * orderProduct.product.cost}"></td>
+                <td>
+                    <form method="post" th:action="@{/users/{userId}/order/delete(userId=${userDto.id})}">
+                        <input type="hidden" name="productId" th:value="${orderProduct.product.id}"/>
+                        <input type="hidden" name="pageOr" th:value="${order.products.number}"/>
+                        <button type="submit" value="Delete from basket"><span th:text="#{order.deleteFromBasket}">Delete from basket</span></button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div th:if="${not #lists.isEmpty(order.products)}">
+            <form th:if="${not #lists.isEmpty(order.products)}" method="GET"
+                  th:action="@{/users/{userId}/order(userId=${userDto.id})}">
+                <button th:if="${order.products.hasPrevious}" type="submit" name="page" value="0"><span th:text="#{page.first}">First</span></button>
+                <button th:if="${order.products.hasPrevious}" type="submit" name="page" th:value="${order.products.number - 1}">
+                    <span th:text="#{page.previous}">Previous</span>
+                </button>
+                <button th:if="${order.products.hasNext}" type="submit" name="page" th:value="${order.products.number + 1}">
+                    <span th:text="#{page.next}">Next</span>
+                </button>
+                <button th:if="${order.products.hasNext}" type="submit" name="page" th:value="${order.products.totalPages - 1}">
+                    <span th:text="#{page.last}">Last</span>
+                </button>
+            </form>
+        </div>
+    </span>
+    <span th:unless="${not #lists.isEmpty(deliveryAddresses)}">
+        <br/>
+        <span th:text="#{address.NoAddress}">You do not have a delivery address.</span>
+        <a th:href="@{/users/{userId}/profileMenu(userId=${userDto.id})}">
+            <button type="button" value="add"><span th:text="#{order.add}">Add</span></button>
+        </a>
+    </span>
+</div>
 </body>
 </html>

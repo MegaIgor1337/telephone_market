@@ -3,11 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <title>Error 404</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 20px;
+        }
+
+        p {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        img {
+            display: block;
+            margin: 0 auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+    </style>
 </head>
 <body>
 <p><span th:text="#{error.error404}">Not found</span></p>
 <br/>
-<img width="100" th:src="@{/api/v3/errors/picture}" alt="Error image"/>
+<img width="200" th:src="@{/api/v3/errors/picture}" alt="Error image"/>
 <br/>
 </body>
 </html>

@@ -3,6 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <title>Order</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+
+        button[type="submit"],
+        input[type="text"],
+        input[type="number"],
+        select {
+            padding: 8px 16px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            margin-bottom: 10px;
+        }
+
+        button[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            border: none;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .conditional-style form {
+            margin-top: 10px;
+        }
+
+        .conditional-style form button {
+            margin-right: 5px;
+        }
+    </style>
 </head>
 <body>
 <form method="get" th:action="@{/admin/menu/orders}">
@@ -19,7 +72,6 @@
         <th><span th:text="#{products.count}"></span></th>
         <th><span th:text="#{products.price}"></span></th>
         <th></th>
-        <th></th>
     </tr>
     </thead>
     <tbody>
@@ -35,7 +87,7 @@
     </tbody>
 </table>
 
-<div th:if="${not #lists.isEmpty(order.products)}">
+<div th:if="${not #lists.isEmpty(order.products)}" class="conditional-style">
     <form th:if="${not #lists.isEmpty(order.products)}" method="GET"
           th:action="@{/admin/menu/orders/{orderId}/viewInfo(orderId=${order.id})}">
         <button th:if="${order.products.hasPrevious}" type="submit" name="pagePr" value="0"><span th:text="#{page.first}"></span></button>
@@ -52,16 +104,16 @@
 </div>
 <form method="post" th:action="@{/admin/menu/orders/{orderId}/viewInfo/changeInfo(orderId=${order.id})}">
     <label for="dateOfDelivery"><span th:text="#{order.dateOfDelivery}"></span>
-        <input type="date" name="dateOfDelivery" id="dateOfDelivery"/>
+        <input type="date" name="dateOfDelivery" id="dateOfDelivery" th:value="${order.dateOfDelivery}"/>
     </label><br/>
-    <label for="status"></label><select name="status" id="status"><span th:text="#{order.status}"></span>
-    <option th:each="status : ${orderStatuses}" th:text="${status}" th:value="${order.status}" ></option>
-</select><br/>
-    <label for="deliveryAddress"></label><select name="deliveryAddress" id="deliveryAddress"><span th:text="#{order.status}"></span>
+    <label for="status"></label><select name="status" id="status">
+    <option th:each="status : ${orderStatuses}" th:text="${status}" th:selected="${status == order.status}"></option>
+</select>
+    <br/>
+    <label for="deliveryAddress"></label><select name="deliveryAddress" id="deliveryAddress">
     <option th:each="deliveryAddress : ${deliveryAddresses}"
-            th:text="${deliveryAddress.country + ', ' + deliveryAddress.city + ', ' + deliveryAddress.street + ', '
-             + deliveryAddress.house + ', ' + deliveryAddress.flat}"
-            th:value="${deliveryAddress.id}" ></option>
+            th:text="${deliveryAddress.country + ', ' + deliveryAddress.city + ', ' + deliveryAddress.street + ', ' + deliveryAddress.house + ', ' + deliveryAddress.flat}"
+            th:value="${deliveryAddress.id}" th:selected="${deliveryAddress.id == order.address.id}"></option>
 </select><br/>
     <button type="submit" name="send"><span th:text="#{registration.send}"></span></button>
 </form>

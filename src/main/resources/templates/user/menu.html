@@ -3,43 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <style>
+        body {
+            width: 200px;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        a {
+            display: block;
+            text-decoration: none;
+            padding: 10px 20px;
+            margin-bottom: 10px;
+            background-color: #3498db;
+            color: #fff;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+
+        a:hover {
+            background-color: #2980b9;
+        }
+    </style>
 </head>
 <body>
-1)
 <a th:href="@{/market}">
     <span th:text="#{menu.aboutUs}">About us</span>
-</a><br/>
-2)
+</a>
 <a th:href="@{/comments}">
     <span th:text="#{menu.viewComments}">View comments</span>
-</a><br/>
-3)
+</a>
 <a th:href="@{/users/{userId}/profileMenu(userId=${userDto.id})}">
     <span th:text="#{menu.profile}">Profile</span>
-</a><br/>
-4)
+</a>
 <a th:href="@{/users/{userId}/products(userId=${userDto.id})}">
     <span th:text="#{menu.catalog}">Catalog</span>
-</a><br/>
-5)
+</a>
 <a th:href="@{/logout}">
     <span th:text="#{menu.logout}">Log out</span>
-</a><br/>
-6)
+</a>
 <a th:href="@{/users/{userId}/addComment(userId=${userDto.id})}">
     <span th:text="#{menu.addComment}">Add comment</span>
-</a><br/>
-7)
+</a>
 <a th:href="@{/users/{userId}/order(userId=${userDto.id})}">
     <span th:text="#{menu.basket}">Basket</span>
-</a><br/>
-8)
+</a>
 <a th:href="@{/users/{userId}/orderHistory(userId=${userDto.id})}">
     <span th:text="#{menu.orderHistory}">Order history</span>
-</a><br/>
-9)
+</a>
 <a th:href="@{/users/{userId}/favourite(userId=${userDto.id})}">
     <span th:text="#{menu.favourite}">Favourite</span>
-</a><br/>
+</a>
 </body>
 </html>

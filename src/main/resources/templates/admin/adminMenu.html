@@ -2,47 +2,63 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
   <title>Menu</title>
+  <style>
+    body {
+      width: 250px;
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 20px;
+    }
+
+    a {
+      display: block;
+      text-decoration: none;
+      padding: 15px 30px;
+      margin-bottom: 5px;
+      background-color: #3498db;
+      color: #fff;
+      border-radius: 4px;
+      transition: background-color 0.3s ease;
+      width: calc(100% - 60px);
+      text-align: center;
+    }
+
+    a:hover {
+      background-color: #2980b9;
+    }
+  </style>
 </head>
 <body>
-1)
 <a th:href="@{/admin/menu/moderateComments}">
-  <span th:text="#{comments.moderateComments}"></span>  (<span th:text="${sizeModerateComments}"></span>)
-</a><br/>
-2)
+  <span th:text="#{comments.moderateComments}"></span> (<span th:text="${sizeModerateComments}"></span>)
+</a>
 <a th:href="@{/admin/menu/accessedComments}">
   <span th:text="#{admin.viewAccessedComments}"></span>
-</a><br/>
-3)
+</a>
 <a th:href="@{/admin/menu/users}">
   <span th:text="#{admin.viewAllUsers}"></span>
-</a><br/>
-4)
+</a>
 <a th:href="@{/admin/menu/productsForAdmin}">
   <span th:text="#{admin.viewAllProducts}"></span>
-</a><br/>
-5)
+</a>
 <a th:href="@{/admin/menu/promoCodesForAdmin}">
   <span th:text="#{admin.viewAllPromoCodes}"></span>
-</a><br/>
-6)
+</a>
 <a th:href="@{/admin/menu/addPromoCodeInfo}">
   <span th:text="#{admin.addPromoCode}"></span>
-</a><br/>
-7)
+</a>
 <a th:href="@{/admin/menu/addNewProduct}">
   <span th:text="#{admin.addProduct}"></span>
-</a><br/>
-8)
+</a>
 <a th:href="@{/logout}">
   <span th:text="#{menu.logout}"></span>
-</a><br/>
-9)
+</a>
 <a th:href="@{/admin/menu/moderateOrders}">
   <span th:text="#{order.moderateOrders}"></span>(<span th:text="${sizeModerateOrders}"></span>)
-</a><br/>
-10)
+</a>
 <a th:href="@{/admin/menu/orders}">
   <span th:text="#{order.orders}"></span>
-</a><br/>
+</a>
 </body>
 </html>

@@ -3,6 +3,94 @@
 <head>
   <meta charset="UTF-8">
   <title>Confirm Email</title>
+  <style>
+    form {
+      text-align: center;
+      margin-top: 30px;
+      max-width: 300px;
+      margin: auto;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+
+    input[type="number"] {
+      padding: 8px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    input[type="number"]:focus {
+      outline: none;
+      border-color: #3498db;
+      box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+    }
+
+    input[type="submit"],
+    button[type="button"] {
+      padding: 8px 16px;
+      background-color: #3498db;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    input[type="submit"]:hover,
+    button[type="button"]:hover {
+      background-color: #2980b9;
+    }
+
+    #timer-container {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    #timer-text {
+      font-weight: bold;
+    }
+
+    #resend-button {
+      margin-top: 20px;
+      display: block;
+      margin: auto;
+    }
+
+    #resend-button {
+      padding: 8px 16px;
+      background-color: #3498db;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      display: none;
+      margin-top: 10px;
+      transition: background-color 0.3s ease;
+    }
+
+    #resend-button:hover {
+      background-color: #2980b9;
+    }
+
+    /* Убираем вторую ссылку */
+    a:nth-of-type(2) {
+      display: none;
+    }
+
+    /* Перемещаем кнопку "Back to Registration" по центру */
+    #backToRegistration {
+      display: block;
+      text-align: center;
+      margin-top: 20px;
+    }
+  </style>
 </head>
 <body>
 <form th:action="@{/registration/confirmEmail}" method="post">
@@ -12,8 +100,8 @@
     <br/>
   </label>
   <input type="submit" th:value="#{registration.send}">
-  <a id="backToRegistration" th:href="@{/registration}" style="display: none;">
-    <button type="button"><span th:text="#{registration.backToRegistration}">Back to Registration</span></button>
+  <a id="backToRegistration" th:href="@{/registration}">
+    <button type="button"><span th:text="#{registration.backToRegistration}"></span></button>
   </a>
   <span th:text="#{registration.invalidEmail}"></span>
   <div th:if="${emailErrors != null}" style="color: red">
@@ -21,12 +109,9 @@
     <br/>
   </div>
 </form>
-<a th:href="@{/registration}">
-  <button type="button"><span th:text="#{registration.back}"></span></button>
-</a>
 <div id="timer-container">
-  <span id="timer-text">Осталось: <span id="timer">45</span> <span th:text="#{registration.seconds}"></span></span>
-  <button id="resend-button" style="display: none;" onclick="resendConfirmationCode()"><span th:text="#{registration.sendCodeAgain}"></span></button>
+  <span id="timer-text"><span th:text="#{registration.seconds}"></span> <span id="timer">45</span>
+  <button id="resend-button" onclick="resendConfirmationCode()"><span th:text="#{registration.sendCodeAgain}"></span></button>
 </div>
 
 <script>

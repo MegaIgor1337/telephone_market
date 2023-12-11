@@ -2,7 +2,79 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Products</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
+
+        form {
+            flex-basis: 30%;
+            margin-right: 20px;
+        }
+
+        table {
+            flex-basis: 60%;
+            overflow-x: auto;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="submit"],
+        button {
+            width: calc(100% - 14px);
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        input[type="submit"],
+        button {
+            width: 100%;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            transition-duration: 0.4s;
+        }
+
+        input[type="submit"]:hover,
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th,
+        td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
 </head>
 <body>
 <a th:href="@{/users}">
@@ -14,6 +86,7 @@
     <datalist id="brandDataList">
         <option th:each="brand : ${brands}" th:value="${brand.brand}"></option>
     </datalist>
+    <br>
     <br>
     <label for="model"><span th:text="#{products.model}"></span></label>
     <input type="text" id="model" name="model" th:value="${model}" list="modelDataList">
@@ -47,8 +120,7 @@
         <input type="radio" id="priceQuery" name="priceQuery" th:value="${priceQuery}"
                th:checked="${priceQuery == selectedPriceQuery}" th:text="${priceQuery}">
         <br/>
-    </label>
-    <input type="submit" th:value="#{search.search}">
+    </label>    <input type="submit" th:value="#{search.search}">
 </form>
 <div th:if="${errors != null}" style="color: red">
     <span th:each="error : ${errors}" th:text="${error.message}"></span>
@@ -89,7 +161,7 @@
                     <input type="hidden" name="productId" th:value="${productDto.id}"/>
                     <input type="hidden" name="count" th:value="${count}"/>
                     <input type="hidden" name="pageFB" th:value="${products.number}"/>
-                    <button type="submit" value="submit"><span th:text="#{products.addToBasket}"></span></button>
+                    <button type="submit"><span th:text="#{products.addToBasket}"></span></button>
                 </form>
             </span>
             <span th:if="${productsInBasket.contains(productDto)}">

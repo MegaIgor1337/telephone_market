@@ -3,15 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
+    <style>
+        form {
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        input {
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 200px;
+            box-sizing: border-box;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+        }
+
+        button[type="submit"],
+        button[type="button"] {
+            padding: 8px 16px;
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button[type="submit"]:hover,
+        button[type="button"]:hover {
+            background-color: #2980b9;
+        }
+    </style>
 </head>
 <body>
 <div th:insert="~{fragment :: locale}"></div>
 <br/>
 <form th:action="@{/login}" method="post">
-    <label for="username"><span th:text="#{login.username}">Username:</span>
+    <label for="username"><span th:text="#{login.username}" style="font-weight: bold;">Username:</span>
         <input type="text" name="username" id="username" th:value="${username}" required>
     </label><br>
-    <label for="password"><span th:text="#{login.password}">Password:</span>
+    <label for="password"><span th:text="#{login.password}" style="font-weight: bold;">Password:</span>
         <input type="password" name="password" id="password" th:value="${password}" required>
     </label><br>
     <button type="submit"><span th:text="#{login.login}">Login</span></button>

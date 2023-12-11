@@ -3,26 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <title>Market</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        p {
+            margin-bottom: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+    </style>
 </head>
 <body>
-<div th:insert="~{fragment :: locale}"></div>
-<p><span th:text="#{market.text1}">text1:</span>
-</p>
-<p>
-    <span th:text="#{market.text2}">text2:</span>
-</p>
-<p>
-    <span th:text="#{market.text3}">text3:</span>
-</p>
-<p>
-    <span th:text="#{market.text4}">text4:</span>
-</p>
-<p>
-    <span th:text="#{market.text5}">text5:</span>
-</p>
-<a th:href="@{/users}">
-    <button type="button"><span th:text="#{menu.backToMenu}">text5:</span></button>
-</a>
-
+<div class="container">
+    <div th:insert="~{fragment :: locale}"></div>
+    <p><span th:text="#{market.text1}">text1:</span></p>
+    <p><span th:text="#{market.text2}">text2:</span></p>
+    <p><span th:text="#{market.text3}">text3:</span></p>
+    <p><span th:text="#{market.text4}">text4:</span></p>
+    <p><span th:text="#{market.text5}">text5:</span></p>
+    <a th:href="@{/users}">
+        <button type="button"><span th:text="#{menu.backToMenu}">text5:</span></button>
+    </a>
+</div>
 </body>
 </html>

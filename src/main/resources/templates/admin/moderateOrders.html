@@ -3,6 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <title>Orders</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+
+        button[type="submit"],
+        table {
+            margin-bottom: 20px;
+        }
+
+        button[type="submit"] {
+            padding: 8px 16px;
+            border-radius: 4px;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            border: none;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        a {
+            text-decoration: none;
+            color: #007bff;
+        }
+
+        a:hover {
+            color: #0056b3;
+        }
+
+        .center-text {
+            text-align: center;
+        }
+
+        .pagination {
+            margin-top: 10px;
+        }
+
+        .pagination button {
+            margin-right: 5px;
+        }
+    </style>
 </head>
 <body>
 <form method="get" th:action="@{/admin/menu}">
@@ -10,7 +72,7 @@
 </form>
 <p><span th:text="#{order.moderateOrders}"></span></p>
 <span th:if="${#lists.isEmpty(moderateOrders.content)}">
-<p><span th:text="#{order.noOrders}"></span></p>
+    <p><span th:text="#{order.noOrders}"></span></p>
 </span>
 <table th:if="${not #lists.isEmpty(moderateOrders.content)}">
     <thead>
@@ -22,26 +84,29 @@
         <th><span th:text="#{order.dateOfDelivery}"></span></th>
         <th><span th:text="#{products.price}"></span></th>
         <th></th>
-        <th></th>
     </tr>
     </thead>
     <tbody>
     <tr th:each="order, loop : ${moderateOrders}">
-        <td>  <a th:href="@{/admin/menu/moderateOrders/{orderId}/moderate(orderId=${order.id})}">
-            <span style="text-align: center;" th:text="${order.id}"></span>
-        </a></td>
-        <td  style="text-align: center;" th:text="${order.status}"></td>
-        <td  style="text-align: center;" th:text="${order.date}"></td>
-        <td  style="text-align: center;" th:text="${order.products.size()}"></td>
-        <td  style="text-align: center;" th:text="${order.dateOfDelivery != null ? order.dateOfDelivery : 'unknown'}"></td>
-        <td  style="text-align: center;" th:text="${order.cost}"></td>
+        <td>
+            <a th:href="@{/admin/menu/moderateOrders/{orderId}/moderate(orderId=${order.id})}" class="center-text">
+                <span th:text="${order.id}"></span>
+            </a>
+        </td>
+        <td class="center-text" th:text="${order.status}"></td>
+        <td class="center-text" th:text="${order.date}"></td>
+        <td class="center-text" th:text="${order.products.size()}"></td>
+        <td class="center-text" th:text="${order.dateOfDelivery != null ? order.dateOfDelivery : 'unknown'}"></td>
+        <td class="center-text" th:text="${order.cost}"></td>
     </tr>
     </tbody>
 </table>
-<div th:if="${not #lists.isEmpty(moderateOrders)}">
+<div th:if="${not #lists.isEmpty(moderateOrders)}" class="pagination">
     <form th:if="${not #lists.isEmpty(moderateOrders)}" method="GET"
           th:action="@{/admin/menu/moderateOrders}">
-        <button th:if="${moderateOrders.hasPrevious}" type="submit" name="page" value="0"><span th:text="#{page.first}"></span></button>
+        <button th:if="${moderateOrders.hasPrevious}" type="submit" name="page" value="0">
+            <span th:text="#{page.first}"></span>
+        </button>
         <button th:if="${moderateOrders.hasPrevious}" type="submit" name="page" th:value="${moderateOrders.number - 1}">
             <span th:text="#{page.previous}"></span>
         </button>

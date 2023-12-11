@@ -164,7 +164,6 @@ public class UserController {
             addAttributes(model, Map.of(ERRORS, e.getErrors()));
             return "redirect:/users/{id}/profileMenu/changeEmail";
         }
-
     }
 
     @GetMapping("/{id}/profileMenu/changePassportNo")

@@ -1,8 +1,59 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html" lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Add product</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            transition-duration: 0.4s;
+            margin-bottom: 5px;
+            padding: 10px 20px;
+            border-radius: 4px;
+            border: none;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="submit"],
+        select {
+            width: calc(25% - 14px);
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        div[style="color: red"] {
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
 <a th:href="@{/admin/menu}">
@@ -33,9 +84,11 @@
         <option th:each="country : ${countries}" th:value="${country.country}"></option>
     </datalist><br/>
     <label for="cost"><span th:text="#{products.price}"></span>
+        <br/>
         <input type="number" name="cost" id="cost" step="any" th:value="${cost}" required>
     </label><br/>
     <label for="count"><span th:text="#{products.count}"></span>
+        <br/>
         <input type="number" name="count" id="count" th:value="${count}" required>
     </label><br/>
     <button type="submit" name="add"><span th:text="#{order.add}"></span></button>

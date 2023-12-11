@@ -3,6 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <title>Users</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f4f4f4;
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 20px;
+        }
+
+        button[type="submit"],
+        button[type="button"] {
+            padding: 8px 16px;
+            border-radius: 4px;
+            border: none;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button[type="submit"]:hover,
+        button[type="button"]:hover {
+            background-color: #0056b3;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 2px; /* Уменьшенный размер ячеек */
+            text-align: center;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        form {
+            margin-top: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px; /* Немного больший промежуток между элементами формы */
+        }
+
+        label, input[type="text"], input[type="radio"] {
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        input[type="text"], input[type="radio"] {
+            flex-basis: calc(60% + 6px); /* Увеличенная ширина инпутов */
+        }
+
+        button {
+            margin-top: 10px;
+            flex-basis: 100%;
+        }
+
+        .right-column {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .right-column th, .right-column td {
+            border: 1px solid #ccc;
+            padding: 4px; /* Уменьшенный размер ячеек */
+            text-align: center;
+        }
+
+        .right-column th {
+            background-color: #f2f2f2;
+        }
+    </style>
 </head>
 <body>
 <form method="get" th:action="@{/admin/menu}">
@@ -13,7 +92,8 @@
     <span th:each="error : ${errors}" th:text="${error.message}"></span>
     <br/>
 </div>
-<form th:action="@{/admin/menu/users}" method="get" >
+
+<form th:action="@{/admin/menu/users}" method="get" class="left-column">
     <label for="name"><span th:text="#{login.username}"></span></label>
     <input type="text" id="name" name="username" th:value="${name}">
     <br>
@@ -24,8 +104,8 @@
     <input type="text" id="passportNo" name="passportNo" th:value="${passportNo}">
     <br>
     <label th:each="gender : ${genders}">
-    <input type="radio" id="gender" name="gender" th:value="${gender}" th:text="${gender}">
-    <br/>
+        <input type="radio" id="gender" name="gender" th:value="${gender}" th:text="${gender}">
+        <br/>
     </label>
     <span th:text="#{address.usersAddresses}"></span><br/>
     <label for="country"><span th:text="#{address.country}"></span></label>
@@ -45,13 +125,13 @@
     <br>
     <button type="submit" value="search"><span th:text="#{search.search}"></span></button>
 </form>
-<table th:if="${not #lists.isEmpty(users)}">
+
+<table th:if="${not #lists.isEmpty(users)}" class="right-column">
     <thead>
     <tr>
         <th>#</th>
         <th><span th:text="#{login.username}"></span></th>
         <th><span th:text="#{user.email}"></span></th>
-        <th><span th:text="#{login.password}"></span></th>
         <th><span th:text="#{user.passportNumber}"></span></th>
         <th><span th:text="#{registration.gender}"></span></th>
         <th></th>
@@ -63,13 +143,11 @@
         <td th:text="${loop.index + 1}"></td>
         <td th:text="${user.username}"></td>
         <td th:text="${user.email}"></td>
-        <td th:text="${user.password}"></td>
         <td th:text="${user.passportNo}"></td>
         <td th:text="${user.gender}"></td>
         <td>
             <form method="get" th:action="@{/admin/menu/users/{userId}/profile(userId=${user.id})}">
                 <input type="hidden" name="name" th:value="${name}"/>
-                <input type="hidden" name="password" th:value="${password}"/>
                 <input type="hidden" name="passportNo" th:value="${passportNo}"/>
                 <input type="hidden" name="email" th:value="${email}"/>
                 <input type="hidden" name="gender" th:value="${gender}"/>
@@ -85,7 +163,6 @@
         <td>
             <form method="post" th:action="@{/admin/menu/users/{userId}/delete(userId=${user.id})}">
                 <input type="hidden" name="name" th:value="${name}"/>
-                <input type="hidden" name="password" th:value="${password}"/>
                 <input type="hidden" name="passportNo" th:value="${passportNo}"/>
                 <input type="hidden" name="email" th:value="${email}"/>
                 <input type="hidden" name="gender" th:value="${gender}"/>
@@ -102,12 +179,10 @@
     </tbody>
 </table>
 
-
 <div th:if="${not #lists.isEmpty(users)}">
     <form th:if="${not #lists.isEmpty(users)}" method="GET"
           th:action="@{/admin/menu/users}">
         <input type="hidden" name="name" th:value="${name}"/>
-        <input type="hidden" name="password" th:value="${password}"/>
         <input type="hidden" name="passportNo" th:value="${passportNo}"/>
         <input type="hidden" name="email" th:value="${email}"/>
         <input type="hidden" name="gender" th:value="${gender}"/>
@@ -117,13 +192,10 @@
         <input type="hidden" name="house" th:value="${house}"/>
         <input type="hidden" name="flat" th:value="${flat}"/>
         <button th:if="${users.hasPrevious}" type="submit" name="page" value="0"><span th:text="#{page.first}">First</span></button>
-        <button th:if="${users.hasPrevious}" type="submit" name="page" th:value="${users.number - 1}"><span th:text="#{page.previous}">Previous</span>
-        </button>
+        <button th:if="${users.hasPrevious}" type="submit" name="page" th:value="${users.number - 1}"><span th:text="#{page.previous}">Previous</span></button>
         <button th:if="${users.hasNext}" type="submit" name="page" th:value="${users.number + 1}"><span th:text="#{page.next}">Next</span></button>
-        <button th:if="${users.hasNext}" type="submit" name="page" th:value="${users.totalPages - 1}"><span th:text="#{page.last}">Last</span>
-        </button>
+        <button th:if="${users.hasNext}" type="submit" name="page" th:value="${users.totalPages - 1}"><span th:text="#{page.last}">Last</span></button>
     </form>
-
 </div>
 </body>
 </html>

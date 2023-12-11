@@ -3,6 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <title>Moderating</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+
+        button[type="submit"],
+        input[type="date"],
+        select {
+            padding: 8px 16px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            margin-bottom: 10px;
+        }
+
+        button[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            border: none;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .pagination {
+            margin-top: 10px;
+        }
+
+        .pagination button {
+            margin-right: 5px;
+        }
+
+        .delivery-address {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .error-message {
+            color: red;
+        }
+    </style>
 </head>
 <body>
 <form method="get" th:action="@{/admin/menu/moderateOrders}">
@@ -35,7 +96,7 @@
     </tbody>
 </table>
 
-<div th:if="${not #lists.isEmpty(moderateOrder.products)}">
+<div th:if="${not #lists.isEmpty(moderateOrder.products)}" class="pagination">
     <form th:if="${not #lists.isEmpty(moderateOrder.products)}" method="GET"
           th:action="@{/admin/menu/moderateOrders/{orderId}/moderate(orderId=${moderateOrder.id})}">
         <button th:if="${moderateOrder.products.hasPrevious}" type="submit" name="pagePr" value="0"><span th:text="#{page.first}"></span></button>
@@ -50,22 +111,26 @@
         </button>
     </form>
 </div>
-Deliver address:
-<span th:text="${moderateOrder.address.country + ', ' + moderateOrder.address.city +
- ', ' + moderateOrder.address.street + ', ' + moderateOrder.address.house + ', ' + moderateOrder.address.flat}" >
 
-</span>
+<div class="delivery-address">
+    Deliver address:
+    <span th:text="${moderateOrder.address.country + ', ' + moderateOrder.address.city +
+ ', ' + moderateOrder.address.street + ', ' + moderateOrder.address.house + ', ' + moderateOrder.address.flat}" >
+    </span>
+</div>
+
 <form method="post" th:action="@{/admin/menu/moderateOrders/{orderId}/moderate(orderId=${moderateOrder.id})}">
     <label for="dateOfDelivery"><span th:text="#{order.dateOfDelivery}"></span>
         <input type="date" name="dateOfDelivery" id="dateOfDelivery"/>
     </label><br/>
     <label for="status"></label><select name="status" id="status"><span th:text="#{order.status}"></span>
-        <option th:each="status : ${orderStatuses}" th:text="${status}" th:value="${status}" ></option>
-    </select><br/>
-
+    <option th:each="status : ${orderStatuses}" th:text="${status}" th:value="${status}" ></option>
+</select><br/>
+    <input type="hidden" name="deliveryAddress" th:value="${moderateOrder.address.id}">
     <button type="submit" name="send"><span th:text="#{registration.send}"></span></button>
 </form>
-<div th:if="${errors != null  && errors != ''}" style="color: red">
+
+<div th:if="${errors != null  && errors != ''}" class="error-message">
     <span th:each="error : ${errors}" th:text="${error.message}"></span>
     <br/>
 </div>

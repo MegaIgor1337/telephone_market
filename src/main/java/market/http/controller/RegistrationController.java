@@ -10,13 +10,18 @@ import market.service.EmailService;
 import market.service.UserService;
 import market.service.impl.UserServiceImpl;
 import market.util.AccessDeniedExceptionHelper;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +39,7 @@ public class RegistrationController {
     private final UserService userService;
     private final EmailService emailService;
     private Integer generatedCode;
-
+    private MultipartFile multipartFile;
     @ModelAttribute(ROLES)
     public List<Role> getRoles() {
         return Arrays.asList(Role.values());
@@ -44,7 +49,6 @@ public class RegistrationController {
     public List<Gender> getGenders() {
         return Arrays.asList(Gender.values());
     }
-
 
 
     @GetMapping
@@ -58,6 +62,8 @@ public class RegistrationController {
                                RedirectAttributes redirectAttributes) {
         try {
             String message;
+            multipartFile = createUserDto.getImage();
+            createUserDto.setImage(null);
             userService.validCreateUserDto(createUserDto);
             generatedCode = emailService.sendCodeToConfirmEmail(createUserDto.getEmail());
             if (generatedCode.equals(0)) {
@@ -87,9 +93,15 @@ public class RegistrationController {
     public String confirmEmail(@RequestParam String inputCode,
                                Model model,
                                RedirectAttributes redirectAttributes,
-                               @SessionAttribute CreateUserDto createUserDto) {
+                               @SessionAttribute(name = CREATE_USER_DTO) CreateUserDto createUserDto) throws IOException {
         if (Objects.equals(generatedCode, Integer.valueOf(inputCode))) {
+            createUserDto.setImage(multipartFile);
             var userDto = userService.create(createUserDto);
+            User user = new User(createUserDto.getUsername(), createUserDto.getRawPassword(),
+                    AuthorityUtils.createAuthorityList(Role.USER.toString()));
+            SecurityContextHolder.getContext().setAuthentication(
+                    new UsernamePasswordAuthenticationToken(user, createUserDto.getRawPassword(), user.getAuthorities())
+            );
             addAttributes(model, Map.of(USER_DTO, userDto));
             return "redirect:/users";
         } else {

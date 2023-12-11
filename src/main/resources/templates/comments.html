@@ -2,10 +2,58 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <title>Comments</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        a {
+            margin-right: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-bottom: 10px;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        b {
+            color: #555;
+        }
+
+        span.comment {
+            color: gray;
+        }
+    </style>
 </head>
 <body>
 <a th:href="@{/users/{userId}/personalComments(userId=${userDto.id})}">
-    <button type="button"><span th:text="#{comments.personalComments}"></span> </button>
+    <button type="button"><span th:text="#{comments.personalComments}"></span></button>
 </a>
 <a th:href="@{/users}">
     <button type="button"><span th:text="#{menu.backToMenu}"></span></button>
@@ -19,7 +67,7 @@
         <th:block th:each="comment, counter : ${comments}">
             <li>
                 <b th:text="${counter.count + ': ' + comment.user.username + ' -'}"></b>
-                <span style="color: gray" th:text="${#strings.toLowerCase(comment.comment)}"></span>
+                <span class="comment" th:text="${#strings.toLowerCase(comment.comment)}"></span>
             </li>
         </th:block>
     </th:block>
