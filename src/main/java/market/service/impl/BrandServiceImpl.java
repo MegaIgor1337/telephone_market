@@ -2,9 +2,9 @@ package market.service.impl;
 
 
 import lombok.RequiredArgsConstructor;
-import market.dto.BrandDto;
-import market.mapper.BrandMapper;
-import market.repository.BrandRepository;
+import market.service.dto.BrandDto;
+import market.service.mapper.BrandMapper;
+import market.model.repository.BrandRepository;
 import market.service.BrandService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

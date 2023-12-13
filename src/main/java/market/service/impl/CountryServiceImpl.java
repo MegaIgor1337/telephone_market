@@ -1,9 +1,9 @@
 package market.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import market.dto.CountryDto;
-import market.mapper.CountryMapper;
-import market.repository.CountryRepository;
+import market.service.dto.CountryDto;
+import market.service.mapper.CountryMapper;
+import market.model.repository.CountryRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

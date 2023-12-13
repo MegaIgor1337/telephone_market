@@ -1,12 +1,11 @@
 package project.service;
 
 import lombok.RequiredArgsConstructor;
-import market.dto.CreateProductDto;
-import market.dto.ProductFilter;
-import market.enums.OrderStatus;
-import market.repository.ProductRepository;
+import market.service.dto.CreateProductDto;
+import market.service.dto.ProductFilter;
+import market.model.enums.OrderStatus;
+import market.model.repository.ProductRepository;
 import market.service.ProductService;
-import market.service.impl.ProductServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.PageRequest;
 import project.annotation.IT;

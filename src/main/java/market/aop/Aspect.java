@@ -14,7 +14,7 @@ public class Aspect {
     public void isControllerLayer() {
     }
 
-    @Pointcut("execution(public * market.http.controller.LoginController.*(..))")
+    @Pointcut("execution(public * market.view.controller.LoginController.*(..))")
     public void isOnLoginPage() {}
 
     @Pointcut("within(market.service.*Service)")
@@ -41,7 +41,7 @@ public class Aspect {
     }
 
 
-    @Pointcut("execution(public * market.http.controller.UserController.payOrder(..))")
+    @Pointcut("execution(public * market.view.controller.UserController.payOrder(..))")
     public void anyControllerPayOrderMethod() {}
 
     @Pointcut("execution(public * market.service.*Service.setNew*(..))")
@@ -52,7 +52,7 @@ public class Aspect {
     public void anyServicePayOrder() {}
 
 
-    @Pointcut("execution(public * market.http.*.*.*(..))")
+    @Pointcut("execution(public * market.view.*.*.*(..))")
     public void anyController() {}
 
     @Pointcut("execution(public * market.service.*.*(..))")

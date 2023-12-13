@@ -1,12 +1,11 @@
 package project.service;
 
 import lombok.RequiredArgsConstructor;
-import market.dto.CreatePromoCodeDto;
-import market.dto.PromoCodeFilter;
-import market.enums.PromoCodeStatus;
-import market.repository.PromoCodeRepository;
+import market.service.dto.CreatePromoCodeDto;
+import market.service.dto.PromoCodeFilter;
+import market.model.enums.PromoCodeStatus;
+import market.model.repository.PromoCodeRepository;
 import market.service.PromoCodeService;
-import market.service.impl.PromoCodeServiceImpl;
 import org.junit.jupiter.api.Test;
 import project.annotation.IT;
 

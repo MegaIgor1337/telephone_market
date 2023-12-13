@@ -1,23 +1,23 @@
 package market.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import market.dto.CreatePromoCodeDto;
-import market.dto.PromoCodeDto;
-import market.dto.PromoCodeDtoWithPage;
-import market.dto.PromoCodeFilter;
-import market.entity.PromoCode;
-import market.enums.PromoCodeStatus;
+import market.service.dto.CreatePromoCodeDto;
+import market.service.dto.PromoCodeDto;
+import market.service.dto.PromoCodeDtoWithPage;
+import market.service.dto.PromoCodeFilter;
+import market.model.entity.PromoCode;
+import market.model.enums.PromoCodeStatus;
 import market.exception.ValidationException;
-import market.mapper.CreatePromoCodeMapper;
-import market.mapper.PromoCodeDtoWithPageMapper;
-import market.mapper.PromoCodeMapper;
-import market.repository.ProductRepository;
-import market.repository.PromoCodeProductRepository;
-import market.repository.PromoCodeRepository;
-import market.validator.AddedPromoCodeValidator;
-import market.validator.ChangeDiscountPromoCodeValidator;
-import market.validator.ChangeNamePromoCodeValidator;
-import market.validator.EnteredPromoCodeValidator;
+import market.service.mapper.CreatePromoCodeMapper;
+import market.service.mapper.PromoCodeDtoWithPageMapper;
+import market.service.mapper.PromoCodeMapper;
+import market.model.repository.ProductRepository;
+import market.model.repository.PromoCodeProductRepository;
+import market.model.repository.PromoCodeRepository;
+import market.service.validator.AddedPromoCodeValidator;
+import market.service.validator.ChangeDiscountPromoCodeValidator;
+import market.service.validator.ChangeNamePromoCodeValidator;
+import market.service.validator.EnteredPromoCodeValidator;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
@@ -25,7 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import static market.util.ConstantContainer.*;
+import static market.service.util.ConstantContainer.*;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @Service

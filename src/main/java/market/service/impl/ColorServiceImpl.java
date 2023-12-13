@@ -2,9 +2,9 @@ package market.service.impl;
 
 
 import lombok.RequiredArgsConstructor;
-import market.dto.ColorDto;
-import market.mapper.ColorMapper;
-import market.repository.ColorRepository;
+import market.service.dto.ColorDto;
+import market.service.mapper.ColorMapper;
+import market.model.repository.ColorRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

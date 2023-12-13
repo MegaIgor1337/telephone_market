@@ -1,9 +1,9 @@
 package market.service;
 
-import market.dto.CreateProductDto;
-import market.dto.ProductDto;
-import market.dto.ProductFilter;
-import market.enums.OrderStatus;
+import market.service.dto.CreateProductDto;
+import market.service.dto.ProductDto;
+import market.service.dto.ProductFilter;
+import market.model.enums.OrderStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

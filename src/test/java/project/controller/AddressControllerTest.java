@@ -2,7 +2,7 @@ package project.controller;
 
 
 import lombok.RequiredArgsConstructor;
-import market.dto.UserDto;
+import market.service.dto.UserDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.security.test.context.support.WithMockUser;

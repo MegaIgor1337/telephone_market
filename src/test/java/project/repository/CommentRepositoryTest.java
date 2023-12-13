@@ -2,8 +2,8 @@ package project.repository;
 
 
 import lombok.RequiredArgsConstructor;
-import market.entity.Comment;
-import market.repository.CommentRepository;
+import market.model.entity.Comment;
+import market.model.repository.CommentRepository;
 import org.junit.jupiter.api.Test;
 import project.annotation.IT;
 

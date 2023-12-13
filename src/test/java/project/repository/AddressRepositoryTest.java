@@ -2,8 +2,8 @@ package project.repository;
 
 
 import lombok.RequiredArgsConstructor;
-import market.entity.Address;
-import market.repository.AddressRepository;
+import market.model.entity.Address;
+import market.model.repository.AddressRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,7 +18,7 @@ public class AddressRepositoryTest  {
     private final AddressRepository addressRepository;
    @Test
     public void testAddressesFindByUserId() {
-        Page<Address> addresses = addressRepository.findByUserId(1L, PageRequest.of(0, 2));
+        Page<Address> addresses = addressRepository.findByUserIdAndDeletedFalse(1L, PageRequest.of(0, 2));
         assertThat(addresses).hasSize(1);
    }
 }

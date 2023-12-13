@@ -1,28 +1,24 @@
 package market.service.impl;
 
-import market.dto.CreateUpdateAddressDto;
-import market.dto.ICreateAddressDto;
-import market.entity.Address;
-import market.mapper.CreateUpdateAddressDtoMapper;
-import market.repository.AddressRepository;
-import market.dto.AddressDto;
-import market.dto.CreateAddressDto;
+import market.service.dto.ICreateAddressDto;
+import market.model.repository.AddressRepository;
+import market.service.dto.AddressDto;
+import market.service.dto.CreateAddressDto;
 import market.exception.ValidationException;
 import lombok.RequiredArgsConstructor;
-import market.mapper.AddressMapper;
-import market.mapper.CreateAddressMapper;
-import market.repository.OrderRepository;
+import market.service.mapper.AddressMapper;
+import market.service.mapper.CreateAddressMapper;
+import market.model.repository.OrderRepository;
 import market.service.AddressService;
-import market.service.OrderService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import market.validator.CreateAddressValidator;
+import market.service.validator.CreateAddressValidator;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static market.util.ConstantContainer.PAGE_SIZE;
+import static market.service.util.ConstantContainer.PAGE_SIZE;
 
 @Service
 @RequiredArgsConstructor

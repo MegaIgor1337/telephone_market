@@ -1,19 +1,19 @@
 package market.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import market.dto.CreateProductDto;
-import market.dto.ProductFilter;
-import market.dto.ProductDto;
-import market.entity.*;
-import market.enums.OrderStatus;
 import market.exception.ValidationException;
-import market.mapper.ProductMapper;
-import market.repository.*;
+import market.model.entity.*;
+import market.model.enums.OrderStatus;
+import market.model.repository.*;
 import market.service.ModelService;
-import market.validator.CreateProductValidator;
-import market.validator.EnteredAddCountValidator;
-import market.validator.EnteredProductInfoValidator;
-import market.validator.EnteredRemoveCountValidator;
+import market.service.dto.CreateProductDto;
+import market.service.dto.ProductDto;
+import market.service.dto.ProductFilter;
+import market.service.mapper.ProductMapper;
+import market.service.validator.CreateProductValidator;
+import market.service.validator.EnteredAddCountValidator;
+import market.service.validator.EnteredProductInfoValidator;
+import market.service.validator.EnteredRemoveCountValidator;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -27,7 +27,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.math.BigDecimal;
 import java.util.List;
 
-import static market.util.ConstantContainer.*;
+import static market.service.util.ConstantContainer.*;
 
 
 @Service

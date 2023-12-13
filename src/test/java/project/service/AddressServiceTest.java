@@ -1,11 +1,10 @@
 package project.service;
 
 import lombok.RequiredArgsConstructor;
-import market.dto.CreateAddressDto;
-import market.dto.CreateUpdateAddressDto;
-import market.repository.UserRepository;
+import market.service.dto.CreateAddressDto;
+import market.service.dto.CreateUpdateAddressDto;
+import market.model.repository.UserRepository;
 import market.service.AddressService;
-import market.service.impl.AddressServiceImpl;
 import org.junit.jupiter.api.Test;
 import project.annotation.IT;
 
@@ -37,27 +36,10 @@ public class AddressServiceTest {
     }
 
 
-    @Test
-    void update() {
-        System.out.println("update ");
-        System.out.println(userRepository.findAll());
-        var createUpdateAddressDto = CreateUpdateAddressDto.builder()
-                .id("1")
-                .country("Bengladesh")
-                .street("dslds")
-                .house("sds")
-                .city("dsld")
-                .userId("1")
-                .build();
-        addressService.update(createUpdateAddressDto);
-        var result = addressService.getAddressesByUserId(id, 0);
-        assertThat(result).hasSize(1);
-    }
 
     @Test
     void delete() {
-        System.out.println("delete ");
-        System.out.println(userRepository.findAll());
+
         addressService.delete(id);
         var result = addressService.getAddressesByUserId(id, 2);
         assertThat(result).hasSize(0);
@@ -65,8 +47,7 @@ public class AddressServiceTest {
 
     @Test
     void getAddresses() {
-        System.out.println("get ");
-        System.out.println(userRepository.findAll());
+
         var result = addressService.getAddressesByUserId(id, 1);
         assertThat(result).hasSize(0);
     }

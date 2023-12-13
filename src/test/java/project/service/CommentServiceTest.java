@@ -1,10 +1,10 @@
 package project.service;
 
 import lombok.RequiredArgsConstructor;
-import market.dto.CommentDto;
-import market.enums.CommentStatus;
-import market.mapper.CommentMapper;
-import market.repository.CommentRepository;
+import market.service.dto.CommentDto;
+import market.model.enums.CommentStatus;
+import market.service.mapper.CommentMapper;
+import market.model.repository.CommentRepository;
 import market.service.impl.CommentServiceImpl;
 import org.junit.jupiter.api.Test;
 import project.annotation.IT;

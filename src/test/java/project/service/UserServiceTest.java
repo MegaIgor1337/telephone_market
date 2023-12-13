@@ -1,10 +1,9 @@
 package project.service;
 
 import lombok.RequiredArgsConstructor;
-import market.mapper.UserMapper;
-import market.repository.UserRepository;
+import market.service.mapper.UserMapper;
+import market.model.repository.UserRepository;
 import market.service.UserService;
-import market.service.impl.UserServiceImpl;
 import org.junit.jupiter.api.Test;
 import project.annotation.IT;
 

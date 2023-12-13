@@ -2,13 +2,13 @@ package project.repository;
 
 
 import lombok.RequiredArgsConstructor;
-import market.repository.ProductRepository;
+import market.model.repository.ProductRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import project.annotation.IT;
 
-import static market.util.ConstantContainer.ID;
+import static market.service.util.ConstantContainer.ID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 

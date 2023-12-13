@@ -3,10 +3,10 @@ package project.repository;
 
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
-import market.entity.User;
-import market.enums.Gender;
-import market.enums.Role;
-import market.repository.UserRepository;
+import market.model.entity.User;
+import market.model.enums.Gender;
+import market.model.enums.Role;
+import market.model.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -16,7 +16,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
-import static market.util.ConstantContainer.ID;
+import static market.service.util.ConstantContainer.ID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 import static org.junit.jupiter.api.Assertions.assertFalse;

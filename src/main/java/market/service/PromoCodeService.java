@@ -1,9 +1,9 @@
 package market.service;
 
-import market.dto.CreatePromoCodeDto;
-import market.dto.PromoCodeDto;
-import market.dto.PromoCodeDtoWithPage;
-import market.dto.PromoCodeFilter;
+import market.service.dto.CreatePromoCodeDto;
+import market.service.dto.PromoCodeDto;
+import market.service.dto.PromoCodeDtoWithPage;
+import market.service.dto.PromoCodeFilter;
 import org.springframework.data.domain.Page;
 
 public interface PromoCodeService {

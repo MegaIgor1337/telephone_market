@@ -2,16 +2,15 @@ package project.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import lombok.RequiredArgsConstructor;
-import market.dto.ModerateOrderDto;
-import market.dto.OrderFilterDto;
-import market.enums.OrderStatus;
+import market.service.dto.ModerateOrderDto;
+import market.service.dto.OrderFilterDto;
+import market.model.enums.OrderStatus;
 import market.exception.LackOfMoneyException;
-import market.mapper.OrderMapper;
-import market.mapper.UserMapper;
-import market.repository.OrderRepository;
-import market.repository.UserRepository;
+import market.service.mapper.OrderMapper;
+import market.service.mapper.UserMapper;
+import market.model.repository.OrderRepository;
+import market.model.repository.UserRepository;
 import market.service.OrderService;
-import market.service.impl.OrderServiceImpl;
 import org.junit.jupiter.api.Test;
 import project.annotation.IT;
 

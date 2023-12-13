@@ -1,10 +1,10 @@
 package market.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import market.entity.PromoCodeProduct;
-import market.repository.ProductRepository;
-import market.repository.PromoCodeProductRepository;
-import market.repository.PromoCodeRepository;
+import market.model.entity.PromoCodeProduct;
+import market.model.repository.ProductRepository;
+import market.model.repository.PromoCodeProductRepository;
+import market.model.repository.PromoCodeRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

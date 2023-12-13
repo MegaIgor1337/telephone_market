@@ -7,7 +7,7 @@ import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 
 @SpringBootApplication
 @ConfigurationPropertiesScan
-@EntityScan("market/entity")
+@EntityScan("market/model/entity")
 public class  ApplicationRunner {
     public static void main(String[] args) {
         SpringApplication.run(ApplicationRunner.class);

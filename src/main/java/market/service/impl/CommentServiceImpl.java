@@ -2,12 +2,12 @@ package market.service.impl;
 
 
 import lombok.RequiredArgsConstructor;
-import market.dto.CommentDto;
-import market.entity.Comment;
-import market.enums.CommentStatus;
-import market.mapper.CommentMapper;
-import market.repository.CommentRepository;
-import market.repository.UserRepository;
+import market.service.dto.CommentDto;
+import market.model.entity.Comment;
+import market.model.enums.CommentStatus;
+import market.service.mapper.CommentMapper;
+import market.model.repository.CommentRepository;
+import market.model.repository.UserRepository;
 import market.service.CommentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;

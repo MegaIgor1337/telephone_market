@@ -4,18 +4,18 @@ import jakarta.persistence.criteria.Join;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import market.dto.*;
-import market.entity.Address;
-import market.entity.User;
-import market.enums.Role;
 import market.exception.ValidationException;
-import market.mapper.CreateUserMapper;
-import market.mapper.UserMapper;
-import market.repository.AddressRepository;
-import market.repository.UserRepository;
+import market.model.entity.Address;
+import market.model.entity.User;
+import market.model.enums.Role;
+import market.model.repository.AddressRepository;
+import market.model.repository.UserRepository;
 import market.service.ImageService;
 import market.service.UserService;
-import market.validator.*;
+import market.service.dto.*;
+import market.service.mapper.CreateUserMapper;
+import market.service.mapper.UserMapper;
+import market.service.validator.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
@@ -36,7 +36,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-import static market.util.ConstantContainer.*;
+import static market.service.util.ConstantContainer.*;
 
 
 @Slf4j

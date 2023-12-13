@@ -2,23 +2,23 @@ package market.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import market.dto.*;
-import market.entity.Order;
-import market.entity.OrderProduct;
-import market.entity.Product;
-import market.entity.PromoCodeProduct;
-import market.enums.OrderStatus;
 import market.exception.LackOfMoneyException;
 import market.exception.ValidationException;
-import market.mapper.OrderDtoWithPageMapper;
-import market.mapper.OrderMapper;
-import market.mapper.UserMapper;
-import market.repository.*;
+import market.model.entity.Order;
+import market.model.entity.OrderProduct;
+import market.model.entity.Product;
+import market.model.entity.PromoCodeProduct;
+import market.model.enums.OrderStatus;
+import market.model.repository.*;
 import market.service.OrderService;
-import market.util.PageUtil;
-import market.validator.LackOfMoneyValidator;
-import market.validator.ModerateOrderDtoValidator;
-import market.validator.PromoCodeValidator;
+import market.service.dto.*;
+import market.service.mapper.OrderDtoWithPageMapper;
+import market.service.mapper.OrderMapper;
+import market.service.mapper.UserMapper;
+import market.service.util.PageUtil;
+import market.service.validator.LackOfMoneyValidator;
+import market.service.validator.ModerateOrderDtoValidator;
+import market.service.validator.PromoCodeValidator;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -34,7 +34,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import static market.util.ConstantContainer.*;
+import static market.service.util.ConstantContainer.*;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @Transactional(readOnly = true)
@@ -155,7 +155,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public void payOrder(UserDto userDto, Long addressId, OrderDtoWithPage orderDto)  {
+    public void payOrder(UserDto userDto, Long addressId, OrderDtoWithPage orderDto) {
 
         lackOfMoneyValidator.putOrderCost(orderDto.getCost());
         var moneyResult = lackOfMoneyValidator.isValid(userDto);
@@ -165,7 +165,8 @@ public class OrderServiceImpl implements OrderService {
         var userBalance = userDto.getBalance();
         userDto.setBalance(userBalance.subtract(orderDto.getCost()));
         var order = orderRepository.findAllByUserIdAndStatus(userDto.getId(), OrderStatus.WAITING_PAID);
-        order.ifPresent(o -> {o.setStatus(OrderStatus.MODERATING);
+        order.ifPresent(o -> {
+            o.setStatus(OrderStatus.MODERATING);
             o.setAddress(address);
             o.setCost(orderDto.getCost());
         });

@@ -1,6 +1,6 @@
 package market.service;
 
-import market.dto.CountryDto;
+import market.service.dto.CountryDto;
 
 import java.util.List;
 

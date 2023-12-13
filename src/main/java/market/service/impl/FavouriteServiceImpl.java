@@ -3,14 +3,14 @@ package market.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import market.dto.FavouriteDto;
-import market.entity.Favourite;
-import market.mapper.FavouriteMapper;
-import market.repository.FavouriteRepository;
-import market.repository.ProductRepository;
-import market.repository.UserRepository;
+import market.service.dto.FavouriteDto;
+import market.model.entity.Favourite;
+import market.service.mapper.FavouriteMapper;
+import market.model.repository.FavouriteRepository;
+import market.model.repository.ProductRepository;
+import market.model.repository.UserRepository;
 import market.service.FavouriteService;
-import market.util.PageUtil;
+import market.service.util.PageUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
-import static market.util.ConstantContainer.PAGE_SIZE;
+import static market.service.util.ConstantContainer.PAGE_SIZE;
 
 @Transactional(readOnly = true)
 @Service

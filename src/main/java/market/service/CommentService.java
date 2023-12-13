@@ -1,6 +1,6 @@
 package market.service;
 
-import market.dto.CommentDto;
+import market.service.dto.CommentDto;
 
 import java.util.List;
 

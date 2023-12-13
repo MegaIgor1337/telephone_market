@@ -1,8 +1,7 @@
 package market.service;
 
-import market.dto.AddressDto;
-import market.dto.CreateAddressDto;
-import market.dto.CreateUpdateAddressDto;
+import market.service.dto.AddressDto;
+import market.service.dto.CreateAddressDto;
 import org.springframework.data.domain.Page;
 
 import java.util.List;

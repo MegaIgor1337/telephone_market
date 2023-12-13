@@ -1,6 +1,6 @@
 package market.service;
 
-import market.dto.ColorDto;
+import market.service.dto.ColorDto;
 
 import java.util.List;
 

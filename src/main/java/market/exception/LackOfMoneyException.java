@@ -1,7 +1,7 @@
 package market.exception;
 
 import lombok.Getter;
-import market.validator.Error;
+import market.service.validator.Error;
 
 import java.util.List;
 

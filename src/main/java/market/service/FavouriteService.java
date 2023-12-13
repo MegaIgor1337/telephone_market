@@ -1,6 +1,6 @@
 package market.service;
 
-import market.dto.FavouriteDto;
+import market.service.dto.FavouriteDto;
 import org.springframework.data.domain.Page;
 
 public interface FavouriteService {
