@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>Moderate Comments</title>
+</head>
+<body>
+<form th:action="@{/admin/menu}" method="get">
+    <button type="submit" name="button"><span th:text="#{menu.backToMenu}"></span></button>
+</form>
+<h1><span th:text="#{backup.backup}"></span></h1>
+<form onsubmit="event.preventDefault(); createBackup();" id="backupForm">
+    <div>
+        <input type="file" id="fileInput" webkitdirectory directory multiple style="display: none;">
+        <button type="button" onclick="document.getElementById('fileInput').click();">Выбрать папку</button>
+        <button type="submit">Сделать бэкап</button>
+    </div>
+</form>
+</body>
+<script>
+    function createBackup() {
+        var folderPath = document.getElementById('fileInput').files[0].path; // Получаем путь к выбранной папке
+        fetch('/admin/backup/createBackup?path=' + folderPath)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.blob();
+            })
+            .then(blob => {
+                // Здесь можно использовать библиотеку file-saver.js для сохранения файла
+                saveAs(blob, 'db.bak');
+            })
+            .catch(error => {
+                console.error('Ошибка при создании бэкапа:', error);
+            });
+    }
+</script>
+</html>

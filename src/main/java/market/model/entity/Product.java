@@ -1,5 +1,6 @@
 package market.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import jakarta.persistence.*;
@@ -32,15 +33,18 @@ public class Product implements BaseEntity<Long> {
     private Integer storageCount;
 
     @ToString.Exclude
+    @JsonIgnore
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<Favourite> favourites = new ArrayList<>();
     private BigDecimal cost;
 
     @ToString.Exclude
+    @JsonIgnore
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<OrderProduct> orders = new ArrayList<>();
 
     @ToString.Exclude
+    @JsonIgnore
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<PromoCodeProduct> promoCodes = new ArrayList<>();
 

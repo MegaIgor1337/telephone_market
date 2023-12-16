@@ -1,5 +1,6 @@
 package market.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -22,6 +23,7 @@ public class Country implements BaseEntity<Long> {
 
     @Builder.Default
     @ToString.Exclude
+    @JsonIgnore
     @OneToMany(mappedBy = "country", cascade = CascadeType.ALL)
     private List<Product> products = new ArrayList<>();
 

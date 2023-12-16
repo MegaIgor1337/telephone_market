@@ -1,5 +1,6 @@
 package market.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,10 +21,12 @@ public class Address implements BaseEntity<Long> {
     private String house;
     private String flat;
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "user_id")
     private User user;
 
     @ToString.Exclude
+    @JsonIgnore
     @OneToMany(mappedBy = "address")
     private List<Order> orders;
     private Boolean deleted;

@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -19,4 +20,7 @@ public interface OrderRepository extends JpaRepository<Order, Long>, JpaSpecific
     List<Order> findAllByStatus(OrderStatus status);
     Page<Order> findAllByStatus(OrderStatus status, Pageable pageable);
     List<Order> findAllByAddressId(Long id);
+
+    @Query("SELECT o FROM Order o JOIN FETCH o.user JOIN FETCH o.address")
+    List<Order> findAllOrders();
 }

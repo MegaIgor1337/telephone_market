@@ -1,5 +1,6 @@
 package market.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import jakarta.persistence.*;
@@ -22,6 +23,7 @@ public class Color implements BaseEntity<Long> {
     private Long id;
     private String color;
     @Builder.Default
+    @JsonIgnore
     @ToString.Exclude
     @OneToMany(mappedBy = "color", cascade = CascadeType.ALL)
     private List<Product> products = new ArrayList<>();

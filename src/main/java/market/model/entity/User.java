@@ -1,5 +1,6 @@
 package market.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import market.model.enums.Gender;
 import market.model.enums.Role;
 import jakarta.persistence.*;
@@ -38,20 +39,24 @@ public class User implements BaseEntity<Long> {
     private String image;
 
     @Builder.Default
+    @JsonIgnore
     @ToString.Exclude
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Address> addresses = new ArrayList<>();
     @Builder.Default
     @ToString.Exclude
+    @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<Comment> comments = new ArrayList<>();
     @Builder.Default
     @ToString.Exclude
+    @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<Order> orders = new ArrayList<>();
 
     @Builder.Default
     @ToString.Exclude
+    @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<Favourite> favourites = new ArrayList<>();
 }

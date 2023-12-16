@@ -2,7 +2,7 @@
 logging:
   level:
     root: INFO
-    market.database.pool: INFO
+    market: INFO
   file:
     name: market
     path: /

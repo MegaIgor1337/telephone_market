@@ -60,5 +60,27 @@
 <a th:href="@{/admin/menu/orders}">
   <span th:text="#{order.orders}"></span>
 </a>
+<form action="/admin/backup/createBackup" style="display: block; text-decoration: none; padding: 10px 30px; margin-bottom: 5px; background-color: #3498db; color: #fff; border-radius: 4px; transition: background-color 0.3s ease; width: calc(100% - 60px); text-align: center;" method="get">
+  <a type="submit"><span th:text="#{data.export}">Сделать бэкап</span></a>
+</form>
+</body>
+<script>
+  function downloadFile() {
+    // Замените URL на ваш реальный URL файла на сервере
+    var fileUrl = '/admin/backup/createBackup';
+
+    // Используем библиотеку file-saver.js для скачивания файла
+    fetch(fileUrl)
+            .then(response => response.blob())
+            .then(blob => {
+              // Запрашиваем у пользователя выбор директории для сохранения файла
+              saveAs(blob, 'file.json');
+            })
+            .catch(error => {
+              console.error('Ошибка при скачивании файла:', error);
+            });
+  }
+</script>
+</html>
 </body>
 </html>

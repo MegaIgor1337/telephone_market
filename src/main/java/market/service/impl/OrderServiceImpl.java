@@ -293,7 +293,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
 
-    private Specification<Order> getSpecifications(OrderFilterDto orderFilterDto) {
+    private Specification<Order> getSpecifications (OrderFilterDto orderFilterDto) {
         Specification<Order> specification = Specification.where(null);
         if (orderFilterDto.getUsername() != null && !orderFilterDto.getUsername().isBlank()) {
             specification = specification
