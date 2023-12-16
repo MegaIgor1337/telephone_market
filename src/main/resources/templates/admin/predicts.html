@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Users</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 0;
+            margin: 0;
+            background-color: #f4f4f4;
+            display: grid;
+            gap: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: #fff;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1;
+        }
+
+        .back-to-menu {
+            margin-left: 20px;
+        }
+
+        button[type="submit"],
+        button[type="button"] {
+            padding: 8px 16px;
+            border-radius: 4px;
+            border: none;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button[type="submit"]:hover,
+        button[type="button"]:hover {
+            background-color: #0056b3;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 80px; /* Отступ для контента под шапкой */
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 2px; /* Уменьшенный размер ячеек */
+            text-align: center;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 12px; /* Немного больший промежуток между элементами формы */
+            padding: 20px;
+        }
+
+        label, input[type="text"], input[type="radio"] {
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        input[type="text"], input[type="radio"] {
+            padding: 8px;
+            font-size: 16px;
+        }
+
+        button {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+<!-- Back to Menu button -->
+<form method="get" th:action="@{/admin/menu}" class="back-to-menu">
+    <button type="submit" value="send"><span th:text="#{menu.backToMenu}"></span></button>
+</form>
+
+<a style="margin-left: 50px" th:href="@{/admin/predict/query(query=#{query.query1})}"><span th:text="#{query.query1}"></span></a>
+<a style="margin-left: 50px" th:href="@{/admin/predict/query(query=#{query.query2})}"><span th:text="#{query.query2}"></span></a>
+<a style="margin-left: 50px" th:href="@{/admin/predict/query(query=#{query.query3})}"><span th:text="#{query.query3}"></span></a>
+
+<!-- Updated form with increased input size -->
+<form method="get" th:action="@{/admin/predict/query}">
+    <label>
+        <span style="margin-left: 20px" th:text="#{predict.free}"></span>
+        <!-- Increased input size -->
+        <input style="margin-left: 20px" type="text" name="query">
+    </label>
+    <button style="margin-left: 20px" type="submit"><span th:text="#{registration.send}"></span></button>
+</form>
+<p><span th:text="${answer}"></span></p>
+</body>
+</html>

@@ -63,6 +63,9 @@
 <form action="/admin/backup/createBackup" style="display: block; text-decoration: none; padding: 10px 30px; margin-bottom: 5px; background-color: #3498db; color: #fff; border-radius: 4px; transition: background-color 0.3s ease; width: calc(100% - 60px); text-align: center;" method="get">
   <a type="submit"><span th:text="#{data.export}">Сделать бэкап</span></a>
 </form>
+<a th:href="@{/admin/predict}">
+  <span th:text="#{admin.predict}"></span>
+</a>
 </body>
 <script>
   function downloadFile() {

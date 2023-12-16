@@ -22,6 +22,12 @@ public class ControllerExceptionHandler implements AccessDeniedHandler {
         return "error/error500";
     }
 
+    @ExceptionHandler(IOException.class)
+    public String handleIoException(IOException exception, HttpServletRequest request) {
+        log.error("Failed to return response", exception);
+        return "error/error500";
+    }
+
     @Override
     @ExceptionHandler(AccessDeniedException.class)
     public void handle(HttpServletRequest request, HttpServletResponse response,
