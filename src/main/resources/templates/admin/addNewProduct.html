@@ -59,43 +59,78 @@
 <a th:href="@{/admin/menu}">
     <button type="button"><span th:text="#{menu.backToMenu}"></span></button>
 </a><br/>
-<form th:action="@{/admin/menu/addNewProduct}" method="post">
-    <label for="brand"><span th:text="#{products.brand}"></span></label>
-    <input type="text" id="brand" name="brand" th:value="${brand}" list="brandDataList">
-    <datalist id="brandDataList">
-        <option th:each="brand : ${brands}" th:value="${brand.brand}"></option>
-    </datalist>
-    <br>
-    <label for="model"><span th:text="#{products.model}"></span></label>
-    <input type="text" id="model" name="model" th:value="${model}" list="modelDataList">
-    <datalist id="modelDataList">
-        <option th:each="model : ${models}" th:value="${model.model}"></option>
-    </datalist>
-    <br>
-    <label for="color"><span th:text="#{products.color}"></span></label>
-    <input type="text" id="color" name="color" th:value="${color}" list="colorDataList">
-    <datalist id="colorDataList">
-        <option th:each="color : ${colors}" th:value="${color.color}"></option>
-    </datalist>
-    <br>
-    <label for="country"><span th:text="#{products.country}"></span></label>
-    <input type="text" id="country" name="country" th:value="${country}" list="countryDataList">
-    <datalist id="countryDataList">
-        <option th:each="country : ${countries}" th:value="${country.country}"></option>
-    </datalist><br/>
-    <label for="cost"><span th:text="#{products.price}"></span>
+<form id="fileForm" enctype="multipart/form-data">
+    <input type="file" id="fileInput" name="file" accept=".json">
+    <button type="button" onclick="uploadFile()"><span th:text="#{admin.upload}"></span></button>
+    <form th:action="@{/admin/menu/addNewProduct}" method="post">
+        <label for="brand"><span th:text="#{products.brand}"></span></label>
+        <input type="text" id="brand" name="brand" th:value="${brand}" list="brandDataList">
+        <datalist id="brandDataList">
+            <option th:each="brand : ${brands}" th:value="${brand.brand}"></option>
+        </datalist>
+        <br>
+        <label for="model"><span th:text="#{products.model}"></span></label>
+        <input type="text" id="model" name="model" th:value="${model}" list="modelDataList">
+        <datalist id="modelDataList">
+            <option th:each="model : ${models}" th:value="${model.model}"></option>
+        </datalist>
+        <br>
+        <label for="color"><span th:text="#{products.color}"></span></label>
+        <input type="text" id="color" name="color" th:value="${color}" list="colorDataList">
+        <datalist id="colorDataList">
+            <option th:each="color : ${colors}" th:value="${color.color}"></option>
+        </datalist>
+        <br>
+        <label for="country"><span th:text="#{products.country}"></span></label>
+        <input type="text" id="country" name="country" th:value="${country}" list="countryDataList">
+        <datalist id="countryDataList">
+            <option th:each="country : ${countries}" th:value="${country.country}"></option>
+        </datalist>
         <br/>
-        <input type="number" name="cost" id="cost" step="any" th:value="${cost}" required>
-    </label><br/>
-    <label for="count"><span th:text="#{products.count}"></span>
+        <label for="cost"><span th:text="#{products.price}"></span>
+            <br/>
+            <input type="number" name="cost" id="cost" step="any" th:value="${cost}" required>
+        </label><br/>
+        <label for="count"><span th:text="#{products.count}"></span>
+            <br/>
+            <input type="number" name="count" id="count" th:value="${count}" required>
+        </label><br/>
+        <button type="submit" name="add"><span th:text="#{order.add}"></span></button>
+    </form>
+    <div th:if="${errors != null  && errors != ''}" style="color: red">
+        <span th:each="error : ${errors}" th:text="${error.message}"></span>
         <br/>
-        <input type="number" name="count" id="count" th:value="${count}" required>
-    </label><br/>
-    <button type="submit" name="add"><span th:text="#{order.add}"></span></button>
+    </div>
 </form>
-<div th:if="${errors != null  && errors != ''}" style="color: red">
-    <span th:each="error : ${errors}" th:text="${error.message}"></span>
-    <br/>
-</div>
 </body>
+<script>
+    function uploadFile() {
+        const fileInput = document.getElementById('fileInput');
+        const file = fileInput.files[0];
+
+        if (file) {
+            const formData = new FormData();
+            formData.append('file', file);
+
+            fetch('/admin/menu/addNewProduct/import-json', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('File uploaded successfully:', data);
+                })
+                .catch(error => {
+                    console.error('Error uploading file:', error);
+                });
+        } else {
+            console.error('No file selected');
+        }
+    }
+</script>
 </html>

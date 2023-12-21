@@ -1,5 +1,6 @@
 package market.view.controller;
 
+import com.itextpdf.text.DocumentException;
 import lombok.RequiredArgsConstructor;
 import market.exception.ValidationException;
 import market.model.enums.OrderStatus;
@@ -8,13 +9,18 @@ import market.service.*;
 import market.service.dto.*;
 import market.service.util.ModelHelper;
 import market.service.validator.Error;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -177,6 +183,8 @@ public class AdminController {
             addAttributes(model, Map.of(ERRORS, e.getErrors()));
             ModelHelper.redirectAttributes(redirectAttributes,
                     Map.of(DATE_OF_DELIVERY, moderateOrderDto.getDateOfDelivery()));
+        } catch (DocumentException e) {
+            throw new RuntimeException(e);
         }
         return "redirect:/admin/menu/moderateOrders";
     }
@@ -216,6 +224,8 @@ public class AdminController {
             addAttributes(model, Map.of(ERRORS, e.getErrors()));
             redirectAttributes(redirectAttributes,
                     Map.of(DATE_OF_DELIVERY, moderateOrderDto.getDateOfDelivery()));
+        } catch (DocumentException e) {
+            throw new RuntimeException(e);
         }
         return "redirect:/admin/menu/orders";
     }
@@ -424,6 +434,21 @@ public class AdminController {
         return "redirect:/admin/menu";
     }
 
+    @PostMapping("/menu/addNewProduct/import-json")
+    public String importJsonData(@RequestParam("file") MultipartFile file,
+                                                 Model model) {
+        try {
+            productService.importDataFromJson(file);
+            return "redirect:/admin/menu/addNewProduct";
+        } catch (ValidationException e) {
+            addAttributes(model, Map.of(ERRORS, e.getErrors()));
+            return "/admin/addNewProduct";
+        } catch (IOException e) {
+            List<Error> errors = List.of(Error.of("405", "Invalid file"));
+            addAttributes(model, Map.of(ERRORS, errors));
+            return "/admin/addNewProduct";
+        }
+    }
 }
 
 

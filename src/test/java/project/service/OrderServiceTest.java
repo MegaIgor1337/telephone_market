@@ -1,6 +1,8 @@
 package project.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
+import com.itextpdf.text.DocumentException;
 import lombok.RequiredArgsConstructor;
 import market.service.dto.ModerateOrderDto;
 import market.service.dto.OrderFilterDto;
@@ -94,7 +96,7 @@ class OrderServiceTest {
     }
 
     @Test
-    void moderateOrder() {
+    void moderateOrder() throws DocumentException {
         var moderateOrderDto = ModerateOrderDto.builder()
                 .status(OrderStatus.DELIVER_PROCESSING)
                 .dateOfDelivery(LocalDate.now())

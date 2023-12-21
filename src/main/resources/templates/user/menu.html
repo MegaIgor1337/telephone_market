@@ -5,22 +5,35 @@
     <title>Title</title>
     <style>
         body {
-            width: 200px;
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
             margin: 0;
             padding: 20px;
+            display: flex; /* Use flexbox */
+            justify-content: center; /* Center horizontally */
+            align-items: center; /* Center vertically */
+            height: 100vh; /* Set height to full viewport height */
+        }
+
+        .button-container {
+            display: flex;
+            flex-direction: column; /* Display buttons vertically */
+            align-items: stretch; /* Buttons will stretch to equal width */
+            width: 200px; /* Set the desired width for the buttons */
+            gap: 10px; /* Gap between buttons */
         }
 
         a {
-            display: block;
             text-decoration: none;
             padding: 10px 20px;
-            margin-bottom: 10px;
             background-color: #3498db;
             color: #fff;
             border-radius: 4px;
             transition: background-color 0.3s ease;
+            flex: 1; /* Equal width for all buttons */
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         a:hover {
@@ -29,32 +42,37 @@
     </style>
 </head>
 <body>
-<a th:href="@{/market}">
-    <span th:text="#{menu.aboutUs}">About us</span>
-</a>
-<a th:href="@{/comments}">
-    <span th:text="#{menu.viewComments}">View comments</span>
-</a>
-<a th:href="@{/users/{userId}/profileMenu(userId=${userDto.id})}">
-    <span th:text="#{menu.profile}">Profile</span>
-</a>
-<a th:href="@{/users/{userId}/products(userId=${userDto.id})}">
-    <span th:text="#{menu.catalog}">Catalog</span>
-</a>
-<a th:href="@{/logout}">
-    <span th:text="#{menu.logout}">Log out</span>
-</a>
-<a th:href="@{/users/{userId}/addComment(userId=${userDto.id})}">
-    <span th:text="#{menu.addComment}">Add comment</span>
-</a>
-<a th:href="@{/users/{userId}/order(userId=${userDto.id})}">
-    <span th:text="#{menu.basket}">Basket</span>
-</a>
-<a th:href="@{/users/{userId}/orderHistory(userId=${userDto.id})}">
-    <span th:text="#{menu.orderHistory}">Order history</span>
-</a>
-<a th:href="@{/users/{userId}/favourite(userId=${userDto.id})}">
-    <span th:text="#{menu.favourite}">Favourite</span>
-</a>
+<div class="button-container">
+
+
+    <a th:href="@{/users/{userId}/profileMenu(userId=${userDto.id})}">
+        <span th:text="#{menu.profile}">Profile</span>
+    </a>
+    <a th:href="@{/comments}">
+        <span th:text="#{menu.viewComments}">View comments</span>
+    </a>
+    <a th:href="@{/users/{userId}/products(userId=${userDto.id})}">
+        <span th:text="#{menu.catalog}">Catalog</span>
+    </a>
+
+    <a th:href="@{/users/{userId}/addComment(userId=${userDto.id})}">
+        <span th:text="#{menu.addComment}">Add comment</span>
+    </a>
+    <a th:href="@{/users/{userId}/order(userId=${userDto.id})}">
+        <span th:text="#{menu.basket}">Basket</span>
+    </a>
+    <a th:href="@{/users/{userId}/orderHistory(userId=${userDto.id})}">
+        <span th:text="#{menu.orderHistory}">Order history</span>
+    </a>
+    <a th:href="@{/users/{userId}/favourite(userId=${userDto.id})}">
+        <span th:text="#{menu.favourite}">Favourite</span>
+    </a>
+    <a th:href="@{/market}">
+        <span th:text="#{menu.aboutUs}">About us</span>
+    </a>
+    <a th:href="@{/logout}">
+        <span th:text="#{menu.logout}">Log out</span>
+    </a>
+</div>
 </body>
 </html>

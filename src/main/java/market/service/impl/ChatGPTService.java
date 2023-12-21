@@ -15,23 +15,20 @@ import java.net.URL;
 
 @Component
 public class ChatGPTService implements AIService {
-    @Value("${app.gpt.api}")
-    private String urlString;
-    @Value("${app.gpt.key}")
-    private String apiKey;
-    @Value("${app.gpt.version}")
-    private String version;
+    private static final String URL_STRING = "https://api.openai.com/v1/chat/completions";
+    private static final String API_KEY = "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";
+    private static final String VERSION = "gpt-3.5-turbo";
     @Override
     public String getMessage(String query) {
         try {
-            URL obj = new URL(urlString);
+            URL obj = new URL(URL_STRING);
             HttpURLConnection connection = (HttpURLConnection) obj.openConnection();
             connection.setRequestMethod("POST");
-            connection.setRequestProperty("Authorization", "Bearer " + apiKey);
+            connection.setRequestProperty("Authorization", "Bearer " + API_KEY);
             connection.setRequestProperty("Content-Type", "application/json");
 
             // The request body
-            String body = "{\"model\": \"" + version + "\", \"messages\": [{\"role\": \"user\", " +
+            String body = "{\"model\": \"" + VERSION + "\", \"messages\": [{\"role\": \"user\", " +
                           "\"content\": \"" + query + "\"}]}";
             connection.setDoOutput(true);
             OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());

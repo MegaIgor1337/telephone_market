@@ -118,9 +118,6 @@
         </a>
         <p><span th:text="#{user.email}">Email:</span></p>
         <span th:text="${userDto.email}"></span>
-        <a th:href="@{/users/{userId}/profileMenu/changeEmail(userId=${userDto.id})}">
-            <button type="button"><span th:text="#{user.changeEmail}">Change email</span></button>
-        </a>
         <p><span th:text="#{user.passportNumber}">Passport number:</span></p>
         <span th:text="${userDto.passportNo}"></span>
         <a th:href="@{/users/{userId}/profileMenu/changePassportNo(userId=${userDto.id})}">

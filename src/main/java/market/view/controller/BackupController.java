@@ -15,7 +15,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
 @Controller
-@RequestMapping("/admin/backup")
 @RequiredArgsConstructor
 public class BackupController {
     private final DatabaseBackupService databaseBackupService;
@@ -27,7 +26,7 @@ public class BackupController {
         return "admin/backup";
     }
 
-    @GetMapping("/createBackup")
+    @GetMapping("/downloadFile")
     public ResponseEntity<InputStreamResource> downloadFile() throws IOException {
         databaseBackupService.createBackup();
         // Замените путь к файлу на реальный путь на вашем сервере

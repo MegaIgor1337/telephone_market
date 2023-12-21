@@ -98,7 +98,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         userDto.setBalance(BigDecimal.ZERO);
         return Optional.of(userDto)
                 .map(dto -> {
-                    return createUserMapper.map(dto);
+                     return createUserMapper.map(dto);
                 })
                 .map(userRepository::save)
                 .map(userMapper::userToUserDto)
@@ -313,7 +313,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     @SneakyThrows
     private void uploadImage(MultipartFile image) {
-        if (image.isEmpty()) {
+        if (!image.isEmpty()) {
             imageService.upload(image.getOriginalFilename(), image.getInputStream());
         }
     }

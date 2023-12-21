@@ -1,5 +1,6 @@
 package market.service.impl;
 
+import com.itextpdf.text.DocumentException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import market.exception.LackOfMoneyException;
@@ -10,11 +11,13 @@ import market.model.entity.Product;
 import market.model.entity.PromoCodeProduct;
 import market.model.enums.OrderStatus;
 import market.model.repository.*;
+import market.service.EmailService;
 import market.service.OrderService;
 import market.service.dto.*;
 import market.service.mapper.OrderDtoWithPageMapper;
 import market.service.mapper.OrderMapper;
 import market.service.mapper.UserMapper;
+import market.service.util.GeneratePdfFile;
 import market.service.util.PageUtil;
 import market.service.validator.LackOfMoneyValidator;
 import market.service.validator.ModerateOrderDtoValidator;
@@ -43,6 +46,7 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
     private final AddressRepository addressRepository;
+    private final EmailService emailService;
     private final ModerateOrderDtoValidator moderateOrderDtoValidator;
     private final OrderMapper orderMapper;
     private final PromoCodeRepository promoCodeRepository;
@@ -246,7 +250,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public void moderateOrder(Long id, ModerateOrderDto moderateOrderDto) {
+    public void moderateOrder(Long id, ModerateOrderDto moderateOrderDto) throws DocumentException {
         var validationResult = moderateOrderDtoValidator.isValid(moderateOrderDto);
         if (!validationResult.isValid()) {
             throw new ValidationException(validationResult.getErrors());
@@ -262,6 +266,7 @@ public class OrderServiceImpl implements OrderService {
             canceledOrder(order.getId());
         }
         orderRepository.saveAndFlush(order);
+        emailService.sendPdfFileOnEmail(order.getUser().getEmail(), GeneratePdfFile.generatePdf(order));
     }
 
     protected void canceledOrder(Long orderId) {

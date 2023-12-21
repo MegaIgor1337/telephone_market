@@ -15,4 +15,5 @@ public class CreateProductDto {
     private String color;
     private String country;
     private Double cost;
-    private Integer count;}
+    private Integer count;
+}

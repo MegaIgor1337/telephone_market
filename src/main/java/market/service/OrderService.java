@@ -1,5 +1,6 @@
 package market.service;
 
+import com.itextpdf.text.DocumentException;
 import market.model.enums.OrderStatus;
 import market.service.dto.*;
 import org.springframework.data.domain.Page;
@@ -27,7 +28,7 @@ public interface OrderService {
 
     Page<OrderDto> getOrdersByStatus(OrderStatus orderStatus, Integer page);
 
-    void moderateOrder(Long id, ModerateOrderDto moderateOrderDto);
+    void moderateOrder(Long id, ModerateOrderDto moderateOrderDto) throws DocumentException;
 
     Page<OrderDto> getAllOrders(Integer page, OrderFilterDto orderFilterDto);
 }

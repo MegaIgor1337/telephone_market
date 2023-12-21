@@ -87,7 +87,6 @@
         <th><span th:text="#{order.countOfProducts}"></span></th>
         <th><span th:text="#{order.dateOfDelivery}"></span></th>
         <th><span th:text="#{products.price}"></span></th>
-        <th></th>
     </tr>
     </thead>
     <tbody>
@@ -96,7 +95,7 @@
             <span style="text-align: center;" th:text="${order.id}"></span>
         </a></td>
         <td style="text-align: center;" th:text="${order.status}" th:value="${order.status}"></td>
-        <td style="text-align: center;" th:text="${order.date}" th:value="${order.date}"></td>
+        <td style="text-align: center;" th:text="${order.date.getYear()} + '-' + ${order.date.getMonth().getValue()} + '-' + ${order.date.getDayOfMonth()}" th:value="${order.date}"></td>
         <td style="text-align: center;" th:text="${order.products.size()}"></td>
         <td style="text-align: center;" th:text="${order.dateOfDelivery != null ? order.dateOfDelivery : 'unknown'}"
             th:value="${order.dateOfDelivery}"></td>

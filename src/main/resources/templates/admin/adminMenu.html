@@ -1,89 +1,106 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
-  <title>Menu</title>
-  <style>
-    body {
-      width: 250px;
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
-      margin: 0;
-      padding: 20px;
-    }
 
-    a {
-      display: block;
-      text-decoration: none;
-      padding: 15px 30px;
-      margin-bottom: 5px;
-      background-color: #3498db;
-      color: #fff;
-      border-radius: 4px;
-      transition: background-color 0.3s ease;
-      width: calc(100% - 60px);
-      text-align: center;
-    }
+    <title>Menu</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+            display: flex; /* Use flexbox */
+            justify-content: center; /* Center horizontally */
+            align-items: center; /* Center vertically */
+            height: 100vh; /* Set height to full viewport height */
+        }
 
-    a:hover {
-      background-color: #2980b9;
-    }
-  </style>
+        .button-container {
+            display: flex;
+            flex-direction: column; /* Display buttons vertically */
+            align-items: stretch; /* Buttons will stretch to equal width */
+            width: 200px; /* Set the desired width for the buttons */
+            gap: 10px; /* Gap between buttons */
+        }
+
+        a {
+            text-decoration: none;
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: #fff;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+            flex: 1; /* Equal width for all buttons */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        a:hover {
+            background-color: #2980b9;
+        }
+    </style>
 </head>
 <body>
-<a th:href="@{/admin/menu/moderateComments}">
-  <span th:text="#{comments.moderateComments}"></span> (<span th:text="${sizeModerateComments}"></span>)
-</a>
-<a th:href="@{/admin/menu/accessedComments}">
-  <span th:text="#{admin.viewAccessedComments}"></span>
-</a>
-<a th:href="@{/admin/menu/users}">
-  <span th:text="#{admin.viewAllUsers}"></span>
-</a>
-<a th:href="@{/admin/menu/productsForAdmin}">
-  <span th:text="#{admin.viewAllProducts}"></span>
-</a>
-<a th:href="@{/admin/menu/promoCodesForAdmin}">
-  <span th:text="#{admin.viewAllPromoCodes}"></span>
-</a>
-<a th:href="@{/admin/menu/addPromoCodeInfo}">
-  <span th:text="#{admin.addPromoCode}"></span>
-</a>
-<a th:href="@{/admin/menu/addNewProduct}">
-  <span th:text="#{admin.addProduct}"></span>
-</a>
-<a th:href="@{/logout}">
-  <span th:text="#{menu.logout}"></span>
-</a>
-<a th:href="@{/admin/menu/moderateOrders}">
-  <span th:text="#{order.moderateOrders}"></span>(<span th:text="${sizeModerateOrders}"></span>)
-</a>
-<a th:href="@{/admin/menu/orders}">
-  <span th:text="#{order.orders}"></span>
-</a>
-<form action="/admin/backup/createBackup" style="display: block; text-decoration: none; padding: 10px 30px; margin-bottom: 5px; background-color: #3498db; color: #fff; border-radius: 4px; transition: background-color 0.3s ease; width: calc(100% - 60px); text-align: center;" method="get">
-  <a type="submit"><span th:text="#{data.export}">Сделать бэкап</span></a>
-</form>
-<a th:href="@{/admin/predict}">
-  <span th:text="#{admin.predict}"></span>
-</a>
-</body>
-<script>
-  function downloadFile() {
-    // Замените URL на ваш реальный URL файла на сервере
-    var fileUrl = '/admin/backup/createBackup';
+<div class="button-container">
+    <a th:href="@{/admin/menu/moderateComments}">
+        <span th:text="#{comments.moderateComments}"></span> (<span th:text="${sizeModerateComments}"></span>)
+    </a>
+    <a th:href="@{/admin/menu/accessedComments}">
+        <span th:text="#{admin.viewAccessedComments}"></span>
+    </a>
+    <a th:href="@{/admin/menu/users}">
+        <span th:text="#{admin.viewAllUsers}"></span>
+    </a>
+    <a th:href="@{/admin/menu/productsForAdmin}">
+        <span th:text="#{admin.viewAllProducts}"></span>
+    </a>
+    <a th:href="@{/admin/menu/promoCodesForAdmin}">
+        <span th:text="#{admin.viewAllPromoCodes}"></span>
+    </a>
+    <a th:href="@{/admin/menu/addPromoCodeInfo}">
+        <span th:text="#{admin.addPromoCode}"></span>
+    </a>
+    <a th:href="@{/admin/menu/addNewProduct}">
+        <span th:text="#{admin.addProduct}"></span>
+    </a>
 
-    // Используем библиотеку file-saver.js для скачивания файла
-    fetch(fileUrl)
-            .then(response => response.blob())
-            .then(blob => {
-              // Запрашиваем у пользователя выбор директории для сохранения файла
-              saveAs(blob, 'file.json');
-            })
-            .catch(error => {
-              console.error('Ошибка при скачивании файла:', error);
-            });
-  }
-</script>
-</html>
+    <a th:href="@{/admin/menu/moderateOrders}">
+        <span th:text="#{order.moderateOrders}"></span>(<span th:text="${sizeModerateOrders}"></span>)
+    </a>
+    <a th:href="@{/admin/menu/orders}">
+        <span th:text="#{order.orders}"></span>
+    </a>
+    <a th:href="@{/admin/predict}">
+        <span th:text="#{admin.predict}"></span>
+    </a>
+
+
+    <a onclick="event.preventDefault(); downloadFile();" type="submit">
+        <span th:text="#{data.export}"></span>
+    </a>
+    <a th:href="@{/logout}">
+        <span th:text="#{menu.logout}"></span>
+    </a>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <script>
+        function downloadFile() {
+            // Замените URL на ваш реальный URL файла на сервере
+            var fileUrl = '/downloadFile';
+
+            // Используем библиотеку file-saver.js для скачивания файла
+            fetch(fileUrl)
+                .then(response => response.blob())
+                .then(blob => {
+                    // Запрашиваем у пользователя выбор директории для сохранения файла
+                    saveAs(blob, 'file.json');
+                })
+                .catch(error => {
+                    console.error('Ошибка при скачивании файла:', error);
+                });
+        }
+    </script>
+</div>
 </body>
 </html>

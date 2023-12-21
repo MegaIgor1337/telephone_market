@@ -23,6 +23,7 @@ public class CreateUserMapper  {
     public User map(CreateUserDto object) {
         User user = new User();
         copy(object, user);
+        user.setImage("img.png");
         return user;
     }
 

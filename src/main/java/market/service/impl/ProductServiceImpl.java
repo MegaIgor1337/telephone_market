@@ -1,19 +1,18 @@
 package market.service.impl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import market.exception.ValidationException;
 import market.model.entity.*;
 import market.model.enums.OrderStatus;
 import market.model.repository.*;
 import market.service.ModelService;
+import market.service.ProductService;
 import market.service.dto.CreateProductDto;
 import market.service.dto.ProductDto;
 import market.service.dto.ProductFilter;
 import market.service.mapper.ProductMapper;
-import market.service.validator.CreateProductValidator;
-import market.service.validator.EnteredAddCountValidator;
-import market.service.validator.EnteredProductInfoValidator;
-import market.service.validator.EnteredRemoveCountValidator;
+import market.service.validator.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -22,18 +21,22 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import static market.service.util.ConstantContainer.*;
 
 
 @Service
-@Transactional(readOnly = true)
+@Transactional
 @RequiredArgsConstructor
-public class ProductServiceImpl implements market.service.ProductService {
+public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final CreateProductValidator createProductValidator;
     private final EnteredRemoveCountValidator enteredRemoveCountValidator;
@@ -179,7 +182,7 @@ public class ProductServiceImpl implements market.service.ProductService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = false)
     public void addNewProduct(CreateProductDto createProductDto) {
         createProductValidator.putProducts(productRepository.findAll());
         var validationResult = createProductValidator.isValid(createProductDto);
@@ -211,5 +214,20 @@ public class ProductServiceImpl implements market.service.ProductService {
                 .storageCount(createProductDto.getCount())
                 .cost(BigDecimal.valueOf(createProductDto.getCost()))
                 .build();
+    }
+
+    @Override
+    public void importDataFromJson(MultipartFile file) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        CreateProductDto[] createProoductDtos = objectMapper.readValue(file.getBytes(), CreateProductDto[].class);
+        List<CreateProductDto> entityList = Arrays.asList(createProoductDtos);
+        createProductValidator.putProducts(productRepository.findAll());
+        for (CreateProductDto product : entityList) {
+            var validationResult = createProductValidator.isValid(product);
+            if (!validationResult.isValid()) {
+                throw new ValidationException(validationResult.getErrors());
+            }
+        }
+        productRepository.saveAll(entityList.stream().map(this::createProduct).toList());
     }
 }

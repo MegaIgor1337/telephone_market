@@ -1,5 +1,6 @@
 package market.view.controller;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import market.service.dto.CreateUserDto;
 import market.model.enums.Gender;
@@ -8,9 +9,12 @@ import market.exception.ValidationException;
 import market.service.EmailService;
 import market.service.UserService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -88,6 +92,7 @@ public class RegistrationController {
     @PostMapping("/confirmEmail")
     public String confirmEmail(@RequestParam String inputCode,
                                Model model,
+                               HttpSession session,
                                RedirectAttributes redirectAttributes,
                                @SessionAttribute(name = CREATE_USER_DTO) CreateUserDto createUserDto) throws IOException {
         if (Objects.equals(generatedCode, Integer.valueOf(inputCode))) {
@@ -98,6 +103,9 @@ public class RegistrationController {
             SecurityContextHolder.getContext().setAuthentication(
                     new UsernamePasswordAuthenticationToken(user, createUserDto.getRawPassword(), user.getAuthorities())
             );
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,
+                    new SecurityContextImpl(authentication));
             addAttributes(model, Map.of(USER_DTO, userDto));
             return "redirect:/users";
         } else {
