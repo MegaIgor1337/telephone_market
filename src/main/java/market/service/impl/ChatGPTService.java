@@ -16,7 +16,7 @@ import java.net.URL;
 @Component
 public class ChatGPTService implements AIService {
     private static final String URL_STRING = "https://api.openai.com/v1/chat/completions";
-    private static final String API_KEY = "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";
+    private static final String API_KEY = "";
     private static final String VERSION = "gpt-3.5-turbo";
     @Override
     public String getMessage(String query) {
