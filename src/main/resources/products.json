@@ -1,0 +1,82 @@
+[
+  {
+    "brand": "Samsung",
+    "model": "Galaxy S20",
+    "color": "Black",
+    "country": "South Korea",
+    "cost": 999.99,
+    "count": 10
+  },
+  {
+    "brand": "Apple",
+    "model": "iPhone 12",
+    "color": "White",
+    "country": "USA",
+    "cost": 1299.99,
+    "count": 20
+  },
+  {
+    "brand": "Xiaomi",
+    "model": "Mi 11",
+    "color": "Silver",
+    "country": "China",
+    "cost": 799.99,
+    "count": 15
+  },
+  {
+    "brand": "Huawei",
+    "model": "P40 Pro",
+    "color": "Gray",
+    "country": "China",
+    "cost": 899.99,
+    "count": 12
+  },
+  {
+    "brand": "Sony",
+    "model": "Xperia 1 II",
+    "color": "Gold",
+    "country": "Japan",
+    "cost": 1099.99,
+    "count": 8
+  },
+  {
+    "brand": "LG",
+    "model": "G8 ThinQ",
+    "color": "Pink",
+    "country": "South Korea",
+    "cost": 699.99,
+    "count": 5
+  },
+  {
+    "brand": "Nokia",
+    "model": "Nokia 9 PureView",
+    "color": "Blue",
+    "country": "Finland",
+    "cost": 599.99,
+    "count": 10
+  },
+  {
+    "brand": "Motorola",
+    "model": "Moto G Power",
+    "color": "Green",
+    "country": "USA",
+    "cost": 299.99,
+    "count": 7
+  },
+  {
+    "brand": "HTC",
+    "model": "HTC U12+",
+    "color": "Red",
+    "country": "Taiwan",
+    "cost": 499.99,
+    "count": 3
+  },
+  {
+    "brand": "Google",
+    "model": "Pixel 5",
+    "color": "Yellow",
+    "country": "USA",
+    "cost": 799.99,
+    "count": 4
+  }
+]

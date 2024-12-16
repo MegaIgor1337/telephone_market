@@ -2,7 +2,7 @@ package market.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import market.service.AIService;
+
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +13,7 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-@Component
+/*@Component
 public class ChatGPTService implements AIService {
     private static final String URL_STRING = "https://api.openai.com/v1/chat/completions";
     private static final String API_KEY = "";
@@ -64,4 +64,4 @@ public class ChatGPTService implements AIService {
     }
 
 
-}
+}*/

@@ -1,7 +1,7 @@
 package market.view.controller;
 
 import lombok.RequiredArgsConstructor;
-import market.service.AIService;
+//import market.service.AIService;
 import market.service.util.ModelHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,7 +16,7 @@ import java.util.Map;
 @SessionAttributes({"answer"})
 @RequestMapping("/admin/predict")
 public class PredictController {
-    private final AIService aiService;
+    //private final AIService aiService;
     @GetMapping
     public String getPagePredict(Model model) {
         return "/admin/predicts";
@@ -24,8 +24,8 @@ public class PredictController {
 
     @GetMapping("/query")
     public String getAnswer(Model model, String query){
-        String answer = aiService.getMessage(query);
-        model.addAttribute("answer", answer);
+     //   String answer = aiService.getMessage(query);
+   //     model.addAttribute("answer", answer);
         return "redirect:/admin/predict";
     }
 }

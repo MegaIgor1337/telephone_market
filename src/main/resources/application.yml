@@ -14,7 +14,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/online_telephone_market
     username: postgres
-    password: 1234
+    password: root
     driver-class-name: org.postgresql.Driver
   jpa:
     open-in-view: false
@@ -22,17 +22,19 @@ spring:
       show_sql: true
       format_sql: true
       hbm2ddl.auto: update
-
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
 
   messages:
     basename: messages
 app:
   image:
-    bucket: D:\JAVA\enterpriseCourse\project\project\images
-  gpt:
-    key: ${API_KEY_GPT}
-    api: ${API_GPT}
-    version: ${VERSION_GPT}
+    bucket: D:\JAVA\telephone_market\images
+  #gpt:
+  #  key: ${API_KEY_GPT}
+   # api: ${API_GPT}
+   # version: ${VERSION_GPT}
   mail:
     username: ${MAIL_USERNAME}
     password: ${MAIL_PASSWORD}

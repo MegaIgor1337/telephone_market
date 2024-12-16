@@ -1,5 +1,5 @@
 package market.service;
 
-public interface AIService {
+/*public interface AIService {
     String getMessage(String query);
-}
+}*/
